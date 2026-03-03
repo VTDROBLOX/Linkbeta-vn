@@ -532,7 +532,7 @@
           <div class="cf-brand-label">Cloudflare</div>
         </div>
       </div>
-      <button class="btn-primary" onclick="doLogin()">Đăng Nhập →</button>
+      <button class="btn-primary" onclick="doLogin('cf1')">Đăng Nhập →</button>
       <div class="auth-switch">Chưa có tài khoản? <a onclick="showPage('page-register')">Đăng ký ngay</a></div>
     </div>
   </div>
@@ -574,7 +574,7 @@
           <div class="cf-brand-label">Cloudflare</div>
         </div>
       </div>
-      <button class="btn-primary" onclick="doLogin()">Đăng Ký →</button>
+      <button class="btn-primary" onclick="doLogin('cf2')">Đăng Ký →</button>
       <div class="auth-switch">Đã có tài khoản? <a onclick="showPage('page-login')">Đăng nhập</a></div>
     </div>
   </div>
@@ -1291,9 +1291,12 @@
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    if(id === 'page-register') autoVerifyCaptcha('cf2');
+    if(id === 'page-login') autoVerifyCaptcha('cf1');
   }
 
-  function doLogin() {
+  function doLogin(cfId) {
+    // Captcha is optional - just go straight in
     showPage('page-app');
     navTo('dashboard');
   }
@@ -1379,8 +1382,28 @@
       el.classList.remove('checking');
       el.classList.add('verified');
       el.querySelector('.cf-text').textContent = 'Xác minh thành công ✓';
-    }, 1700);
+    }, 1200);
   }
+
+  // Auto verify captcha after short delay on page show
+  function autoVerifyCaptcha(id) {
+    const el = document.getElementById(id);
+    if(!el || el.classList.contains('verified')) return;
+    setTimeout(() => {
+      el.classList.add('checking');
+      el.querySelector('.cf-text').textContent = 'Đang xác minh...';
+      setTimeout(() => {
+        el.classList.remove('checking');
+        el.classList.add('verified');
+        el.querySelector('.cf-text').textContent = 'Xác minh thành công ✓';
+      }, 1000);
+    }, 800);
+  }
+
+  // Run auto verify when login/register page shows
+  document.addEventListener('DOMContentLoaded', () => {
+    autoVerifyCaptcha('cf1');
+  });
 
   // ===== RANK LIST =====
   const rankData = [

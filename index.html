@@ -4,1415 +4,1251 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkBeta - Kiếm Tiền Online</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #F5A623;
-    --gold-light: #FFD166;
-    --gold-dark: #C47D0E;
-    --bg: #0E0E10;
-    --bg2: #161618;
-    --bg3: #1E1E22;
-    --bg4: #26262C;
-    --text: #F0F0F0;
-    --text2: #A0A0A8;
-    --text3: #606068;
-    --green: #2ECC71;
-    --red: #E74C3C;
-    --blue: #3498DB;
-    --purple: #9B59B6;
-    --orange: #E67E22;
-    --border: rgba(255,255,255,0.07);
-    --radius: 14px;
-    --radius-sm: 8px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Be Vietnam Pro',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+:root {
+  --gold:#F5A623; --gold2:#FFD166; --gold3:#C47D0E;
+  --bg:#0E0E10; --bg2:#161618; --bg3:#1E1E22; --bg4:#26262C;
+  --text:#F0F0F0; --text2:#A0A0A8; --text3:#505058;
+  --green:#2ECC71; --red:#E74C3C; --blue:#3498DB; --purple:#9B59B6; --orange:#E67E22;
+  --border:rgba(255,255,255,0.07); --r:14px; --r2:8px;
+  --shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
-  /* ===== PAGES ===== */
-  .page { display:none; min-height:100vh; }
-  .page.active { display:block; }
+/* PAGES */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
 
-  /* ===== AUTH PAGES ===== */
-  .auth-wrap {
-    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:20px; background:var(--bg);
-    background-image: radial-gradient(ellipse at 50% 0%, rgba(245,166,35,0.08) 0%, transparent 60%);
-  }
-  .auth-logo { display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:32px; }
-  .auth-logo-icon {
-    width:72px; height:72px; background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-    border-radius:20px; display:flex; align-items:center; justify-content:center;
-    font-size:32px; box-shadow:0 8px 32px rgba(245,166,35,0.3);
-  }
-  .auth-logo h1 { font-size:28px; font-weight:800; }
-  .auth-logo h1 span { color:var(--gold); }
-  .auth-logo p { color:var(--text2); font-size:13px; }
-  .auth-card {
-    width:100%; max-width:400px; background:var(--bg2);
-    border:1px solid var(--border); border-radius:20px; padding:28px; box-shadow:var(--shadow);
-  }
-  .auth-card h2 { font-size:20px; font-weight:700; margin-bottom:20px; }
-  .form-group { margin-bottom:16px; }
-  .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text2); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
-  .form-group input {
-    width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm);
-    padding:12px 14px; color:var(--text); font-family:inherit; font-size:14px; outline:none; transition:border 0.2s;
-  }
-  .form-group input:focus { border-color:var(--gold); }
-  .form-group input::placeholder { color:var(--text3); }
-  .btn-primary {
-    width:100%; padding:14px; background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-    border:none; border-radius:var(--radius-sm); color:#000; font-family:inherit;
-    font-size:15px; font-weight:700; cursor:pointer; transition:opacity 0.2s; margin-top:8px;
-  }
-  .btn-primary:hover { opacity:0.9; }
-  .auth-switch { text-align:center; margin-top:16px; font-size:13px; color:var(--text2); }
-  .auth-switch a { color:var(--gold); text-decoration:none; font-weight:600; cursor:pointer; }
-  /* ===== CLOUDFLARE TURNSTILE ===== */
-  .cf-captcha {
-    display:flex; align-items:center; justify-content:space-between;
-    background:var(--bg3); border:1.5px solid var(--border); border-radius:var(--radius-sm);
-    padding:14px 16px; margin-bottom:16px; cursor:pointer; transition:all 0.3s;
-    position:relative; overflow:hidden; user-select:none;
-  }
-  .cf-captcha::after {
-    content:""; position:absolute; top:0; left:-100%; width:60%; height:100%;
-    background:linear-gradient(90deg, transparent, rgba(245,166,35,0.07), transparent);
-    transition:left 0.9s ease;
-  }
-  .cf-captcha.checking::after { left:160%; }
-  .cf-captcha:hover:not(.verified):not(.checking) { border-color:rgba(245,166,35,0.3); background:rgba(30,30,34,0.8); }
-  .cf-captcha.checking { border-color:var(--gold); box-shadow:0 0 0 3px rgba(245,166,35,0.1); }
-  .cf-captcha.verified { border-color:var(--green); box-shadow:0 0 0 3px rgba(46,204,113,0.1); cursor:default; }
-  .cf-left { display:flex; align-items:center; gap:12px; }
-  .cf-box {
-    width:24px; height:24px; border:2px solid var(--text3); border-radius:6px;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-    background:var(--bg4); transition:all 0.3s; position:relative;
-  }
-  .cf-captcha.checking .cf-box { border-color:var(--gold); }
-  .cf-captcha.verified .cf-box { background:var(--green); border-color:var(--green); }
-  .cf-check { display:none; color:#fff; font-size:13px; font-weight:900; }
-  .cf-captcha.verified .cf-check { display:block; }
-  .cf-spin {
-    display:none; width:13px; height:13px;
-    border:2px solid rgba(245,166,35,0.2); border-top-color:var(--gold);
-    border-radius:50%; animation:cfSpin 0.7s linear infinite;
-  }
-  .cf-captcha.checking .cf-spin { display:block; }
-  @keyframes cfSpin { to { transform:rotate(360deg); } }
-  .cf-text { font-size:14px; font-weight:500; color:var(--text2); transition:color 0.3s; }
-  .cf-captcha.checking .cf-text { color:var(--gold); }
-  .cf-captcha.verified .cf-text { color:var(--green); font-weight:600; }
-  .cf-brand { display:flex; flex-direction:column; align-items:center; gap:3px; }
-  .cf-brand-icon {
-    width:32px; height:32px; border-radius:8px;
-    background:linear-gradient(135deg,#F6821F,#FBAD41);
-    display:flex; align-items:center; justify-content:center; font-size:16px;
-    box-shadow:0 2px 10px rgba(246,130,31,0.35);
-  }
-  .cf-brand-label { font-size:9px; color:var(--text3); font-weight:700; letter-spacing:0.8px; text-transform:uppercase; }
+/* AUTH */
+.auth-bg{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;
+  background:var(--bg);
+  background-image:radial-gradient(ellipse at 30% 20%,rgba(245,166,35,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 80%,rgba(196,125,14,0.05) 0%,transparent 50%);
+}
+.auth-logo{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:28px;animation:fadeUp .5s ease;}
+.auth-logo-box{
+  width:76px;height:76px;background:linear-gradient(135deg,var(--gold),var(--gold3));
+  border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;
+  box-shadow:0 8px 32px rgba(245,166,35,0.35);animation:glow 2.5s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{box-shadow:0 8px 32px rgba(245,166,35,0.35);}50%{box-shadow:0 8px 48px rgba(245,166,35,0.6);}}
+.auth-logo h1{font-size:30px;font-weight:900;letter-spacing:-0.5px;}
+.auth-logo h1 span{color:var(--gold);}
+.auth-logo p{font-size:13px;color:var(--text2);}
+.auth-card{
+  width:100%;max-width:400px;background:rgba(22,22,24,0.97);
+  border:1px solid rgba(245,166,35,0.1);border-radius:20px;padding:28px;
+  box-shadow:0 8px 48px rgba(0,0,0,0.6);animation:fadeUp .4s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.auth-card h2{font-size:20px;font-weight:800;margin-bottom:20px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.6px;}
+.fg input{
+  width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r2);
+  padding:12px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.fg input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,0.12);background:var(--bg4);}
+.fg input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(231,76,60,0.12);}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+.shk{animation:shake .35s ease;}
+.err-box{
+  display:none;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);
+  border-radius:var(--r2);padding:10px 13px;font-size:13px;color:#ff7070;margin-bottom:12px;
+}
+.btn-main{
+  width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold3));
+  border:none;border-radius:var(--r2);color:#000;font-family:inherit;font-size:15px;font-weight:800;
+  cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(245,166,35,0.3);letter-spacing:.3px;
+  margin-top:4px;
+}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(245,166,35,0.45);}
+.btn-main:active{transform:translateY(0);}
+.auth-sw{text-align:center;margin-top:14px;font-size:13px;color:var(--text2);}
+.auth-sw a{color:var(--gold);text-decoration:none;font-weight:700;cursor:pointer;}
 
-  /* ===== LAYOUT ===== */
-  .layout { display:flex; min-height:100vh; }
-  .sidebar {
-    width:260px; background:var(--bg2); border-right:1px solid var(--border);
-    display:flex; flex-direction:column; position:fixed; top:0; left:0; height:100vh; z-index:100;
-    transform:translateX(-100%); transition:transform 0.3s;
-  }
-  .sidebar.open { transform:translateX(0); }
-  .sidebar-logo {
-    padding:20px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border);
-  }
-  .sidebar-logo-icon {
-    width:36px; height:36px; background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-    border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px;
-  }
-  .sidebar-logo h2 { font-size:18px; font-weight:800; }
-  .sidebar-logo h2 span { color:var(--gold); }
-  .sidebar-close { margin-left:auto; background:none; border:none; color:var(--text2); cursor:pointer; font-size:20px; }
-  .sidebar-balance { margin:16px; background:var(--bg3); border-radius:var(--radius-sm); padding:14px; }
-  .sidebar-balance .label { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; }
-  .sidebar-balance .amount { font-size:22px; font-weight:800; color:var(--gold); margin-top:2px; }
-  .sidebar-balance .unit { font-size:13px; color:var(--text2); }
-  .sidebar-nav { flex:1; padding:8px 12px; overflow-y:auto; }
-  .nav-item {
-    display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:var(--radius-sm);
-    cursor:pointer; transition:background 0.2s; margin-bottom:2px; color:var(--text2); font-size:14px; font-weight:500;
-  }
-  .nav-item:hover { background:var(--bg3); color:var(--text); }
-  .nav-item.active { background:linear-gradient(135deg,rgba(245,166,35,0.2),rgba(196,125,14,0.1)); color:var(--gold); }
-  .nav-icon { font-size:18px; width:24px; text-align:center; }
-  .sidebar-footer { padding:16px; border-top:1px solid var(--border); }
-  .logout-btn {
-    display:flex; align-items:center; gap:10px; color:var(--red); font-size:14px; font-weight:500;
-    cursor:pointer; padding:10px 14px; border-radius:var(--radius-sm); transition:background 0.2s;
-  }
-  .logout-btn:hover { background:rgba(231,76,60,0.1); }
+/* LAYOUT */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99;backdrop-filter:blur(2px);}
+.overlay.show{display:block;}
+.sb-user-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.sb-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#000;flex-shrink:0;}
+.sb-user-info{flex:1;min-width:0;}
+.su-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px;background:rgba(46,204,113,.2);color:var(--green);}
+.su-badge.admin{background:rgba(231,76,60,.2);color:var(--red);}
+.sb-balance-box{background:var(--bg4);border-radius:10px;padding:10px 14px;}
+.nav-svg{width:20px;height:20px;fill:currentColor;stroke:currentColor;stroke-width:1.5;flex-shrink:0;}
+.nav-item{fill:var(--text3);stroke:var(--text3);}
+.nav-item.active .nav-svg,.nav-item:hover .nav-svg{fill:var(--gold);stroke:var(--gold);}
+.nav-support{background:var(--gold)!important;color:#000!important;border-radius:12px;margin-top:4px;}
+.nav-support .nav-svg{fill:#000;stroke:#000;}
+.nav-support:hover{background:var(--gold-dark)!important;}
+.nav-sep{height:1px;background:var(--border);margin:8px 0;}
+.sidebar{
+  width:265px;background:var(--bg2);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;height:100vh;z-index:100;
+  transform:translateX(-100%);transition:transform .3s;display:flex;flex-direction:column;
+}
+.sidebar.open{transform:translateX(0);}
+.sb-logo{padding:18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.sb-logo h2{font-size:17px;font-weight:900;}
+.sb-logo h2 span{color:var(--gold);}
+.sb-close{margin-left:auto;background:none;border:none;color:var(--text2);cursor:pointer;font-size:20px;padding:4px;}
+.sb-user{margin:12px;background:var(--bg3);border-radius:var(--r2);padding:12px;}
+.sb-user .su-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.sb-user .su-email{font-size:11px;color:var(--text2);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sb-user .su-bal{font-size:20px;font-weight:800;color:var(--gold);}
+.sb-user .su-bal-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+.admin-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(245,166,35,0.2),rgba(196,125,14,0.1));color:var(--gold);font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;border:1px solid rgba(245,166,35,0.3);margin-bottom:6px;}
+.sb-nav{flex:1;padding:8px 10px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:var(--r2);cursor:pointer;transition:background .2s;margin-bottom:2px;color:var(--text2);font-size:14px;font-weight:500;}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{background:linear-gradient(135deg,rgba(245,166,35,0.18),rgba(196,125,14,0.08));color:var(--gold);font-weight:700;}
+.nav-icon{font-size:17px;width:22px;text-align:center;}
+.nav-sep{height:1px;background:var(--border);margin:8px 0;}
+.sb-footer{padding:14px;border-top:1px solid var(--border);}
+.logout-btn{display:flex;align-items:center;gap:9px;color:var(--red);font-size:14px;font-weight:600;cursor:pointer;padding:10px 12px;border-radius:var(--r2);transition:background .2s;}
+.logout-btn:hover{background:rgba(231,76,60,0.1);}
 
-  /* ===== TOPBAR ===== */
-  .topbar {
-    position:fixed; top:0; left:0; right:0; height:56px; background:var(--bg2);
-    border-bottom:1px solid var(--border); display:flex; align-items:center;
-    padding:0 16px; gap:12px; z-index:99;
-  }
-  .menu-btn { background:none; border:none; color:var(--text); font-size:22px; cursor:pointer; }
-  .topbar-title { font-size:16px; font-weight:700; flex:1; }
-  .topbar-icon {
-    width:36px; height:36px; background:var(--bg3); border-radius:50%;
-    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px;
-  }
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;height:54px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;z-index:98;}
+.menu-btn{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;}
+.topbar-title{font-size:16px;font-weight:800;flex:1;}
+.tb-icon{width:36px;height:36px;background:var(--bg3);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;position:relative;}
+.tb-dot::after{content:'';position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--gold);border-radius:50%;border:2px solid var(--bg2);}
 
-  /* ===== MAIN CONTENT ===== */
-  .main { padding-top:56px; min-height:100vh; }
-  .content { padding:16px; }
+.main{padding-top:54px;min-height:100vh;}
+.content{padding:14px;}
 
-  /* ===== OVERLAY ===== */
-  .overlay {
-    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
-    z-index:99; backdrop-filter:blur(2px);
-  }
-  .overlay.show { display:block; }
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.card-title{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.card-title h3{font-size:15px;font-weight:800;flex:1;}
+.badge-sm{background:var(--bg4);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text2);}
 
-  /* ===== CARDS ===== */
-  .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .card-title { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
-  .card-title .icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
-  .card-title h3 { font-size:16px; font-weight:700; }
-  .card-title .badge { margin-left:auto; background:var(--bg4); border-radius:20px; padding:3px 10px; font-size:12px; color:var(--text2); }
+/* DASHBOARD */
+.welcome-card{background:linear-gradient(135deg,rgba(245,166,35,0.13),rgba(196,125,14,0.05));border:1px solid rgba(245,166,35,0.18);border-radius:var(--r);padding:20px;margin-bottom:12px;}
+.wc-streak{display:inline-flex;align-items:center;gap:5px;background:rgba(245,166,35,0.15);padding:4px 10px;border-radius:20px;font-size:12px;color:var(--gold);margin-bottom:8px;}
+.wc-title{font-size:21px;font-weight:800;margin-bottom:4px;}
+.wc-sub{font-size:13px;color:var(--text2);margin-bottom:14px;}
+.btn-sm{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;border-radius:var(--r2);color:#000;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;}
 
-  /* ===== DASHBOARD ===== */
-  .welcome-card {
-    background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(196,125,14,0.05));
-    border:1px solid rgba(245,166,35,0.2); border-radius:var(--radius); padding:20px; margin-bottom:12px;
-  }
-  .welcome-streak { display:inline-flex; align-items:center; gap:6px; background:rgba(245,166,35,0.15); padding:4px 10px; border-radius:20px; font-size:12px; color:var(--gold); margin-bottom:8px; }
-  .welcome-title { font-size:20px; font-weight:800; margin-bottom:4px; }
-  .welcome-sub { font-size:13px; color:var(--text2); margin-bottom:14px; }
-  .btn-small { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; border-radius:var(--radius-sm); color:#000; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.stats2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.stat-box .sv{font-size:22px;font-weight:800;}
+.stat-box .sl{font-size:11px;color:var(--text2);margin-top:2px;}
+.stat-box .si{font-size:20px;margin-bottom:6px;}
 
-  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
-  .stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
-  .stat-card .s-icon { font-size:20px; margin-bottom:6px; }
-  .stat-card .s-value { font-size:20px; font-weight:800; }
-  .stat-card .s-label { font-size:11px; color:var(--text2); margin-top:2px; }
+.prog-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:12px;text-align:center;}
+.circle-wrap{position:relative;width:120px;height:120px;margin:0 auto 10px;}
+.cir-bg{fill:none;stroke:var(--bg4);stroke-width:8;}
+.cir-fg{fill:none;stroke:var(--gold);stroke-width:8;stroke-linecap:round;stroke-dasharray:314;stroke-dashoffset:314;transform:rotate(-90deg);transform-origin:50% 50%;}
+.cir-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.cir-num{font-size:22px;font-weight:800;}
+.cir-sub{font-size:11px;color:var(--text2);}
 
-  .progress-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:12px; text-align:center; }
-  .progress-title { font-size:13px; color:var(--text2); margin-bottom:16px; display:flex; align-items:center; justify-content:center; gap:6px; }
-  .circle-wrap { position:relative; width:120px; height:120px; margin:0 auto 12px; }
-  .circle-bg { fill:none; stroke:var(--bg4); stroke-width:8; }
-  .circle-fg { fill:none; stroke:var(--gold); stroke-width:8; stroke-linecap:round; stroke-dasharray:314; stroke-dashoffset:314; transition:stroke-dashoffset 1s; transform:rotate(-90deg); transform-origin:50% 50%; }
-  .circle-text { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .circle-num { font-size:24px; font-weight:800; }
-  .circle-sub { font-size:11px; color:var(--text2); }
-  .progress-link { color:var(--gold); font-size:13px; font-weight:600; cursor:pointer; }
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.qa-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s;}
+.qa-box:hover{border-color:rgba(245,166,35,0.3);}
+.qa-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.qa-lbl{font-size:13px;font-weight:700;}
 
-  .quick-actions { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:12px; }
-  .qa-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:14px; display:flex; align-items:center; gap:10px; cursor:pointer; transition:border-color 0.2s; }
-  .qa-item:hover { border-color:rgba(245,166,35,0.3); }
-  .qa-icon { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; }
-  .qa-label { font-size:13px; font-weight:600; }
+.top-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.top-item:last-child{border-bottom:none;}
+.t-rank{width:28px;height:28px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.t-rank.r1{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;}
+.t-rank.r2{background:linear-gradient(135deg,#C0C0C0,#909090);color:#000;}
+.t-rank.r3{background:linear-gradient(135deg,#CD7F32,#A05A20);color:#fff;}
+.t-av{width:32px;height:32px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.t-info{flex:1;}
+.t-name{font-size:13px;font-weight:700;}
+.t-sub{font-size:11px;color:var(--text2);}
+.t-amt{font-size:13px;font-weight:800;color:var(--gold);}
 
-  .top-list { }
-  .top-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
-  .top-item:last-child { border-bottom:none; }
-  .top-rank { width:28px; height:28px; border-radius:50%; background:var(--bg4); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
-  .top-rank.g1 { background:linear-gradient(135deg,#FFD700,#FFA500); color:#000; }
-  .top-rank.g2 { background:linear-gradient(135deg,#C0C0C0,#A0A0A0); color:#000; }
-  .top-rank.g3 { background:linear-gradient(135deg,#CD7F32,#A05A20); color:#fff; }
-  .top-avatar { width:32px; height:32px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
-  .top-info { flex:1; }
-  .top-name { font-size:13px; font-weight:600; }
-  .top-sub { font-size:11px; color:var(--text2); }
-  .top-amount { font-size:13px; font-weight:700; color:var(--gold); }
+/* NHIỆM VỤ */
+.tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--r2);padding:4px;margin-bottom:14px;}
+.tab{flex:1;text-align:center;padding:8px 4px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text2);transition:all .2s;position:relative;}
+.tab.active{background:var(--gold);color:#000;}
+.tab-badge{position:absolute;top:-4px;right:4px;background:var(--red);color:#fff;font-size:9px;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.task-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;}
+.task-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.task-ico{width:42px;height:42px;background:var(--bg3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--gold);flex-shrink:0;}
+.task-name{font-size:14px;font-weight:800;}
+.task-meta{font-size:11px;color:var(--text2);margin-top:1px;}
+.task-hot{background:linear-gradient(135deg,#FF6B35,#FF3300);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;margin-left:auto;}
+.task-reward{background:var(--bg3);border-radius:var(--r2);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.task-amt{font-size:22px;font-weight:900;color:var(--gold);}
+.task-slots{font-size:12px;color:var(--text2);}
+.task-bar{height:4px;background:var(--bg4);border-radius:4px;overflow:hidden;margin-bottom:10px;}
+.task-bar-f{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));border-radius:4px;}
+.btn-task{width:100%;padding:12px;border:none;border-radius:var(--r2);font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-task.normal{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;}
+.btn-task.hot{background:linear-gradient(135deg,#FF6B35,#FF3300);color:#fff;}
+.btn-task.pending{background:var(--bg3);color:var(--text2);cursor:default;}
 
-  .invite-banner { background:linear-gradient(135deg,rgba(245,166,35,0.1),rgba(196,125,14,0.05)); border:1px solid rgba(245,166,35,0.2); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .invite-banner .ib-title { font-size:13px; color:var(--gold); font-weight:600; display:flex; align-items:center; gap:6px; margin-bottom:4px; }
-  .invite-banner .ib-main { font-size:18px; font-weight:800; margin-bottom:4px; }
-  .invite-banner .ib-sub { font-size:12px; color:var(--text2); margin-bottom:12px; }
+.hist-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
+.hist-item:last-child{border-bottom:none;}
+.hi-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.hi-info{flex:1;}
+.hi-name{font-size:13px;font-weight:700;}
+.hi-time{font-size:11px;color:var(--text2);}
+.hi-right{text-align:right;}
+.hi-amt{font-size:14px;font-weight:800;}
+.status-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-top:2px;display:inline-block;}
+.sp-pending{background:rgba(245,166,35,0.15);color:var(--gold);}
+.sp-approved{background:rgba(46,204,113,0.15);color:var(--green);}
+.sp-rejected{background:rgba(231,76,60,0.15);color:var(--red);}
+.sp-expired{background:var(--bg3);color:var(--text2);}
 
-  .activity-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
-  .activity-item:last-child { border-bottom:none; }
-  .act-icon { width:36px; height:36px; background:rgba(46,204,113,0.15); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
-  .act-info { flex:1; }
-  .act-name { font-size:13px; font-weight:600; }
-  .act-time { font-size:11px; color:var(--text2); }
-  .act-amount { font-size:14px; font-weight:700; color:var(--green); }
+/* RÚT TIỀN */
+.balance-card{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:12px;}
+.bc-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.bc-amt{font-size:34px;font-weight:900;color:var(--gold);}
+.bc-unit{font-size:14px;color:var(--text2);}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.pay-m{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r2);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s;}
+.pay-m:hover,.pay-m.sel{border-color:var(--gold);}
+.pm-icon{font-size:22px;}
+.pm-name{font-size:13px;font-weight:800;}
+.pm-sub{font-size:11px;color:var(--text2);}
+.btn-withdraw{width:100%;padding:14px;background:linear-gradient(135deg,var(--green),#27AE60);border:none;border-radius:var(--r2);color:#fff;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.wd-input{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r2);padding:13px 14px;color:var(--text);font-family:inherit;font-size:18px;font-weight:800;outline:none;margin-bottom:12px;transition:border .2s;}
+.wd-input:focus{border-color:var(--gold);}
 
-  /* ===== NHIỆM VỤ ===== */
-  .tabs { display:flex; gap:4px; background:var(--bg3); border-radius:var(--radius-sm); padding:4px; margin-bottom:14px; }
-  .tab { flex:1; text-align:center; padding:8px 4px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; color:var(--text2); transition:all 0.2s; position:relative; }
-  .tab.active { background:var(--gold); color:#000; }
-  .tab .tab-badge { position:absolute; top:-4px; right:4px; background:var(--red); color:#fff; font-size:10px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+/* LỊCH SỬ */
+.filter-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;}
+.ft{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;border:1px solid var(--border);color:var(--text2);}
+.ft.active{background:var(--gold);color:#000;border-color:var(--gold);}
 
-  .task-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
-  .task-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .task-icon-wrap { width:42px; height:42px; background:var(--bg3); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; color:var(--gold); flex-shrink:0; }
-  .task-info { flex:1; }
-  .task-name { font-size:14px; font-weight:700; }
-  .task-meta { font-size:11px; color:var(--text2); margin-top:2px; }
-  .task-hot { background:linear-gradient(135deg,#FF6B35,#FF3300); color:#fff; font-size:10px; font-weight:700; padding:3px 8px; border-radius:20px; display:flex; align-items:center; gap:4px; }
-  .task-reward { background:var(--bg3); border-radius:var(--radius-sm); padding:10px 12px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .task-reward .amount { font-size:22px; font-weight:800; color:var(--gold); }
-  .task-reward .slots { font-size:12px; color:var(--text2); }
-  .task-bar { height:4px; background:var(--bg4); border-radius:4px; overflow:hidden; margin-bottom:10px; }
-  .task-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-dark)); border-radius:4px; }
-  .btn-task { width:100%; padding:12px; background:linear-gradient(135deg,var(--gold),var(--gold-dark)); border:none; border-radius:var(--radius-sm); color:#000; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
-  .btn-task-hot { background:linear-gradient(135deg,#FF6B35,#FF3300); color:#fff; }
-  .task-notice { background:var(--bg3); border-radius:var(--radius-sm); padding:12px; font-size:12px; color:var(--text2); line-height:1.6; }
-  .task-notice span { color:var(--gold); font-weight:600; }
-  .task-notice .red { color:var(--red); font-weight:600; }
+/* XẾP HẠNG */
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:16px 0;}
+.pod-item{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pod-av{width:52px;height:52px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;border:2px solid transparent;}
+.pod-av.p1{width:62px;height:62px;border-color:var(--gold);}
+.pod-av.p2{border-color:#C0C0C0;}
+.pod-av.p3{border-color:#CD7F32;}
+.pod-name{font-size:11px;font-weight:700;text-align:center;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pod-amt{font-size:11px;font-weight:800;color:var(--gold);}
+.pod-block{border-radius:8px 8px 0 0;width:70px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:900;}
+.pb1{height:62px;background:linear-gradient(135deg,#FFD700,#FFA500);}
+.pb2{height:46px;background:linear-gradient(135deg,#C0C0C0,#909090);}
+.pb3{height:34px;background:linear-gradient(135deg,#CD7F32,#A05A20);}
 
-  .history-item { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid var(--border); }
-  .history-item:last-child { border-bottom:none; }
-  .hi-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
-  .hi-info { flex:1; }
-  .hi-name { font-size:13px; font-weight:600; }
-  .hi-time { font-size:11px; color:var(--text2); }
-  .hi-amount { font-size:14px; font-weight:700; }
-  .badge-expired { background:var(--bg3); color:var(--text2); font-size:11px; padding:3px 8px; border-radius:20px; }
+/* ADMIN PANEL */
+.admin-section{background:linear-gradient(135deg,rgba(245,166,35,0.08),rgba(196,125,14,0.03));border:1px solid rgba(245,166,35,0.2);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.admin-section h3{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:14px;color:var(--gold);}
+.admin-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.as-box{background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center;}
+.as-val{font-size:20px;font-weight:900;}
+.as-lbl{font-size:10px;color:var(--text2);margin-top:2px;}
 
-  /* ===== RÚT TIỀN ===== */
-  .balance-main { background:linear-gradient(135deg,var(--bg3),var(--bg2)); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:12px; }
-  .balance-label { font-size:12px; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
-  .balance-amount { font-size:32px; font-weight:800; color:var(--gold); }
-  .balance-unit { font-size:14px; color:var(--text2); }
-  .balance-row { display:flex; gap:12px; margin-top:12px; }
-  .balance-stat { flex:1; }
-  .balance-stat .bs-label { font-size:11px; color:var(--text2); }
-  .balance-stat .bs-val { font-size:15px; font-weight:700; }
+.member-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
+.member-item:last-child{border-bottom:none;}
+.mi-av{width:38px;height:38px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+.mi-info{flex:1;}
+.mi-name{font-size:13px;font-weight:700;}
+.mi-email{font-size:11px;color:var(--text2);}
+.mi-bal{font-size:13px;font-weight:800;color:var(--gold);}
+.mi-joined{font-size:10px;color:var(--text3);}
 
-  .withdraw-form { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .withdraw-form .wf-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-  .withdraw-form h3 { font-size:15px; font-weight:700; display:flex; align-items:center; gap:6px; }
-  .schedule-badge { background:var(--bg3); border-radius:20px; padding:4px 10px; font-size:11px; color:var(--text2); }
-  .input-wrap { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:12px; font-size:20px; font-weight:700; color:var(--text3); }
-  .pay-methods { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-  .pay-method { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:10px; cursor:pointer; transition:border-color 0.2s; }
-  .pay-method:hover, .pay-method.selected { border-color:var(--gold); }
-  .pm-icon { font-size:22px; }
-  .pm-info .pm-name { font-size:13px; font-weight:700; }
-  .pm-info .pm-sub { font-size:11px; color:var(--text2); }
-  .btn-withdraw { width:100%; padding:14px; background:linear-gradient(135deg,var(--green),#27AE60); border:none; border-radius:var(--radius-sm); color:#fff; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+.approve-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg3);border-radius:var(--r2);margin-bottom:8px;}
+.ai-info{flex:1;}
+.ai-name{font-size:13px;font-weight:700;}
+.ai-detail{font-size:11px;color:var(--text2);}
+.ai-amt{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:6px;text-align:right;}
+.ai-btns{display:flex;gap:6px;}
+.btn-approve{flex:1;padding:8px;border:none;border-radius:6px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;}
+.btn-ok{background:rgba(46,204,113,0.2);color:var(--green);}
+.btn-no{background:rgba(231,76,60,0.2);color:var(--red);}
 
-  .status-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-  .status-card { border-radius:var(--radius-sm); padding:12px; }
-  .status-card .sc-dot { width:8px; height:8px; border-radius:50%; margin-bottom:6px; }
-  .status-card .sc-name { font-size:12px; font-weight:700; }
-  .status-card .sc-sub { font-size:11px; opacity:0.7; margin-top:2px; }
-  .sc-pending { background:rgba(230,126,34,0.15); }
-  .sc-pending .sc-dot { background:var(--orange); }
-  .sc-approved { background:rgba(52,152,219,0.15); }
-  .sc-approved .sc-dot { background:var(--blue); }
-  .sc-paid { background:rgba(46,204,113,0.15); }
-  .sc-paid .sc-dot { background:var(--green); }
-  .sc-cancel { background:rgba(231,76,60,0.15); }
-  .sc-cancel .sc-dot { background:var(--red); }
-  .sc-refund { background:rgba(155,89,182,0.15); }
-  .sc-refund .sc-dot { background:var(--purple); }
-  .sc-hold { background:var(--bg3); }
-  .sc-hold .sc-dot { background:var(--text3); }
+.task-form{display:flex;flex-direction:column;gap:10px;}
+.tf-input{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 13px;color:var(--text);font-family:inherit;font-size:14px;outline:none;width:100%;transition:border .2s;}
+.tf-input:focus{border-color:var(--gold);}
+.btn-add-task{padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;border-radius:var(--r2);color:#000;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;width:100%;}
+.existing-task-item{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:var(--r2);margin-bottom:8px;}
+.eti-info{flex:1;}
+.eti-name{font-size:13px;font-weight:700;}
+.eti-detail{font-size:11px;color:var(--text2);}
+.btn-del{background:rgba(231,76,60,0.2);color:var(--red);border:none;border-radius:6px;padding:7px 12px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;}
 
-  .rules-card { background:var(--bg2); border:1px solid rgba(245,166,35,0.2); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .rules-card h3 { font-size:14px; font-weight:700; display:flex; align-items:center; gap:6px; margin-bottom:12px; }
-  .rule-item { display:flex; gap:10px; margin-bottom:10px; font-size:13px; color:var(--text2); line-height:1.5; }
-  .rule-item:last-child { margin-bottom:0; }
-  .rule-num { font-size:11px; color:var(--text3); min-width:24px; }
+/* QUY ĐỊNH */
+.reg-warning{background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.25);border-radius:var(--r2);padding:12px 14px;margin-bottom:14px;font-size:13px;display:flex;align-items:flex-start;gap:8px;}
+.reg-item{display:flex;gap:10px;margin-bottom:9px;font-size:13px;line-height:1.55;color:var(--text2);}
+.reg-num{font-size:11px;color:var(--text3);min-width:22px;padding-top:1px;}
+.hl-r{color:var(--red);font-weight:700;}
+.hl-g{color:var(--gold);font-weight:700;}
+.hl-gr{color:var(--green);font-weight:700;}
 
-  /* ===== QUY ĐỊNH ===== */
-  .reg-warning { background:rgba(231,76,60,0.1); border:1px solid rgba(231,76,60,0.3); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:14px; font-size:13px; display:flex; align-items:flex-start; gap:8px; }
-  .reg-item { display:flex; gap:12px; margin-bottom:10px; font-size:13px; line-height:1.5; padding-left:4px; position:relative; }
-  .reg-item::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--text3); flex-shrink:0; margin-top:5px; }
-  .highlight { font-weight:600; }
-  .hl-red { color:var(--red); }
-  .hl-gold { color:var(--gold); }
-  .hl-green { color:var(--green); }
+/* HỖ TRỢ */
+.faq-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px;}
+.faq-q{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.faq-badge{background:var(--bg3);color:var(--gold);font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;flex-shrink:0;}
+.faq-question{font-size:13px;font-weight:800;}
+.faq-answer{font-size:12px;color:var(--text2);line-height:1.6;padding-left:44px;}
+.contact-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
+.contact-item:hover{border-color:rgba(245,166,35,0.3);}
+.ci-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 
-  /* ===== XẾP HẠNG ===== */
-  .rank-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
-  .rank-stat { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center; }
-  .rank-stat .rs-val { font-size:18px; font-weight:800; color:var(--gold); }
-  .rank-stat .rs-label { font-size:11px; color:var(--text2); margin-top:2px; }
+/* GIỚI THIỆU */
+.link-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:13px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.link-url{flex:1;font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-copy{padding:8px 14px;background:var(--text);border:none;border-radius:var(--r2);color:var(--bg);font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0;}
 
-  .podium { display:flex; align-items:flex-end; justify-content:center; gap:8px; margin:20px 0; }
-  .podium-item { display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .pod-avatar { width:50px; height:50px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; border:2px solid transparent; }
-  .pod-avatar.p1 { width:60px; height:60px; border-color:var(--gold); }
-  .pod-avatar.p2 { border-color:#C0C0C0; }
-  .pod-avatar.p3 { border-color:#CD7F32; }
-  .pod-name { font-size:11px; font-weight:600; text-align:center; max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .pod-amount { font-size:12px; font-weight:700; color:var(--gold); }
-  .pod-block { border-radius:8px 8px 0 0; width:70px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; font-weight:800; }
-  .pod-block.b1 { height:60px; background:linear-gradient(135deg,#FFD700,#FFA500); }
-  .pod-block.b2 { height:44px; background:linear-gradient(135deg,#C0C0C0,#A0A0A0); }
-  .pod-block.b3 { height:32px; background:linear-gradient(135deg,#CD7F32,#A05A20); }
+/* TÀI KHOẢN */
+.prof-hd{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.prof-av{width:56px;height:56px;background:linear-gradient(135deg,var(--bg3),var(--bg4));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;}
+.prof-online{position:absolute;bottom:2px;right:2px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);}
+.prof-name{font-size:17px;font-weight:900;}
+.prof-email{font-size:12px;color:var(--text2);margin-top:2px;word-break:break-all;}
+.info-sec{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.info-row{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.info-row:last-child{border-bottom:none;}
+.ir-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ir-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+.ir-val{font-size:13px;font-weight:600;margin-top:1px;}
 
-  .rank-list-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
-  .rank-list-item:last-child { border-bottom:none; }
-  .rl-rank { width:32px; height:32px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
-  .rl-avatar { width:38px; height:38px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
-  .rl-info { flex:1; }
-  .rl-name { font-size:13px; font-weight:600; }
-  .rl-tasks { font-size:11px; color:var(--text2); }
-  .rl-amount { font-size:14px; font-weight:700; color:var(--green); }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:12px 20px;font-size:13px;font-weight:700;opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  /* ===== GIỚI THIỆU ===== */
-  .ref-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
-  .ref-stat { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center; }
-  .ref-stat .rv { font-size:20px; font-weight:800; }
-  .ref-stat .rl { font-size:11px; color:var(--text2); margin-top:2px; }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--bg2);border:1px solid rgba(245,166,35,0.2);border-radius:20px;padding:24px;width:100%;max-width:360px;animation:fadeUp .3s ease;}
+.modal h3{font-size:17px;font-weight:800;margin-bottom:16px;}
+.modal-btns{display:flex;gap:8px;margin-top:16px;}
+.btn-modal-ok{flex:1;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold3));border:none;border-radius:var(--r2);color:#000;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;}
+.btn-modal-cancel{flex:1;padding:12px;background:var(--bg3);border:none;border-radius:var(--r2);color:var(--text2);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;}
 
-  .link-box { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .link-box .link-url { flex:1; font-size:12px; color:var(--text2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .btn-copy { padding:8px 16px; background:var(--text); border:none; border-radius:var(--radius-sm); color:var(--bg); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; flex-shrink:0; }
-  .ref-warning { background:rgba(231,76,60,0.1); border:1px solid rgba(231,76,60,0.2); border-radius:var(--radius-sm); padding:12px; font-size:12px; color:var(--text2); display:flex; align-items:flex-start; gap:8px; margin-bottom:14px; }
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
 
-  .sample-item { background:var(--bg3); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; font-size:13px; color:var(--text2); line-height:1.6; }
-  .sample-num { display:inline-flex; width:24px; height:24px; background:var(--bg4); border-radius:50%; align-items:center; justify-content:center; font-size:11px; font-weight:700; margin-right:6px; flex-shrink:0; }
-
-  /* ===== HỖ TRỢ ===== */
-  .support-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-  .support-icon-wrap { width:52px; height:52px; background:var(--bg3); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; }
-  .support-head-info h3 { font-size:17px; font-weight:700; }
-  .support-head-info p { font-size:12px; color:var(--text2); }
-  .support-feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-  .sf-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; }
-  .sf-icon { font-size:20px; margin-bottom:6px; }
-  .sf-name { font-size:12px; font-weight:700; }
-  .sf-sub { font-size:11px; color:var(--text2); margin-top:2px; }
-
-  .contact-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:8px; cursor:pointer; transition:border-color 0.2s; }
-  .contact-item:hover { border-color:rgba(245,166,35,0.3); }
-  .ci-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
-  .ci-info { flex:1; }
-  .ci-name { font-size:14px; font-weight:700; }
-  .ci-url { font-size:12px; color:var(--text2); }
-  .ci-arrow { color:var(--text3); font-size:16px; }
-
-  .faq-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; }
-  .faq-q { display:flex; align-items:flex-start; gap:10px; margin-bottom:6px; }
-  .faq-badge { background:var(--bg3); color:var(--gold); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; flex-shrink:0; }
-  .faq-question { font-size:13px; font-weight:700; }
-  .faq-answer { font-size:12px; color:var(--text2); line-height:1.6; padding-left:46px; }
-
-  /* ===== TÀI KHOẢN ===== */
-  .profile-header { display:flex; align-items:center; gap:14px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .profile-avatar { width:56px; height:56px; background:linear-gradient(135deg,var(--bg3),var(--bg4)); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; position:relative; }
-  .profile-online { position:absolute; bottom:2px; right:2px; width:10px; height:10px; background:var(--green); border-radius:50%; border:2px solid var(--bg2); }
-  .profile-info .pname { font-size:17px; font-weight:800; }
-  .profile-info .pemail { font-size:12px; color:var(--text2); margin-top:2px; }
-  .profile-badges { display:flex; gap:6px; margin-top:6px; }
-  .pbadge { font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; }
-  .pbadge-lv { background:rgba(52,152,219,0.2); color:var(--blue); }
-  .pbadge-balance { background:rgba(245,166,35,0.2); color:var(--gold); }
-
-  .info-section { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-  .is-title { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; margin-bottom:14px; }
-  .info-row { display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
-  .info-row:last-child { border-bottom:none; }
-  .ir-icon { width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-  .ir-info { flex:1; }
-  .ir-label { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; }
-  .ir-value { font-size:13px; font-weight:600; margin-top:1px; }
-
-  .bank-item { background:var(--bg3); border:1px solid rgba(245,166,35,0.2); border-radius:var(--radius-sm); padding:14px; display:flex; align-items:center; gap:12px; }
-  .bank-icon { width:42px; height:42px; border-radius:12px; background:var(--bg4); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-  .bank-info .bname { font-size:13px; font-weight:700; }
-  .bank-info .bnum { font-size:12px; color:var(--text2); }
-  .bank-default { margin-left:auto; background:rgba(245,166,35,0.15); color:var(--gold); font-size:11px; font-weight:700; padding:4px 8px; border-radius:6px; }
-  .btn-add { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; background:var(--gold); border:none; border-radius:var(--radius-sm); color:#000; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
-
-  .password-form { }
-  .pf-input { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; width:100%; color:var(--text); font-family:inherit; font-size:14px; outline:none; transition:border 0.2s; margin-bottom:10px; }
-  .pf-input:focus { border-color:var(--gold); }
-  .pf-hint { background:var(--bg3); border-radius:var(--radius-sm); padding:10px 12px; font-size:12px; color:var(--text2); display:flex; gap:8px; }
-
-  .login-history { background:var(--bg3); border-radius:var(--radius-sm); padding:14px; }
-  .lh-item { display:flex; align-items:flex-start; gap:8px; }
-  .lh-dot { width:8px; height:8px; border-radius:50%; background:var(--green); margin-top:4px; flex-shrink:0; }
-  .lh-time { font-size:13px; font-weight:700; margin-bottom:4px; }
-  .lh-agent { font-size:11px; color:var(--text2); }
-  .lh-ip { font-size:11px; font-family:monospace; color:var(--text3); margin-top:4px; background:var(--bg4); padding:2px 6px; border-radius:4px; }
-  .lh-badge { background:rgba(46,204,113,0.2); color:var(--green); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; margin-left:auto; }
-
-  /* LỊCH SỬ */
-  .ls-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
-  .lss { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center; }
-  .lss .sv { font-size:18px; font-weight:800; }
-  .lss .sl { font-size:11px; color:var(--text2); margin-top:2px; }
-  .filter-tabs { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px; }
-  .filter-tab { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; transition:all 0.2s; border:1px solid var(--border); color:var(--text2); }
-  .filter-tab.active { background:var(--gold); color:#000; border-color:var(--gold); }
-
-  /* Notification dot */
-  .notif-dot { position:relative; }
-  .notif-dot::after { content:''; position:absolute; top:6px; right:6px; width:8px; height:8px; background:var(--gold); border-radius:50%; border:2px solid var(--bg2); }
-
-  /* Toast */
-  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 20px; font-size:13px; font-weight:600; opacity:0; transition:all 0.3s; z-index:1000; white-space:nowrap; }
-  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width:4px; }
-  ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:var(--bg4); border-radius:4px; }
-
-  /* ===== AUTH ENHANCEMENTS ===== */
-  .auth-wrap {
-    background-image:
-      radial-gradient(ellipse at 20% 80%, rgba(245,166,35,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 10%, rgba(196,125,14,0.05) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(245,166,35,0.03) 0%, transparent 70%) !important;
-  }
-  .auth-card {
-    box-shadow: 0 8px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,166,35,0.06);
-    animation: authSlideUp 0.4s ease;
-  }
-  @keyframes authSlideUp {
-    from { opacity:0; transform:translateY(20px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-  .auth-logo-icon { animation:authPulse 2.5s ease-in-out infinite; }
-  @keyframes authPulse {
-    0%,100% { box-shadow:0 8px 32px rgba(245,166,35,0.3); }
-    50% { box-shadow:0 8px 48px rgba(245,166,35,0.55); }
-  }
-  .form-group input:focus {
-    box-shadow:0 0 0 3px rgba(245,166,35,0.1);
-    background:var(--bg4);
-  }
-  .btn-primary {
-    box-shadow:0 4px 16px rgba(245,166,35,0.25);
-    letter-spacing:0.3px;
-  }
-  .btn-primary:hover {
-    opacity:1 !important;
-    transform:translateY(-1px);
-    box-shadow:0 6px 24px rgba(245,166,35,0.4) !important;
-  }
-  .btn-primary:active { transform:translateY(0); }
-
-  @media(max-width:400px) {
-    .stats-grid { grid-template-columns:1fr 1fr; }
-    .podium-item { gap:4px; }
-    .pod-block { width:60px; }
-    .pod-name { max-width:60px; }
-  }
+/* ===== ACCOUNT PAGE ===== */
+.acc-profile-card{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;}
+.acc-av-wrap{position:relative;flex-shrink:0;}
+.acc-av{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#1a1a2e,#16213e);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--gold);}
+.acc-online-dot{position:absolute;bottom:2px;right:2px;width:12px;height:12px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);}
+.acc-hd-name{font-size:18px;font-weight:800;line-height:1.2;}
+.acc-hd-email{font-size:12px;color:var(--text2);margin-top:2px;}
+.acc-hd-badges{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.acc-lv-badge{background:rgba(245,166,35,.15);color:var(--gold);border:1px solid rgba(245,166,35,.3);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.acc-bal-badge{color:var(--gold);font-size:14px;font-weight:800;}
+.acc-section-header{display:flex;align-items:center;gap:12px;margin:14px 0 8px;}
+.acc-sec-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.acc-sec-title{font-size:16px;font-weight:800;}
+.acc-sec-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.acc-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:4px;}
+.acc-info-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);}
+.acc-info-icon{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.acc-info-body{flex:1;}
+.acc-info-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.acc-info-val{font-size:14px;font-weight:600;color:var(--text);}
+.acc-pw-lbl{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;}
+.acc-pw-wrap{position:relative;margin-bottom:12px;}
+.acc-pw-inp{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border .2s;}
+.acc-pw-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,.1);}
+.acc-pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text3);font-size:16px;}
+.acc-btn-gold{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;color:#000;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.acc-btn-sm-gold{padding:8px 14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:20px;color:#000;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.acc-btn-outline{width:100%;padding:12px;background:transparent;border:1.5px solid var(--border);border-radius:12px;color:var(--text2);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;}
+.acc-pw-note{font-size:12px;color:var(--text3);background:var(--bg3);border-radius:10px;padding:10px 12px;margin-top:10px;line-height:1.5;}
+.acc-empty{text-align:center;padding:24px 16px;}
+.acc-empty-icon{font-size:32px;margin-bottom:10px;}
+.acc-empty-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.acc-empty-sub{font-size:12px;color:var(--text2);margin-bottom:14px;}
+.acc-contact-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.acc-contact-lbl{font-size:13px;font-weight:600;color:var(--text2);}
+.acc-bank-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:12px;margin-bottom:8px;}
+.acc-bank-icon{width:40px;height:40px;background:var(--bg4);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.acc-bank-name{font-size:13px;font-weight:700;}
+.acc-bank-num{font-size:12px;color:var(--text2);margin-top:2px;}
+.acc-bank-del{margin-left:auto;background:rgba(231,76,60,.15);border:none;border-radius:8px;color:var(--red);font-size:12px;font-weight:700;padding:6px 10px;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN PAGE ===== -->
+<!-- LOGIN PAGE -->
 <div class="page active" id="page-login">
-  <div class="auth-wrap">
+  <div class="auth-bg">
     <div class="auth-logo">
-      <div class="auth-logo-icon">🔗</div>
+      <div class="auth-logo-box">🔗</div>
       <h1>Link<span>Beta</span></h1>
       <p>Đăng nhập để tiếp tục kiếm tiền</p>
     </div>
     <div class="auth-card">
       <h2>Đăng Nhập</h2>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="email@example.com" id="login-email">
-      </div>
-      <div class="form-group">
-        <label>Mật Khẩu</label>
-        <input type="password" placeholder="••••••••" id="login-pass">
-      </div>
-      <div class="cf-captcha" id="cf1" onclick="triggerCaptcha('cf1')">
-        <div class="cf-left">
-          <div class="cf-box"><span class="cf-check">✓</span><div class="cf-spin"></div></div>
-          <span class="cf-text">Tôi không phải robot</span>
-        </div>
-        <div class="cf-brand">
-          <div class="cf-brand-icon">☁️</div>
-          <div class="cf-brand-label">Cloudflare</div>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="doLogin('cf1')">Đăng Nhập →</button>
-      <div class="auth-switch">Chưa có tài khoản? <a onclick="showPage('page-register')">Đăng ký ngay</a></div>
+      <div id="login-err" class="err-box"></div>
+      <div class="fg"><label>Email</label><input type="email" id="li-email" placeholder="email@gmail.com"></div>
+      <div class="fg"><label>Mật Khẩu</label><input type="password" id="li-pass" placeholder="Tối thiểu 6 ký tự"></div>
+      <button class="btn-main" onclick="doLogin()">Đăng Nhập →</button>
+      <div class="auth-sw">Chưa có tài khoản? <a onclick="showPg('page-register')">Đăng ký ngay</a></div>
     </div>
   </div>
 </div>
 
-<!-- ===== REGISTER PAGE ===== -->
+<!-- REGISTER PAGE -->
 <div class="page" id="page-register">
-  <div class="auth-wrap">
+  <div class="auth-bg">
     <div class="auth-logo">
-      <div class="auth-logo-icon">🔗</div>
+      <div class="auth-logo-box">🔗</div>
       <h1>Link<span>Beta</span></h1>
-      <p>Tạo tài khoản để bắt đầu kiếm tiền</p>
+      <p>Tạo tài khoản miễn phí</p>
     </div>
     <div class="auth-card">
       <h2>Đăng Ký</h2>
-      <div class="form-group">
-        <label>Họ Tên</label>
-        <input type="text" placeholder="Nguyễn Văn A">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="email@example.com">
-      </div>
-      <div class="form-group">
-        <label>Mật Khẩu</label>
-        <input type="password" placeholder="Tối thiểu 8 ký tự">
-      </div>
-      <div class="form-group">
-        <label>Mã Giới Thiệu (tuỳ chọn)</label>
-        <input type="text" placeholder="Nhập mã giới thiệu">
-      </div>
-      <div class="cf-captcha" id="cf2" onclick="triggerCaptcha('cf2')">
-        <div class="cf-left">
-          <div class="cf-box"><span class="cf-check">✓</span><div class="cf-spin"></div></div>
-          <span class="cf-text">Tôi không phải robot</span>
-        </div>
-        <div class="cf-brand">
-          <div class="cf-brand-icon">☁️</div>
-          <div class="cf-brand-label">Cloudflare</div>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="doLogin('cf2')">Đăng Ký →</button>
-      <div class="auth-switch">Đã có tài khoản? <a onclick="showPage('page-login')">Đăng nhập</a></div>
+      <div id="reg-err" class="err-box"></div>
+      <div class="fg"><label>Họ Tên</label><input type="text" id="rg-name" placeholder="Nguyễn Văn A"></div>
+      <div class="fg"><label>Email</label><input type="email" id="rg-email" placeholder="email@gmail.com"></div>
+      <div class="fg"><label>Mật Khẩu</label><input type="password" id="rg-pass" placeholder="Tối thiểu 6 ký tự"></div>
+      <div class="fg"><label>Mã Giới Thiệu (tuỳ chọn)</label><input type="text" id="rg-ref" placeholder="Nhập mã nếu có"></div>
+      <button class="btn-main" onclick="doRegister()">Đăng Ký →</button>
+      <div class="auth-sw">Đã có tài khoản? <a onclick="showPg('page-login')">Đăng nhập</a></div>
     </div>
   </div>
 </div>
 
-<!-- ===== APP LAYOUT ===== -->
+<!-- APP -->
 <div class="page" id="page-app">
-  <!-- Overlay -->
-  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-  <!-- Sidebar -->
+  <div class="overlay" id="overlay" onclick="closeSB()"></div>
   <div class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">🔗</div>
+    <div class="sb-logo">
+      <div class="sb-logo-icon">🔗</div>
       <h2>Link<span>Beta</span></h2>
-      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+      <button class="sb-close" onclick="closeSB()">✕</button>
     </div>
-    <div class="sidebar-balance">
-      <div class="label">SỐ DƯ</div>
-      <div class="amount">0 <span class="unit">VNĐ</span></div>
-    </div>
-    <div class="sidebar-nav">
-      <div class="nav-item active" onclick="navTo('dashboard')">
-        <span class="nav-icon">📊</span> Tổng Quan
+    <div class="sb-user">
+      <div class="sb-user-top">
+        <div class="sb-avatar" id="sb-avatar">?</div>
+        <div class="sb-user-info">
+          <div class="su-name" id="sb-name">—</div>
+          <div class="su-email" id="sb-email">—</div>
+          <div class="su-badge" id="sb-badge">MEMBER</div>
+        </div>
       </div>
-      <div class="nav-item" onclick="navTo('account')">
-        <span class="nav-icon">👤</span> Tài Khoản
-      </div>
-      <div class="nav-item" onclick="navTo('tasks')">
-        <span class="nav-icon">📋</span> Nhiệm Vụ
-      </div>
-      <div class="nav-item" onclick="navTo('ranking')">
-        <span class="nav-icon">🏆</span> Xếp Hạng
-      </div>
-      <div class="nav-item" onclick="navTo('referral')">
-        <span class="nav-icon">👥</span> Giới Thiệu
-      </div>
-      <div class="nav-item" onclick="navTo('withdraw')">
-        <span class="nav-icon">💳</span> Rút Tiền
-      </div>
-      <div class="nav-item" onclick="navTo('history')">
-        <span class="nav-icon">📅</span> Lịch Sử
-      </div>
-      <div class="nav-item" onclick="navTo('rules')">
-        <span class="nav-icon">📖</span> Quy Định
-      </div>
-      <div class="nav-item" onclick="navTo('support')">
-        <span class="nav-icon">🎧</span> Hỗ Trợ
+      <div class="sb-balance-box">
+        <div class="su-bal-label">SỐ DƯ</div>
+        <div class="su-bal" id="sb-balance">0 VNĐ</div>
       </div>
     </div>
-    <div class="sidebar-footer">
-      <div class="logout-btn" onclick="logout()">
-        <span>🚪</span> Đăng Xuất
+    <div class="sb-nav" id="sb-nav">
+      <div class="nav-item active" data-sec="dashboard" onclick="navTo('dashboard')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Tổng Quan
+      </div>
+      <div class="nav-item" data-sec="account" onclick="navTo('account')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Tài Khoản
+      </div>
+      <div class="nav-item" data-sec="tasks" onclick="navTo('tasks')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="2" rx="1"/><rect x="3" y="11" width="18" height="2" rx="1"/><rect x="3" y="18" width="12" height="2" rx="1"/></svg>
+        Nhiệm Vụ
+      </div>
+      <div class="nav-item" data-sec="ranking" onclick="navTo('ranking')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        Xếp Hạng
+      </div>
+      <div class="nav-item" data-sec="referral" onclick="navTo('referral')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M2 20c0-3 3-5 7-5s7 2 7 5"/><circle cx="17" cy="7" r="3"/><path d="M17 12c2 0 5 1.3 5 4"/></svg>
+        Giới Thiệu
+      </div>
+      <div class="nav-item" data-sec="withdraw" onclick="navTo('withdraw')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="7" cy="15" r="1.5"/></svg>
+        Rút Tiền
+      </div>
+      <div class="nav-item" data-sec="history" onclick="navTo('history')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M12 7v5l3 3"/></svg>
+        Lịch Sử
+      </div>
+      <div class="nav-item" data-sec="rules" onclick="navTo('rules')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" fill="none" stroke-width="2"/><path d="M8 7h8M8 12h8M8 17h5"/></svg>
+        Quy Định
+      </div>
+      <div class="nav-item nav-support" data-sec="support" onclick="navTo('support')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M9 9a3 3 0 1 1 4 2.8c-.8.3-1 .9-1 1.7v.5"/><circle cx="12" cy="17" r="1"/></svg>
+        Hỗ Trợ
+      </div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" id="nav-admin" style="display:none;" data-sec="admin" onclick="navTo('admin')">
+        <svg class="nav-svg" viewBox="0 0 24 24"><path d="M12 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
+        Quản Trị Admin
+      </div>
+    </div>
+    <div class="sb-footer">
+      <div class="logout-btn" onclick="doLogout()">
+        <svg style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Đăng Xuất
       </div>
     </div>
   </div>
 
-  <!-- Topbar -->
   <div class="topbar">
-    <button class="menu-btn" onclick="openSidebar()">☰</button>
+    <button class="menu-btn" onclick="openSB()">☰</button>
     <div class="topbar-title" id="topbar-title">Tổng Quan</div>
-    <div class="topbar-icon notif-dot">🔔</div>
-    <div class="topbar-icon" onclick="navTo('account')">👤</div>
+    <div class="tb-icon tb-dot">🔔</div>
+    <div class="tb-icon" onclick="navTo('account')">👤</div>
   </div>
 
   <div class="main">
 
-    <!-- ===== DASHBOARD ===== -->
+    <!-- DASHBOARD -->
     <div class="content" id="sec-dashboard">
       <div class="welcome-card">
-        <div class="welcome-streak">🔥 1 ngày liên tiếp</div>
-        <div class="welcome-title">Chào buổi sáng, Thần tày 👋</div>
-        <div class="welcome-sub">Hoàn thành nhiệm vụ hôm nay để nhận thưởng bonus</div>
-        <button class="btn-small" onclick="navTo('withdraw')">💳 Rút tiền</button>
+        <div class="wc-streak">🔥 <span id="wc-streak">1</span> ngày liên tiếp</div>
+        <div class="wc-title">Xin chào, <span id="wc-name">bạn</span> 👋</div>
+        <div class="wc-sub">Hoàn thành nhiệm vụ hôm nay để nhận thưởng bonus</div>
+        <button class="btn-sm" onclick="navTo('tasks')">📋 Làm nhiệm vụ</button>
       </div>
-
-      <div class="progress-card">
-        <div class="progress-title">⚙️ Tiến độ hôm nay</div>
+      <div class="prog-card">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">⚙️ Tiến độ hôm nay</div>
         <div class="circle-wrap">
           <svg width="120" height="120" viewBox="0 0 120 120">
-            <circle class="circle-bg" cx="60" cy="60" r="50"/>
-            <circle class="circle-fg" id="progress-circle" cx="60" cy="60" r="50"/>
+            <circle class="cir-bg" cx="60" cy="60" r="50"/>
+            <circle class="cir-fg" id="prog-circle" cx="60" cy="60" r="50"/>
           </svg>
-          <div class="circle-text">
-            <div class="circle-num">0/600</div>
-            <div class="circle-sub">nhiệm vụ</div>
+          <div class="cir-text">
+            <div class="cir-num" id="prog-num">0/20</div>
+            <div class="cir-sub">nhiệm vụ</div>
           </div>
         </div>
-        <div class="progress-link" onclick="navTo('tasks')">Làm nhiệm vụ ngay ›</div>
+        <div style="color:var(--gold);font-size:13px;font-weight:700;cursor:pointer;" onclick="navTo('tasks')">Làm nhiệm vụ ngay ›</div>
       </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="s-icon">💹</div>
-          <div class="s-value">0đ</div>
-          <div class="s-label">Thu nhập hôm nay</div>
-        </div>
-        <div class="stat-card">
-          <div class="s-icon">✅</div>
-          <div class="s-value">0</div>
-          <div class="s-label">Nhiệm vụ hoàn thành</div>
-        </div>
-        <div class="stat-card">
-          <div class="s-icon">👥</div>
-          <div class="s-value">0</div>
-          <div class="s-label">Người được mời</div>
-        </div>
-        <div class="stat-card">
-          <div class="s-icon" style="color:var(--blue)">⚡</div>
-          <div class="s-value">0 XP</div>
-          <div class="s-label">Kinh nghiệm · Lv.1</div>
-        </div>
+      <div class="stats2">
+        <div class="stat-box"><div class="si">💹</div><div class="sv" id="dash-income">0đ</div><div class="sl">Thu nhập hôm nay</div></div>
+        <div class="stat-box"><div class="si">✅</div><div class="sv" id="dash-done">0</div><div class="sl">Nhiệm vụ hoàn thành</div></div>
+        <div class="stat-box"><div class="si">👥</div><div class="sv" id="dash-ref">0</div><div class="sl">Người được mời</div></div>
+        <div class="stat-box"><div class="si">💰</div><div class="sv" id="dash-bal">0đ</div><div class="sl">Số dư hiện tại</div></div>
       </div>
-
-      <div class="quick-actions">
-        <div class="qa-item" onclick="navTo('tasks')">
-          <div class="qa-icon" style="background:rgba(245,166,35,0.15);">📋</div>
-          <div class="qa-label">Làm nhiệm vụ</div>
-        </div>
-        <div class="qa-item" onclick="navTo('withdraw')">
-          <div class="qa-icon" style="background:rgba(46,204,113,0.15);">💳</div>
-          <div class="qa-label">Rút tiền</div>
-        </div>
-        <div class="qa-item" onclick="navTo('referral')">
-          <div class="qa-icon" style="background:rgba(155,89,182,0.15);">👥</div>
-          <div class="qa-label">Giới thiệu</div>
-        </div>
-        <div class="qa-item" onclick="navTo('support')">
-          <div class="qa-icon" style="background:rgba(52,152,219,0.15);">🎧</div>
-          <div class="qa-label">Hỗ trợ</div>
-        </div>
+      <div class="qa-grid">
+        <div class="qa-box" onclick="navTo('tasks')"><div class="qa-ico" style="background:rgba(245,166,35,0.15);">📋</div><div class="qa-lbl">Làm nhiệm vụ</div></div>
+        <div class="qa-box" onclick="navTo('withdraw')"><div class="qa-ico" style="background:rgba(46,204,113,0.15);">💳</div><div class="qa-lbl">Rút tiền</div></div>
+        <div class="qa-box" onclick="navTo('referral')"><div class="qa-ico" style="background:rgba(155,89,182,0.15);">👥</div><div class="qa-lbl">Giới thiệu</div></div>
+        <div class="qa-box" onclick="navTo('support')"><div class="qa-ico" style="background:rgba(52,152,219,0.15);">🎧</div><div class="qa-lbl">Hỗ trợ</div></div>
       </div>
-
       <div class="card">
-        <div class="card-title">
-          <div class="icon" style="background:rgba(245,166,35,0.15);">🏆</div>
-          <h3>Top tháng này</h3>
-          <div class="badge" onclick="navTo('ranking')" style="cursor:pointer;">Xem thêm ›</div>
-        </div>
-        <div class="top-list">
-          <div class="top-item">
-            <div class="top-rank g1">1</div>
-            <div class="top-avatar" style="background:rgba(245,166,35,0.2);">TR</div>
-            <div class="top-info"><div class="top-name">Trần Quốc Việt</div><div class="top-sub">#1 tháng này</div></div>
-            <div class="top-amount">28.800đ</div>
-          </div>
-          <div class="top-item">
-            <div class="top-rank g2">2</div>
-            <div class="top-avatar" style="background:rgba(192,192,192,0.2);">TR</div>
-            <div class="top-info"><div class="top-name">trah5356fake</div><div class="top-sub">#2 tháng này</div></div>
-            <div class="top-amount">27.950đ</div>
-          </div>
-          <div class="top-item">
-            <div class="top-rank g3">3</div>
-            <div class="top-avatar" style="background:rgba(205,127,50,0.2);">NG</div>
-            <div class="top-info"><div class="top-name">Nguyễn Quang Hà</div><div class="top-sub">#3 tháng này</div></div>
-            <div class="top-amount">23.850đ</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="invite-banner">
-        <div class="ib-title">⭐ Mời bạn bè</div>
-        <div class="ib-main">Nhận 500đ cho mỗi lượt mời</div>
-        <div class="ib-sub">Chia sẻ link giới thiệu và nhận hoa hồng vĩnh viễn</div>
-        <button class="btn-small" onclick="navTo('referral')">🤝 Mời ngay</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <div class="icon" style="background:rgba(46,204,113,0.15);">⏰</div>
-          <h3>Hoạt động gần đây</h3>
-          <div class="badge" onclick="navTo('history')" style="cursor:pointer;">Xem tất cả ›</div>
-        </div>
-        <div class="activity-item">
-          <div class="act-icon">✅</div>
-          <div class="act-info">
-            <div class="act-name">Vượt link Uptolink 2 Step</div>
-            <div class="act-time">15:43 02-03</div>
-          </div>
-          <div class="act-amount">+300đ</div>
-        </div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">🏆</div><h3>Top tháng này</h3><div class="badge-sm" onclick="navTo('ranking')" style="cursor:pointer;">Xem thêm ›</div></div>
+        <div id="dash-top"></div>
       </div>
     </div>
 
-    <!-- ===== TÀI KHOẢN ===== -->
-    <div class="content" id="sec-account" style="display:none;">
-      <div class="profile-header">
-        <div class="profile-avatar">👤<div class="profile-online"></div></div>
-        <div class="profile-info">
-          <div class="pname">Thần tày</div>
-          <div class="pemail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e1959794d2d8d8d3d8a1868c80888dcf828e8c">[email&#160;protected]</a></div>
-          <div class="profile-badges">
-            <span class="pbadge pbadge-lv">Lv.1</span>
-            <span class="pbadge pbadge-balance">0đ</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-section">
-        <div class="is-title">👤 Thông tin cá nhân</div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(52,152,219,0.15);">👤</div>
-          <div class="ir-info"><div class="ir-label">HỌ TÊN</div><div class="ir-value">Thần tày</div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(231,76,60,0.15);">@</div>
-          <div class="ir-info"><div class="ir-label">EMAIL</div><div class="ir-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="20545655131919121960474d41494c0e434f4d">[email&#160;protected]</a></div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(46,204,113,0.15);">📱</div>
-          <div class="ir-info"><div class="ir-label">SỐ ĐIỆN THOẠI</div><div class="ir-value" style="color:var(--text3);">—</div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(245,166,35,0.15);">🌐</div>
-          <div class="ir-info"><div class="ir-label">ĐỊA CHỈ IP</div><div class="ir-value" style="font-size:11px;font-family:monospace;">2402:800:62e5:3346:b720...</div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(155,89,182,0.15);">📅</div>
-          <div class="ir-info"><div class="ir-label">NGÀY THAM GIA</div><div class="ir-value">15:42:02 2/3/2026</div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(52,152,219,0.15);">⚡</div>
-          <div class="ir-info"><div class="ir-label">KINH NGHIỆM</div><div class="ir-value">0 Exp</div></div>
-        </div>
-        <div class="info-row">
-          <div class="ir-icon" style="background:rgba(46,204,113,0.15);">🛡️</div>
-          <div class="ir-info"><div class="ir-label">TRẠNG THÁI</div><div class="ir-value" style="color:var(--green);">Đang hoạt động</div></div>
-        </div>
-      </div>
-
-      <div class="info-section">
-        <div class="is-title" style="justify-content:space-between;">
-          <span>🏦 Tài khoản ngân hàng</span>
-          <button class="btn-add" onclick="showToast('Tính năng thêm ngân hàng')">➕ Thêm</button>
-        </div>
-        <div class="bank-item">
-          <div class="bank-icon">💜</div>
-          <div class="bank-info">
-            <div class="bname">MoMo</div>
-            <div class="bnum">0366785862 — VŨ DUY TÙNG</div>
-          </div>
-          <div class="bank-default">Mặc định</div>
-        </div>
-      </div>
-
-      <div class="info-section">
-        <div class="is-title">🛡️ Bảo mật</div>
-        <div style="margin-bottom:10px;">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Mật khẩu hiện tại</div>
-          <input class="pf-input" type="password" placeholder="Nhập mật khẩu hiện tại">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Mật khẩu mới</div>
-          <input class="pf-input" type="password" placeholder="Tối thiểu 8 ký tự">
-          <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Xác nhận mật khẩu</div>
-          <input class="pf-input" type="password" placeholder="Nhập lại mật khẩu mới">
-          <div class="pf-hint">⚠️ Mật khẩu tối thiểu 8 ký tự, gồm chữ hoa, chữ thường và số. Không chia sẻ mật khẩu cho bất kỳ ai.</div>
-          <button class="btn-primary" style="margin-top:12px;" onclick="showToast('Đã cập nhật mật khẩu')">🔒 Cập nhật mật khẩu</button>
-        </div>
-        <div style="margin-top:14px;">
-          <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">✅ Xác thực Email</div>
-          <div style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);border-radius:var(--radius-sm);padding:12px;display:flex;align-items:center;justify-content:space-between;">
-            <div><div style="font-size:13px;font-weight:600;">Email đã xác thực</div><div style="font-size:12px;color:var(--text2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="23575556101a1a111a63444e424a4f0d404c4e">[email&#160;protected]</a></div></div>
-            <span style="color:var(--green);font-size:13px;font-weight:600;">✅ Đã xác thực</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-section">
-        <div class="is-title">💬 Thông tin liên hệ</div>
-        <div class="form-group"><label>Facebook</label><input class="pf-input" type="text" placeholder="Liên kết Facebook"></div>
-        <div class="form-group"><label>Zalo</label><input class="pf-input" type="text" placeholder="Số điện thoại Zalo"></div>
-        <div class="form-group"><label>Telegram</label><input class="pf-input" type="text" placeholder="Liên kết Telegram"></div>
-        <div class="form-group"><label>Skype</label><input class="pf-input" type="text" placeholder="Liên kết Skype"></div>
-        <button class="btn-primary" onclick="showToast('Đã lưu thay đổi')">✅ Lưu thay đổi</button>
-      </div>
-
-      <div class="info-section">
-        <div class="is-title">🔍 Lịch sử đăng nhập</div>
-        <div class="login-history">
-          <div class="lh-item">
-            <div class="lh-dot"></div>
-            <div style="flex:1;">
-              <div style="display:flex;align-items:center;">
-                <div class="lh-time">11:55:24 3/3/2026</div>
-                <div class="lh-badge" style="margin-left:auto;">Thành công</div>
-              </div>
-              <div class="lh-agent">User Agent: Mozilla/5.0 (Linux; Android 10; K) Ap...</div>
-              <div class="lh-ip">2402:800:62e5:3346:b720:4756:3d96:a689</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== NHIỆM VỤ ===== -->
+    <!-- TASKS -->
     <div class="content" id="sec-tasks" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
-        <div class="stat-card" style="padding:10px;">
-          <div class="s-value" style="font-size:18px;">2</div>
-          <div class="s-label">Khả dụng</div>
-        </div>
-        <div class="stat-card" style="padding:10px;">
-          <div class="s-value" style="font-size:18px;">0</div>
-          <div class="s-label">Hoàn thành</div>
-        </div>
-        <div class="stat-card" style="padding:10px;">
-          <div class="s-value" style="font-size:18px;">0đ</div>
-          <div class="s-label">Thu nhập</div>
-        </div>
-        <div class="stat-card" style="padding:10px;">
-          <div class="s-value" style="font-size:18px;color:var(--purple);">600</div>
-          <div class="s-label">Còn lại</div>
-        </div>
-      </div>
-
       <div class="tabs">
-        <div class="tab active" onclick="switchTab(this,'tab-hot')">🔥 Hot <span class="tab-badge">1</span></div>
-        <div class="tab" onclick="switchTab(this,'tab-all')">⚙️ Tất cả 2</div>
-        <div class="tab" onclick="switchTab(this,'tab-history')">⏰ Lịch sử</div>
+        <div class="tab active" onclick="switchTab(this,'tab-hot')">🔥 Hot</div>
+        <div class="tab" onclick="switchTab(this,'tab-all')">📋 Tất cả</div>
+        <div class="tab" onclick="switchTab(this,'tab-hist')">⏰ Lịch sử</div>
       </div>
-
-      <!-- Tab Hot -->
-      <div id="tab-hot">
-        <div class="task-card" style="border-color:rgba(255,107,53,0.3);">
-          <div class="task-header">
-            <div class="task-icon-wrap">U</div>
-            <div class="task-info">
-              <div class="task-name">Uptolink 2 Step</div>
-              <div class="task-meta">Lv.0 · 10 Exp</div>
-            </div>
-            <div class="task-hot">🔥 HOT</div>
-          </div>
-          <div class="task-reward">
-            <div><span class="amount">300</span> <span style="color:var(--text2);font-size:14px;">đ/lượt</span></div>
-            <div class="slots">300/300 lượt</div>
-          </div>
-          <div class="task-bar"><div class="task-bar-fill" style="width:100%;background:linear-gradient(90deg,#FF6B35,#FF3300);"></div></div>
-          <button class="btn-task btn-task-hot" onclick="showToast('Đang mở nhiệm vụ...')">🚀 Làm ngay</button>
-        </div>
-      </div>
-
-      <!-- Tab All -->
-      <div id="tab-all" style="display:none;">
-        <div class="task-card">
-          <div class="task-header">
-            <div class="task-icon-wrap">U</div>
-            <div class="task-info">
-              <div class="task-name">Uptolink 3 Step</div>
-              <div class="task-meta">Lv.0 · 10 Exp</div>
-            </div>
-          </div>
-          <div class="task-reward">
-            <div><span class="amount" style="font-size:22px;">350</span> <span style="color:var(--text2);font-size:14px;">đ</span></div>
-            <div class="slots">300/300 lượt</div>
-          </div>
-          <div class="task-bar"><div class="task-bar-fill" style="width:100%;"></div></div>
-          <button class="btn-task" onclick="showToast('Đang mở nhiệm vụ...')">🚀 Làm nhiệm vụ</button>
-        </div>
-        <div class="task-card" style="border-color:rgba(255,107,53,0.3);">
-          <div class="task-header">
-            <div class="task-icon-wrap">U</div>
-            <div class="task-info">
-              <div class="task-name">Uptolink 2 Step</div>
-              <div class="task-meta">Lv.0 · 10 Exp</div>
-            </div>
-            <div class="task-hot">🔥 HOT</div>
-          </div>
-          <div class="task-reward">
-            <div><span class="amount">300</span> <span style="color:var(--text2);font-size:14px;">đ/lượt</span></div>
-            <div class="slots">300/300 lượt</div>
-          </div>
-          <div class="task-bar"><div class="task-bar-fill" style="width:100%;background:linear-gradient(90deg,#FF6B35,#FF3300);"></div></div>
-          <button class="btn-task btn-task-hot" onclick="showToast('Đang mở nhiệm vụ...')">🚀 Làm ngay</button>
-        </div>
-      </div>
-
-      <!-- Tab History -->
-      <div id="tab-history" style="display:none;">
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <div style="flex:1;background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);border-radius:6px;padding:8px;font-size:12px;font-weight:600;color:var(--green);">0 Đã duyệt</div>
-          <div style="flex:1;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.2);border-radius:6px;padding:8px;font-size:12px;font-weight:600;color:var(--gold);">0 Chờ duyệt</div>
-          <div style="flex:1;background:rgba(52,152,219,0.1);border:1px solid rgba(52,152,219,0.2);border-radius:6px;padding:8px;font-size:12px;font-weight:600;color:var(--blue);">0 Đang làm</div>
-          <div style="flex:1;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:6px;padding:8px;font-size:12px;font-weight:600;color:var(--red);">0 Từ chối</div>
-        </div>
-        <div class="history-item">
-          <div class="hi-icon" style="background:rgba(245,166,35,0.1);">⏱️</div>
-          <div class="hi-info">
-            <div class="hi-name">Vượt link Uptolink 2 Step</div>
-            <div class="hi-time">15:43:53 2/3/2026</div>
-          </div>
-          <div style="text-align:right;">
-            <div class="hi-amount" style="color:var(--green);">+300đ</div>
-            <div class="badge-expired">expired</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="task-notice" style="margin-top:12px;">
-        Dùng <span>Chrome</span> để tránh lỗi · Nhiệm vụ Yeumoney cần duyệt · <span>Ưu tiên LinkBeta</span> · Không dùng <span class="red">VPN/Proxy</span>
+      <div id="tab-hot"></div>
+      <div id="tab-all" style="display:none;"></div>
+      <div id="tab-hist" style="display:none;"></div>
+      <div style="background:var(--bg3);border-radius:var(--r2);padding:12px;font-size:12px;color:var(--text2);line-height:1.7;margin-top:8px;">
+        Dùng <b style="color:var(--gold);">Chrome</b> để tránh lỗi · Không dùng <b style="color:var(--red);">VPN/Proxy</b> · Không bật tắt 4G khi làm nhiệm vụ
       </div>
     </div>
 
-    <!-- ===== RÚT TIỀN ===== -->
+    <!-- WITHDRAW -->
     <div class="content" id="sec-withdraw" style="display:none;">
-      <div class="balance-main">
-        <div class="balance-label">Số dư khả dụng</div>
-        <div><span class="balance-amount">0</span> <span class="balance-unit">VNĐ</span></div>
-        <div class="balance-row">
-          <div class="balance-stat"><div class="bs-label">Đã rút</div><div class="bs-val">0đ</div></div>
-          <div class="balance-stat"><div class="bs-label">Chờ duyệt</div><div class="bs-val" style="color:var(--gold);">0đ</div></div>
-        </div>
+      <div class="balance-card">
+        <div class="bc-label">Số dư khả dụng</div>
+        <div><span class="bc-amt" id="wd-bal">0</span> <span class="bc-unit">VNĐ</span></div>
       </div>
-
-      <div class="withdraw-form">
-        <div class="wf-header">
-          <h3>💰 Tạo yêu cầu rút</h3>
-          <div class="schedule-badge">ℹ️ Chốt lệnh T3-T5-T7</div>
-        </div>
-        <div class="input-wrap">Tối thiểu 10,000</div>
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">💰</div><h3>Tạo yêu cầu rút</h3><div class="badge-sm">Chốt T3-T5-T7</div></div>
+        <input class="wd-input" type="number" id="wd-amount" placeholder="Tối thiểu 10.000 VNĐ">
         <div class="pay-methods">
-          <div class="pay-method selected" onclick="selectPay(this)">
-            <div class="pm-icon">💳</div>
-            <div class="pm-info"><div class="pm-name">Thẻ cào</div><div class="pm-sub">Nhận mã thẻ ngay</div></div>
-          </div>
-          <div class="pay-method" onclick="selectPay(this)">
-            <div class="pm-icon">🏦</div>
-            <div class="pm-info"><div class="pm-name">Ngân hàng</div><div class="pm-sub">Chuyển khoản</div></div>
-          </div>
+          <div class="pay-m sel" onclick="selPay(this)"><div class="pm-icon">💳</div><div><div class="pm-name">Thẻ cào</div><div class="pm-sub">Nhận ngay</div></div></div>
+          <div class="pay-m" onclick="selPay(this)"><div class="pm-icon">🏦</div><div><div class="pm-name">Ngân hàng</div><div class="pm-sub">Chuyển khoản</div></div></div>
         </div>
-        <button class="btn-withdraw" onclick="showToast('Đã gửi yêu cầu rút tiền')">⬇️ Gửi yêu cầu rút tiền</button>
+        <button class="btn-withdraw" onclick="doWithdraw()">⬇️ Gửi yêu cầu rút tiền</button>
       </div>
-
-      <div class="status-grid">
-        <div class="status-card sc-pending"><div class="sc-dot"></div><div class="sc-name">Chờ duyệt</div><div class="sc-sub">Đang được kiểm tra</div></div>
-        <div class="status-card sc-approved"><div class="sc-dot"></div><div class="sc-name">Đã duyệt</div><div class="sc-sub">Chờ gửi tiền</div></div>
-        <div class="status-card sc-paid"><div class="sc-dot"></div><div class="sc-name">Đã thanh toán</div><div class="sc-sub">Gửi thành công</div></div>
-        <div class="status-card sc-cancel"><div class="sc-dot"></div><div class="sc-name">Huỷ thanh toán</div><div class="sc-sub">Đã bị huỷ</div></div>
-        <div class="status-card sc-refund"><div class="sc-dot"></div><div class="sc-name">Hoàn tiền</div><div class="sc-sub">Đã trả lại ví</div></div>
-        <div class="status-card sc-hold"><div class="sc-dot"></div><div class="sc-name">Bị giữ</div><div class="sc-sub">Liên hệ Admin</div></div>
-      </div>
-
-      <div class="rules-card">
-        <h3>⚠️ Quy định rút tiền <span style="font-size:12px;color:var(--text2);font-weight:400;">(8 điều)</span></h3>
-        <div class="rule-item"><span class="rule-num">01</span>Mức rút tối thiểu là <strong style="color:var(--gold);">10.000 VNĐ</strong>. Không giới hạn tối đa.</div>
-        <div class="rule-item"><span class="rule-num">02</span>Mỗi thiết bị chỉ liên kết <strong style="color:var(--gold);">1 tài khoản duy nhất</strong>.</div>
-        <div class="rule-item"><span class="rule-num">03</span>Chốt danh sách rút lúc <strong style="color:var(--red);">10h sáng thứ 3, 5, 7</strong> hàng tuần.</div>
-        <div class="rule-item"><span class="rule-num">04</span>Đơn rút quá <strong style="color:var(--red);">7 ngày</strong> không được hỗ trợ xử lý lại.</div>
-        <div class="rule-item"><span class="rule-num">05</span>Đơn tạm giữ quá <strong style="color:var(--red);">30 ngày</strong> sẽ tự động bị hủy.</div>
-        <div class="rule-item"><span class="rule-num">06</span>Khuyến khích rút ngay khi đạt <strong style="color:var(--gold);">mức tối thiểu</strong>.</div>
-        <div class="rule-item"><span class="rule-num">07</span>Tài khoản <strong style="color:var(--red);">giả mạo</strong> sẽ bị từ chối lệnh rút.</div>
-        <div class="rule-item"><span class="rule-num">08</span>Điền <strong style="color:var(--green);">chính xác</strong> thông tin tài khoản ngân hàng nhận tiền.</div>
-      </div>
-
       <div class="card">
-        <div class="card-title">
-          <div class="icon" style="background:rgba(52,152,219,0.15);">⏰</div>
-          <h3>Lịch sử rút tiền</h3>
-          <div class="badge">0 giao dịch</div>
-        </div>
-        <div style="text-align:center;padding:20px 0;color:var(--text3);font-size:13px;">Chưa có giao dịch nào</div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">⏰</div><h3>Lịch sử rút tiền</h3></div>
+        <div id="wd-hist"></div>
       </div>
     </div>
 
-    <!-- ===== LỊCH SỬ ===== -->
+    <!-- HISTORY -->
     <div class="content" id="sec-history" style="display:none;">
-      <div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
-        <div style="font-size:24px;">⏰</div>
-        <div>
-          <div style="font-size:17px;font-weight:700;">Lịch Sử Giao Dịch</div>
-          <div style="font-size:12px;color:var(--text2);">Theo dõi toàn bộ giao dịch</div>
-        </div>
-        <div style="margin-left:auto;background:rgba(46,204,113,0.15);color:var(--green);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;">● Realtime</div>
-      </div>
-
-      <div class="ls-stats">
-        <div class="lss"><div class="sv">1</div><div class="sl">Tổng giao dịch</div></div>
-        <div class="lss"><div class="sv" style="color:var(--green);">0đ</div><div class="sl">Tổng thu nhập</div></div>
-        <div class="lss"><div class="sv" style="color:var(--gold);">0đ</div><div class="sl">Tổng đã rút</div></div>
-      </div>
-
-      <div class="filter-tabs">
-        <div class="filter-tab active">Tất cả</div>
-        <div class="filter-tab">Thu nhập</div>
-        <div class="filter-tab">Rút tiền</div>
-        <div class="filter-tab">Giới thiệu</div>
-      </div>
-
       <div class="card">
-        <div class="history-item">
-          <div class="hi-icon" style="background:rgba(245,166,35,0.1);">⏱️</div>
-          <div class="hi-info">
-            <div class="hi-name">Vượt link Uptolink 2 Step</div>
-            <div class="hi-time">15:43:53 2/3/2026</div>
-          </div>
-          <div style="text-align:right;">
-            <div class="hi-amount" style="color:var(--green);">+300đ</div>
-            <div class="badge-expired">expired</div>
-          </div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">📅</div><h3>Lịch Sử Giao Dịch</h3></div>
+        <div class="filter-tabs">
+          <div class="ft active" onclick="filterHist(this,'all')">Tất cả</div>
+          <div class="ft" onclick="filterHist(this,'income')">Thu nhập</div>
+          <div class="ft" onclick="filterHist(this,'withdraw')">Rút tiền</div>
         </div>
-        <div style="text-align:center;margin-top:8px;font-size:12px;color:var(--text3);">Hiển thị 1 giao dịch · Trang 1/1</div>
+        <div id="hist-list"></div>
       </div>
     </div>
 
-    <!-- ===== XẾP HẠNG ===== -->
+    <!-- RANKING -->
     <div class="content" id="sec-ranking" style="display:none;">
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,rgba(245,166,35,0.2),rgba(196,125,14,0.1));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🏆</div>
-          <div>
-            <div style="font-size:16px;font-weight:700;">Bảng Xếp Hạng</div>
-            <div style="font-size:12px;color:var(--text2);">50 thành viên · 2026-03</div>
-          </div>
-        </div>
-        <div class="rank-stats">
-          <div class="rank-stat"><div class="rs-val">50</div><div class="rs-label">Thành viên</div></div>
-          <div class="rank-stat"><div class="rs-val">586k</div><div class="rs-label">Tổng thu nhập</div></div>
-          <div class="rank-stat"><div class="rs-val">1869</div><div class="rs-label">Tổng nhiệm vụ</div></div>
-        </div>
-      </div>
-
       <div class="card">
-        <div class="podium">
-          <div class="podium-item">
-            <div class="pod-avatar p2">TR</div>
-            <div class="pod-name">trah5356fake</div>
-            <div class="pod-amount">27.950đ</div>
-            <div class="pod-block b2">2</div>
-          </div>
-          <div class="podium-item">
-            <div class="pod-avatar p1">TR</div>
-            <div class="pod-name">Trần Quốc Việt</div>
-            <div class="pod-amount">28.800đ</div>
-            <div class="pod-block b1">1</div>
-          </div>
-          <div class="podium-item">
-            <div class="pod-avatar p3">NG</div>
-            <div class="pod-name">Nguyễn Quang Hà</div>
-            <div class="pod-amount">23.850đ</div>
-            <div class="pod-block b3">3</div>
-          </div>
-        </div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">🏆</div><h3>Bảng Xếp Hạng</h3><div class="badge-sm" id="rank-month"></div></div>
+        <div class="podium" id="podium"></div>
       </div>
-
       <div class="card">
-        <div class="card-title"><h3>⭐ Xếp hạng chi tiết</h3><div class="badge">#4 – #50</div></div>
+        <div class="card-title"><h3>⭐ Chi tiết #4 trở đi</h3></div>
         <div id="rank-list"></div>
       </div>
     </div>
 
-    <!-- ===== GIỚI THIỆU ===== -->
+    <!-- REFERRAL -->
     <div class="content" id="sec-referral" style="display:none;">
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,rgba(245,166,35,0.2),rgba(196,125,14,0.1));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🎁</div>
-          <div>
-            <div style="font-size:16px;font-weight:700;">Giới Thiệu Bạn Bè</div>
-            <div style="font-size:12px;color:var(--text2);">Mời bạn bè để kiếm hoa hồng trọn đời</div>
-          </div>
-        </div>
-        <div class="ref-stats">
-          <div class="ref-stat"><div class="rv">0</div><div class="rl">Tổng giới thiệu</div></div>
-          <div class="ref-stat"><div class="rv">0đ</div><div class="rl">Hoa hồng nhận</div></div>
-          <div class="ref-stat"><div class="rv" style="color:var(--green);">10%</div><div class="rl">Tỷ lệ hoa hồng</div></div>
-        </div>
-      </div>
-
       <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(52,152,219,0.15);">🔗</div><h3>Liên kết giới thiệu</h3></div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">🎁</div><h3>Giới Thiệu Bạn Bè</h3></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+          <div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center;"><div style="font-size:20px;font-weight:900;" id="ref-count">0</div><div style="font-size:10px;color:var(--text2);">Tổng giới thiệu</div></div>
+          <div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center;"><div style="font-size:20px;font-weight:900;" id="ref-earn">0đ</div><div style="font-size:10px;color:var(--text2);">Hoa hồng</div></div>
+          <div style="background:var(--bg3);border-radius:var(--r2);padding:12px;text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--green);">10%</div><div style="font-size:10px;color:var(--text2);">Tỷ lệ</div></div>
+        </div>
         <div class="link-box">
-          <div class="link-url">https://linkbeta.online/ref/thanhtay</div>
-          <button class="btn-copy" onclick="showToast('Đã sao chép link!')">📋 Sao chép</button>
+          <div class="link-url" id="ref-link">https://linkbeta.online/ref/...</div>
+          <button class="btn-copy" onclick="copyRef()">📋 Sao chép</button>
         </div>
-        <div class="ref-warning">
-          ⚠️ Giới thiệu gian lận, giả mạo, tự giới thiệu sẽ không được thanh toán và có thể bị <strong style="color:var(--red);">khóa tài khoản</strong>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(155,89,182,0.15);">📝</div><h3>Mẫu giới thiệu tham khảo</h3></div>
-        <div class="sample-item"><span class="sample-num">01</span>Nền tảng kiếm tiền online #1 Việt Nam — LinkBeta! Vượt link, tạo tài khoản, cài app... thu nhập 10-50k/ngày cực dễ. Min rút chỉ 10k, thanh toán mỗi ngày. Đăng ký ngay nhận 1.000đ miễn phí vào ví!</div>
-        <div class="sample-item"><span class="sample-num">02</span>Việc nhẹ lương cao — dành cho anh em chăm chỉ! Mỗi nhiệm vụ từ 10đ đến 500đ, ngày kiếm 10-50k đủ tiền trà sữa. Rút tiền siêu tốc, duyệt trong ngày. Tải app & bắt đầu ngay!</div>
-        <div class="sample-item"><span class="sample-num">03</span>Tuyển CTV tạo tài khoản Gmail + Vượt link. 500đ/Gmail, 10-460đ/link. Không vốn, không ràng buộc, min rút 10k. Thanh toán hằng ngày qua MoMo/Ngân hàng!</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(46,204,113,0.15);">👥</div><h3>Danh sách người giới thiệu</h3></div>
-        <div style="text-align:center;padding:24px 0;color:var(--text3);">
-          <div style="font-size:32px;margin-bottom:8px;">👥</div>
-          <div style="font-size:13px;">Chưa có người được giới thiệu</div>
-          <div style="font-size:12px;margin-top:4px;">Chia sẻ link giới thiệu để bắt đầu</div>
-        </div>
+        <div style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);border-radius:var(--r2);padding:11px;font-size:12px;color:var(--text2);">⚠️ Giới thiệu gian lận sẽ bị <b style="color:var(--red);">khóa tài khoản</b></div>
       </div>
     </div>
 
-    <!-- ===== QUY ĐỊNH ===== -->
+    <!-- RULES -->
     <div class="content" id="sec-rules" style="display:none;">
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <div style="width:42px;height:42px;background:linear-gradient(135deg,rgba(52,152,219,0.2),rgba(52,152,219,0.1));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🛡️</div>
-          <div><div style="font-size:16px;font-weight:700;">Quy Định Sử Dụng</div><div style="font-size:12px;color:var(--text2);">Sử dụng website đồng nghĩa bạn đã đồng ý tuân theo tất cả quy định</div></div>
-        </div>
-        <div class="reg-warning">⚠️ Vi phạm quy định sẽ bị <strong style="color:var(--red);">khóa tài khoản vĩnh viễn</strong> và <strong style="color:var(--red);">không được hỗ trợ</strong>.</div>
-      </div>
-
       <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(52,152,219,0.15);">👤</div><h3>Tài khoản</h3><div class="badge">8 điều</div></div>
-        <div class="reg-item"><span class="highlight hl-gold">Mỗi thành viên chỉ được sở hữu duy nhất 1 tài khoản.</span></div>
-        <div class="reg-item">Không chấp nhận tài khoản có <span class="highlight hl-red">cùng IP</span> hoặc <span class="highlight hl-red">cùng thiết bị</span>.</div>
-        <div class="reg-item">Trùng IP xảy ra khi nhiều tài khoản cùng <span class="highlight hl-red">mạng Wifi</span> hoặc <span class="highlight hl-red">4G</span>.</div>
-        <div class="reg-item"><span class="highlight hl-red">Bật tắt 4G</span> hoặc dùng <span class="highlight hl-red">VPN</span> cũng gây trùng IP.</div>
-        <div class="reg-item">Trùng thiết bị: <span class="highlight hl-red">2+ tài khoản</span> đăng nhập cùng thiết bị.</div>
-        <div class="reg-item">Nghiêm cấm tạo <span class="highlight hl-red">tài khoản ảo, giả mạo thông tin</span>.</div>
-        <div class="reg-item">Gian lận sẽ bị <span class="highlight hl-red">khóa vĩnh viễn</span> không cần thông báo.</div>
-        <div class="reg-item">Tài khoản vi phạm <span class="highlight hl-red">không được xử lý</span> lệnh rút tiền.</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(245,166,35,0.15);">💳</div><h3>Rút tiền</h3><div class="badge">8 điều</div></div>
-        <div class="reg-item">Rút tối thiểu <span class="highlight hl-gold">10.000 VNĐ</span>, <span class="highlight hl-gold">không giới hạn</span> tối đa.</div>
-        <div class="reg-item">Mỗi thiết bị chỉ liên kết <span class="highlight hl-gold">1 tài khoản duy nhất</span>.</div>
-        <div class="reg-item">Chốt lệnh rút lúc <span class="highlight hl-red">11h sáng</span> mỗi ngày.</div>
-        <div class="reg-item">Đơn quá <span class="highlight hl-red">7 ngày</span> không được hỗ trợ.</div>
-        <div class="reg-item">Đơn tạm giữ quá <span class="highlight hl-red">30 ngày</span> sẽ <span class="highlight hl-red">tự động hủy</span>.</div>
-        <div class="reg-item">Khuyến khích rút ngay khi đạt <span class="highlight hl-gold">mức tối thiểu</span>.</div>
-        <div class="reg-item">Tài khoản <span class="highlight hl-red">giả mạo</span> bị <span class="highlight hl-red">từ chối</span> lệnh rút.</div>
-        <div class="reg-item">Điền <span class="highlight hl-green">chính xác</span> thông tin ngân hàng nhận tiền.</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(46,204,113,0.15);">📋</div><h3>Nhiệm vụ</h3><div class="badge">10 điều</div></div>
-        <div class="reg-item"><span class="highlight hl-red">Tuyệt đối KHÔNG</span> dùng <span class="highlight hl-red">Proxy, VPN, V2Ray</span>.</div>
-        <div class="reg-item"><span class="highlight hl-red">KHÔNG</span> bật tắt 4G hoặc chuyển Wifi khi làm nhiệm vụ.</div>
-        <div class="reg-item"><span class="highlight hl-red">KHÔNG</span> dùng chế độ ẩn danh trình duyệt.</div>
-        <div class="reg-item">Bật <span class="highlight hl-gold">Cookie</span> và <span class="highlight hl-gold">Javascript</span> để nhiệm vụ hoạt động.</div>
-        <div class="reg-item">Một số nhiệm vụ cần <span class="highlight hl-gold">Admin duyệt</span> trước khi cộng tiền.</div>
-        <div class="reg-item">LinkBeta là <span class="highlight hl-gold">trung gian</span> kết nối các nền tảng.</div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(155,89,182,0.15);">👥</div><h3>Quy định khác</h3><div class="badge">5 điều</div></div>
-        <div class="reg-item">Tham gia <span class="highlight hl-gold">cộng đồng LinkBeta</span> để nhận hỗ trợ nhanh.</div>
-        <div class="reg-item">Nghiêm cấm <span class="highlight hl-red">kích động, xuyên tạc</span> hoặc gây chia rẽ.</div>
-        <div class="reg-item">Quảng bá <span class="highlight hl-red">nội dung xấu, lừa đảo</span> bị <span class="highlight hl-red">xử lý nghiêm</span>.</div>
-        <div class="reg-item">Thắc mắc liên hệ trực tiếp <span class="highlight hl-gold">Admin</span>.</div>
-        <div class="reg-item">Vi phạm bị <span class="highlight hl-red">loại khỏi cộng đồng</span> và <span class="highlight hl-red">khóa vĩnh viễn</span>.</div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">🛡️</div><h3>Quy Định Sử Dụng</h3></div>
+        <div class="reg-warning">⚠️ Vi phạm quy định sẽ bị <b class="hl-r">khóa tài khoản vĩnh viễn</b> và không được hỗ trợ.</div>
+        <div class="reg-item"><span class="reg-num">01</span><span>Mỗi thành viên chỉ được sở hữu <span class="hl-g">duy nhất 1 tài khoản</span>.</span></div>
+        <div class="reg-item"><span class="reg-num">02</span><span>Không chấp nhận tài khoản có <span class="hl-r">cùng IP</span> hoặc <span class="hl-r">cùng thiết bị</span>.</span></div>
+        <div class="reg-item"><span class="reg-num">03</span><span>Rút tối thiểu <span class="hl-g">10.000 VNĐ</span>. Chốt lệnh <span class="hl-r">Thứ 3, 5, 7</span> hàng tuần.</span></div>
+        <div class="reg-item"><span class="reg-num">04</span><span><span class="hl-r">Tuyệt đối KHÔNG</span> dùng Proxy, VPN, V2Ray khi làm nhiệm vụ.</span></div>
+        <div class="reg-item"><span class="reg-num">05</span><span>Gian lận sẽ bị <span class="hl-r">khóa vĩnh viễn</span> không cần thông báo.</span></div>
+        <div class="reg-item"><span class="reg-num">06</span><span>Điền <span class="hl-gr">chính xác</span> thông tin ngân hàng nhận tiền.</span></div>
+        <div class="reg-item"><span class="reg-num">07</span><span>Đơn tạm giữ quá <span class="hl-r">30 ngày</span> sẽ tự động hủy.</span></div>
       </div>
     </div>
 
-    <!-- ===== HỖ TRỢ ===== -->
+    <!-- SUPPORT -->
     <div class="content" id="sec-support" style="display:none;">
       <div class="card">
-        <div class="support-header">
-          <div class="support-icon-wrap">🎧</div>
-          <div class="support-head-info">
-            <h3>Trung Tâm Hỗ Trợ</h3>
-            <p>Đội ngũ hỗ trợ sẵn sàng 24/7</p>
-          </div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">🎧</div><h3>Trung Tâm Hỗ Trợ</h3></div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Đội ngũ hỗ trợ sẵn sàng 24/7</div>
+        <div class="contact-item" onclick="showToast('Đang mở Telegram...')">
+          <div class="ci-ico" style="background:rgba(52,152,219,0.15);">✈️</div>
+          <div><div style="font-size:14px;font-weight:800;">Telegram Notification</div><div style="font-size:12px;color:var(--text2);">https://t.me/linkbeta_noti</div></div>
         </div>
-        <div class="support-feature-grid">
-          <div class="sf-item"><div class="sf-icon">⏱️</div><div class="sf-name">Phản hồi nhanh</div><div class="sf-sub">Trả lời trong 24h</div></div>
-          <div class="sf-item"><div class="sf-icon">🛡️</div><div class="sf-name">Bảo mật</div><div class="sf-sub">Thông tin được bảo mật</div></div>
-          <div class="sf-item"><div class="sf-icon">⚡</div><div class="sf-name">Giải quyết nhanh</div><div class="sf-sub">Xử lý nhanh chóng</div></div>
-          <div class="sf-item"><div class="sf-icon">👥</div><div class="sf-name">Cộng đồng</div><div class="sf-sub">Hàng nghìn thành viên</div></div>
+        <div class="contact-item" onclick="showToast('Đang mở Telegram Group...')">
+          <div class="ci-ico" style="background:rgba(52,152,219,0.1);">👥</div>
+          <div><div style="font-size:14px;font-weight:800;">Telegram Group</div><div style="font-size:12px;color:var(--text2);">https://t.me/linkbeta_z</div></div>
         </div>
       </div>
-
       <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(52,152,219,0.15);">✈️</div><h3>Liên hệ trực tiếp</h3></div>
-        <div class="contact-item" onclick="showToast('Mở Telegram Notification')">
-          <div class="ci-icon" style="background:rgba(52,152,219,0.15);">✈️</div>
-          <div class="ci-info"><div class="ci-name">Telegram Notification</div><div class="ci-url">https://t.me/linkbeta_noti</div></div>
-          <div class="ci-arrow">›</div>
-        </div>
-        <div class="contact-item" onclick="showToast('Mở Telegram Group')">
-          <div class="ci-icon" style="background:rgba(52,152,219,0.1);">👥</div>
-          <div class="ci-info"><div class="ci-name">Telegram Group</div><div class="ci-url">https://t.me/linkbeta_z</div></div>
-          <div class="ci-arrow">›</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title"><div class="icon" style="background:rgba(245,166,35,0.15);">⭐</div><h3>Câu Hỏi Thường Gặp</h3><div class="badge">5 câu</div></div>
-        <div class="faq-item">
-          <div class="faq-q"><div class="faq-badge">Q1</div><div class="faq-question">Làm sao để bắt đầu kiếm tiền?</div></div>
-          <div class="faq-answer">Đăng ký tài khoản → Vào mục Làm Nhiệm Vụ → Chọn nhiệm vụ phù hợp → Hoàn thành và nhận thưởng.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q"><div class="faq-badge">Q2</div><div class="faq-question">Khi nào tôi nhận được tiền?</div></div>
-          <div class="faq-answer">Tiền cộng vào ví ngay sau khi hoàn thành. Một số nhiệm vụ cần admin duyệt thủ công.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q"><div class="faq-badge">Q3</div><div class="faq-question">Min rút tiền là bao nhiêu?</div></div>
-          <div class="faq-answer">Min rút tối thiểu là 10.000 VNĐ. Rút tối đa không giới hạn.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q"><div class="faq-badge">Q4</div><div class="faq-question">Tại sao đơn rút tiền bị tạm giữ?</div></div>
-          <div class="faq-answer">Có thể tài khoản bị nghi ngờ vi phạm. Liên hệ Admin qua Facebook hoặc Telegram.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q"><div class="faq-badge">Q5</div><div class="faq-question">Tôi có thể làm trên điện thoại không?</div></div>
-          <div class="faq-answer">Có! Làm nhiệm vụ trên cả điện thoại và máy tính. Khuyến khích dùng Chrome.</div>
-        </div>
+        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">⭐</div><h3>Câu Hỏi Thường Gặp</h3></div>
+        <div class="faq-item"><div class="faq-q"><div class="faq-badge">Q1</div><div class="faq-question">Làm sao để bắt đầu kiếm tiền?</div></div><div class="faq-answer">Đăng ký → Vào mục Nhiệm Vụ → Chọn nhiệm vụ → Hoàn thành và nhận thưởng.</div></div>
+        <div class="faq-item"><div class="faq-q"><div class="faq-badge">Q2</div><div class="faq-question">Khi nào tôi nhận được tiền?</div></div><div class="faq-answer">Tiền cộng vào ví ngay sau khi hoàn thành. Một số nhiệm vụ cần admin duyệt thủ công.</div></div>
+        <div class="faq-item"><div class="faq-q"><div class="faq-badge">Q3</div><div class="faq-question">Min rút tiền là bao nhiêu?</div></div><div class="faq-answer">Min rút tối thiểu là 10.000 VNĐ. Rút tối đa không giới hạn.</div></div>
+        <div class="faq-item"><div class="faq-q"><div class="faq-badge">Q4</div><div class="faq-question">Tại sao đơn rút tiền bị tạm giữ?</div></div><div class="faq-answer">Có thể tài khoản bị nghi ngờ vi phạm. Liên hệ Admin qua Telegram.</div></div>
+        <div class="faq-item"><div class="faq-q"><div class="faq-badge">Q5</div><div class="faq-question">Tôi có thể làm trên điện thoại không?</div></div><div class="faq-answer">Có! Khuyến khích dùng Chrome để tránh lỗi.</div></div>
       </div>
     </div>
 
-  </div><!-- end main -->
-</div><!-- end page-app -->
+    <!-- ACCOUNT -->
+    <div class="content" id="sec-account" style="display:none;">
 
-<!-- Toast -->
+      <!-- Profile header -->
+      <div class="acc-profile-card">
+        <div class="acc-av-wrap">
+          <div class="acc-av" id="acc-av-icon">?</div>
+          <div class="acc-online-dot"></div>
+        </div>
+        <div class="acc-hd-info">
+          <div class="acc-hd-name" id="acc-hd-name">—</div>
+          <div class="acc-hd-email" id="acc-hd-email">—</div>
+          <div class="acc-hd-badges">
+            <span class="acc-lv-badge">Lv.1</span>
+            <span class="acc-bal-badge">0đ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thông tin cá nhân -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#3a86ff,#0056d6);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </div>
+        <div>
+          <div class="acc-sec-title">Thông tin cá nhân</div>
+          <div class="acc-sec-sub">Thông tin tài khoản của bạn</div>
+        </div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#3a86ff,#0056d6);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">HỌ TÊN</div><div class="acc-info-val" id="acc-name">—</div></div>
+        </div>
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">EMAIL</div><div class="acc-info-val" id="acc-email">—</div></div>
+        </div>
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#059669,#047857);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">SỐ ĐIỆN THOẠI</div><div class="acc-info-val" id="acc-phone">—</div></div>
+        </div>
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#d97706,#b45309);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">ĐỊA CHỈ IP</div><div class="acc-info-val" id="acc-ip">—</div></div>
+        </div>
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#dc2626,#991b1b);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><text x="9" y="19" fill="white" font-size="8" stroke="none">17</text></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">NGÀY THAM GIA</div><div class="acc-info-val" id="acc-joined">—</div></div>
+        </div>
+        <div class="acc-info-row">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#0d9488,#0f766e);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><path d="M3 3l7.5 7.5M3 21l7.5-7.5M21 3l-7.5 7.5M21 21l-7.5-7.5"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">KINH NGHIỆM</div><div class="acc-info-val" id="acc-xp">0 Exp</div></div>
+        </div>
+        <div class="acc-info-row" style="border:none;">
+          <div class="acc-info-icon" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="acc-info-body"><div class="acc-info-lbl">TRẠNG THÁI</div><div class="acc-info-val" style="color:var(--green);" id="acc-status">Đang hoạt động</div></div>
+        </div>
+      </div>
+
+      <!-- Bảo mật -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#d97706,#b45309);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="acc-sec-title">Bảo mật</div>
+          <div class="acc-sec-sub">Quản lý mật khẩu và bảo vệ tài khoản</div>
+        </div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-pw-lbl">Mật khẩu hiện tại</div>
+        <div class="acc-pw-wrap"><input class="acc-pw-inp" type="password" id="pw-old" placeholder="Nhập mật khẩu hiện tại"><span class="acc-pw-eye" onclick="tpw('pw-old',this)">👁</span></div>
+        <div class="acc-pw-lbl">Mật khẩu mới</div>
+        <div class="acc-pw-wrap"><input class="acc-pw-inp" type="password" id="pw-new" placeholder="Tối thiểu 8 ký tự"><span class="acc-pw-eye" onclick="tpw('pw-new',this)">👁</span></div>
+        <div class="acc-pw-lbl">Xác nhận mật khẩu</div>
+        <div class="acc-pw-wrap"><input class="acc-pw-inp" type="password" id="pw-cfm" placeholder="Nhập lại mật khẩu mới"><span class="acc-pw-eye" onclick="tpw('pw-cfm',this)">👁</span></div>
+        <button class="acc-btn-gold" onclick="changePassword()" style="margin-top:4px;">🔒 Cập nhật mật khẩu</button>
+        <div class="acc-pw-note">⚠ Mật khẩu tối thiểu 6 ký tự. Không chia sẻ mật khẩu cho bất kỳ ai.</div>
+      </div>
+
+      <!-- Tài khoản ngân hàng -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#059669,#047857);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 12h20M6 7V5a6 6 0 0 1 12 0v2"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div class="acc-sec-title">Tài khoản ngân hàng</div>
+          <div class="acc-sec-sub" id="bank-count-txt">0 tài khoản đã liên kết</div>
+        </div>
+        <button class="acc-btn-sm-gold" onclick="showAddBank()">⊕ Thêm</button>
+      </div>
+      <div class="acc-card" id="bank-section">
+        <div id="bank-list">
+          <div class="acc-empty">
+            <div class="acc-empty-icon">🏦</div>
+            <div class="acc-empty-title">Chưa có tài khoản ngân hàng</div>
+            <div class="acc-empty-sub">Thêm tài khoản để rút tiền nhanh hơn</div>
+            <button class="acc-btn-outline" onclick="showAddBank()">⊕ Thêm tài khoản</button>
+          </div>
+        </div>
+        <!-- Add bank form (hidden) -->
+        <div id="add-bank-form" style="display:none;margin-top:12px;">
+          <div class="acc-pw-lbl">Tên ngân hàng</div>
+          <input class="acc-pw-inp" type="text" id="bank-name" placeholder="VD: Vietcombank, MB Bank...">
+          <div class="acc-pw-lbl" style="margin-top:8px;">Số tài khoản</div>
+          <input class="acc-pw-inp" type="text" id="bank-num" placeholder="Nhập số tài khoản">
+          <div class="acc-pw-lbl" style="margin-top:8px;">Tên chủ tài khoản</div>
+          <input class="acc-pw-inp" type="text" id="bank-owner" placeholder="Tên in hoa không dấu">
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="acc-btn-gold" style="flex:1;" onclick="saveBank()">💾 Lưu</button>
+            <button class="acc-btn-outline" style="flex:1;" onclick="hideAddBank()">Huỷ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thông tin liên hệ -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+          <div class="acc-sec-title">Thông tin liên hệ</div>
+          <div class="acc-sec-sub">Cập nhật để admin có thể liên lạc</div>
+        </div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-contact-row">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3b82f6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          <span class="acc-contact-lbl">Facebook</span>
+        </div>
+        <input class="acc-pw-inp" type="text" id="contact-fb" placeholder="Liên kết Facebook">
+        <div class="acc-contact-row" style="margin-top:10px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+          <span class="acc-contact-lbl">Zalo</span>
+        </div>
+        <input class="acc-pw-inp" type="text" id="contact-zalo" placeholder="Số điện thoại Zalo">
+        <div class="acc-contact-row" style="margin-top:10px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <span class="acc-contact-lbl">Telegram</span>
+        </div>
+        <input class="acc-pw-inp" type="text" id="contact-tg" placeholder="Liên kết Telegram">
+        <div class="acc-contact-row" style="margin-top:10px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="acc-contact-lbl">Skype</span>
+        </div>
+        <input class="acc-pw-inp" type="text" id="contact-skype" placeholder="Liên kết Skype">
+        <div style="display:flex;align-items:center;gap:12px;margin-top:12px;">
+          <button class="acc-btn-gold" style="flex:1;" onclick="saveContact()">✓ Lưu thay đổi</button>
+          <div style="display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;" onclick="navTo('account')">🔒 Bảo mật</div>
+        </div>
+      </div>
+
+      <!-- Lịch sử đăng nhập -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#0d9488,#0f766e);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+        </div>
+        <div>
+          <div class="acc-sec-title">Lịch sử đăng nhập</div>
+          <div class="acc-sec-sub">Theo dõi hoạt động tài khoản</div>
+        </div>
+      </div>
+      <div class="acc-card" style="margin-bottom:24px;">
+        <div id="login-history-list">
+          <div style="text-align:center;padding:20px;color:var(--text3);font-size:13px;">Chưa có lịch sử đăng nhập</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="content" id="sec-admin" style="display:none;">
+      <div class="admin-section">
+        <h3>⚙️ Bảng Quản Trị Admin</h3>
+        <div class="admin-stat-grid">
+          <div class="as-box"><div class="as-val" id="adm-members">0</div><div class="as-lbl">Thành viên</div></div>
+          <div class="as-box"><div class="as-val" id="adm-pending-tasks">0</div><div class="as-lbl">Chờ duyệt NV</div></div>
+          <div class="as-box"><div class="as-val" id="adm-pending-wd">0</div><div class="as-lbl">Chờ rút tiền</div></div>
+        </div>
+      </div>
+
+      <!-- Phê duyệt nhiệm vụ -->
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">📋</div><h3>Phê Duyệt Nhiệm Vụ</h3><div class="badge-sm" id="task-pending-count">0 chờ</div></div>
+        <div id="admin-task-approvals"><div style="text-align:center;padding:20px;color:var(--text3);">Không có nhiệm vụ nào chờ duyệt</div></div>
+      </div>
+
+      <!-- Duyệt lệnh rút tiền -->
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">💳</div><h3>Duyệt Lệnh Rút Tiền</h3><div class="badge-sm" id="wd-pending-count">0 chờ</div></div>
+        <div id="admin-wd-approvals"><div style="text-align:center;padding:20px;color:var(--text3);">Không có lệnh rút nào chờ duyệt</div></div>
+      </div>
+
+      <!-- Thêm nhiệm vụ mới -->
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(155,89,182,0.15);">➕</div><h3>Thêm Nhiệm Vụ Mới</h3></div>
+        <div class="task-form">
+          <input class="tf-input" id="new-task-name" placeholder="Tên nhiệm vụ (VD: Uptolink 3 Step)">
+          <input class="tf-input" id="new-task-reward" type="number" placeholder="Thưởng (đ) VD: 350">
+          <input class="tf-input" id="new-task-slots" type="number" placeholder="Số lượt tối đa VD: 300">
+          <select class="tf-input" id="new-task-hot">
+            <option value="0">Bình thường</option>
+            <option value="1">🔥 HOT</option>
+          </select>
+          <button class="btn-add-task" onclick="addTask()">➕ Thêm Nhiệm Vụ</button>
+        </div>
+      </div>
+
+      <!-- Danh sách nhiệm vụ hiện tại -->
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">📝</div><h3>Danh Sách Nhiệm Vụ</h3></div>
+        <div id="admin-task-list"></div>
+      </div>
+
+      <!-- Danh sách thành viên -->
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">👥</div><h3>Danh Sách Thành Viên</h3></div>
+        <div id="admin-member-list"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ===== NAVIGATION =====
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if(id === 'page-register') autoVerifyCaptcha('cf2');
-    if(id === 'page-login') autoVerifyCaptcha('cf1');
-  }
+<script>
+var ADMIN_EMAIL='tvu727531@gmail.com';
+function gd(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function sd(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function init(){
+  if(!gd('lb_tasks',null)){sd('lb_tasks',[{id:1,name:'Uptolink 2 Step',reward:300,slots:300,usedSlots:0,level:0,xp:10,hot:true,active:true},{id:2,name:'Uptolink 3 Step',reward:350,slots:300,usedSlots:0,level:0,xp:10,hot:false,active:true}]);}
+  if(!gd('lb_users',null)){sd('lb_users',{});}
+  if(!gd('lb_pt',null)){sd('lb_pt',[]);}
+  if(!gd('lb_wd',null)){sd('lb_wd',[]);}
+}
+var CU=null;
+function gu(em){var u=gd('lb_users',{});return u[em]||null;}
+function su(u){var us=gd('lb_users',{});us[u.email]=u;sd('lb_users',us);}
+function fr(){return CU?gu(CU.email):null;}
+function fmt(n){return Number(n).toLocaleString('vi-VN');}
+function ini(name){var p=name.trim().split(' ');return p.length>=2?(p[p.length-2][0]+p[p.length-1][0]).toUpperCase():p[0][0].toUpperCase();}
+function validEmail(e){return e&&e.indexOf('@')>0&&e.lastIndexOf('.')>e.indexOf('@')+1;}
 
-  function doLogin(cfId) {
-    // Captcha is optional - just go straight in
-    showPage('page-app');
-    navTo('dashboard');
-  }
+function showErr(id,msg,inp){
+  var el=document.getElementById(id);
+  if(el){el.textContent='⚠ '+msg;el.style.display='flex';clearTimeout(el._t);el._t=setTimeout(function(){el.style.display='none';},3500);}
+  if(inp){var i=document.getElementById(inp);if(i){i.classList.add('input-error','shake');i.focus();setTimeout(function(){i.classList.remove('shake');},400);setTimeout(function(){i.classList.remove('input-error');},3500);}}
+}
 
-  function logout() {
-    closeSidebar();
-    showPage('page-login');
-  }
+function doLogin(){
+  var email=document.getElementById('li-email').value.trim().toLowerCase();
+  var pass=document.getElementById('li-pass').value;
+  if(!email){showErr('login-err','Vui long nhap email','li-email');return;}
+  if(!validEmail(email)){showErr('login-err','Email khong hop le','li-email');return;}
+  if(!pass){showErr('login-err','Vui long nhap mat khau','li-pass');return;}
+  if(pass.length<6){showErr('login-err','Mat khau it nhat 6 ky tu','li-pass');return;}
+  var u=gu(email);
+  if(!u){showErr('login-err','Email chua duoc dang ky. Hay dang ky truoc!','li-email');return;}
+  if(u.password!==pass){showErr('login-err','Mat khau khong dung','li-pass');return;}
+  enterApp(u);
+}
 
-  function navTo(section) {
-    closeSidebar();
-    // Hide all sections
-    document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display='none');
-    // Show target
-    const el = document.getElementById('sec-'+section);
-    if(el) el.style.display='block';
-    // Update topbar title
-    const titles = {
-      dashboard:'Tổng Quan', account:'Tài Khoản', tasks:'Nhiệm Vụ',
-      withdraw:'Rút Tiền', history:'Lịch Sử', ranking:'Xếp Hạng',
-      referral:'Giới Thiệu', rules:'Quy Định', support:'Hỗ Trợ'
-    };
-    document.getElementById('topbar-title').textContent = titles[section] || section;
-    // Update active nav
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    // Scroll to top
-    window.scrollTo(0,0);
-  }
+function doRegister(){
+  var name=document.getElementById('rg-name').value.trim();
+  var email=document.getElementById('rg-email').value.trim().toLowerCase();
+  var pass=document.getElementById('rg-pass').value;
+  if(!name){showErr('reg-err','Vui long nhap ho ten','rg-name');return;}
+  if(!email){showErr('reg-err','Vui long nhap email','rg-email');return;}
+  if(!validEmail(email)){showErr('reg-err','Email khong hop le','rg-email');return;}
+  if(!pass){showErr('reg-err','Vui long nhap mat khau','rg-pass');return;}
+  if(pass.length<6){showErr('reg-err','Mat khau it nhat 6 ky tu','rg-pass');return;}
+  if(gu(email)){showErr('reg-err','Email nay da duoc dang ky','rg-email');return;}
+  var u={email:email,name:name,password:pass,role:email===ADMIN_EMAIL?'admin':'member',balance:0,totalWithdrawn:0,pendingWithdraw:0,tasksCompleted:0,xp:0,refs:0,refEarned:0,streak:1,joinedAt:new Date().toLocaleDateString('vi-VN'),history:[]};
+  su(u);toast('Dang ky thanh cong! Chao mung '+name);enterApp(u);
+}
 
-  // ===== SIDEBAR =====
-  function openSidebar() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('overlay').classList.add('show');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('overlay').classList.remove('show');
-  }
+function enterApp(u){
+  u.loginHistory=u.loginHistory||[];
+  u.loginHistory.push({date:new Date().toLocaleString('vi-VN')});
+  if(u.loginHistory.length>10)u.loginHistory=u.loginHistory.slice(-10);
+  su(u);CU=u;updateSB(u);showPg('page-app');navTo('dashboard');
+}
 
-  // ===== TABS =====
-  function switchTab(el, tabId) {
-    // Hide all tab contents in parent
-    const tabs = ['tab-hot','tab-all','tab-history'];
-    tabs.forEach(t => {
-      const el2 = document.getElementById(t);
-      if(el2) el2.style.display='none';
-    });
-    document.getElementById(tabId).style.display='block';
-    // Update active
-    el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-  }
+function doLogout(){CU=null;closeSB();showPg('page-login');document.getElementById('li-email').value='';document.getElementById('li-pass').value='';}
 
-  // ===== PAY METHOD =====
-  function selectPay(el) {
-    el.closest('.pay-methods').querySelectorAll('.pay-method').forEach(p => p.classList.remove('selected'));
-    el.classList.add('selected');
-  }
+function updateSB(u){
+  var i=ini(u.name);
+  function sel(id){return document.getElementById(id);}
+  if(sel('sb-avatar'))sel('sb-avatar').textContent=i;
+  if(sel('sb-name'))sel('sb-name').textContent=u.name;
+  if(sel('sb-email'))sel('sb-email').textContent=u.email;
+  if(sel('sb-balance'))sel('sb-balance').textContent=fmt(u.balance)+' VND';
+  var b=sel('sb-badge');if(b){b.textContent=u.role==='admin'?'ADMIN':'MEMBER';b.className='su-badge '+(u.role==='admin'?'admin':'member');}
+  var an=sel('nav-admin');if(an)an.style.display=u.role==='admin'?'flex':'none';
+  var ab=sel('tb-admin-btn');if(ab)ab.style.display=u.role==='admin'?'flex':'none';
+}
 
-  // ===== FILTER TABS =====
-  document.addEventListener('click', function(e) {
-    if(e.target.classList.contains('filter-tab')) {
-      e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-    }
+function showPage(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function showPg(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.getElementById(id).classList.add('active');}
+
+function navTo(sec){
+  closeSB();
+  document.querySelectorAll('[id^="sec-"]').forEach(function(s){s.style.display='none';});
+  var el=document.getElementById('sec-'+sec);if(el)el.style.display='block';
+  var T={dashboard:'Tong Quan',tasks:'Nhiem Vu',withdraw:'Rut Tien',ranking:'Xep Hang',referral:'Gioi Thieu',history:'Lich Su',rules:'Quy Dinh',support:'Ho Tro',account:'Tai Khoan',admin:'Quan Tri'};
+  document.getElementById('topbar-title').textContent=T[sec]||sec;
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  window.scrollTo(0,0);
+  if(sec==='dashboard')rDash();
+  if(sec==='tasks')rTasks();
+  if(sec==='withdraw')rWd();
+  if(sec==='ranking')rRank();
+  if(sec==='referral')rRef();
+  if(sec==='history')rHist('all');
+  if(sec==='account')rAcc();
+  if(sec==='admin')rAdmin();
+}
+
+function openSB(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('show');}
+function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+
+function rDash(){
+  var u=fr();if(!u)return;CU=u;updateSB(u);
+  var h=new Date().getHours();var g=h<12?'Chao buoi sang':h<18?'Chao buoi chieu':'Chao buoi toi';
+  document.getElementById('dash-greet').textContent=g+', '+u.name+' !';
+  document.getElementById('dash-streak').textContent=u.streak||1;
+  document.getElementById('dash-balance').textContent=fmt(u.balance)+'d';
+  document.getElementById('dash-tasks').textContent=u.tasksCompleted||0;
+  document.getElementById('dash-refs').textContent=u.refs||0;
+  document.getElementById('dash-xp').textContent=(u.xp||0)+' XP';
+  var users=gd('lb_users',{});
+  var arr=Object.values(users).sort(function(a,b){return(b.balance+b.totalWithdrawn)-(a.balance+a.totalWithdrawn);}).slice(0,3);
+  var cl=['rgba(245,166,35,.2)','rgba(192,192,192,.2)','rgba(205,127,50,.2)'];
+  var rk=['g1','g2','g3'];var html='';
+  arr.forEach(function(x,i){var it=ini(x.name);var tot=x.balance+x.totalWithdrawn;html+='<div class="top-item"><div class="top-rank '+rk[i]+'">'+(i+1)+'</div><div class="top-avatar" style="background:'+cl[i]+';">'+it+'</div><div class="top-info"><div class="top-name">'+x.name+'</div><div class="top-sub">#'+(i+1)+' thang nay</div></div><div class="top-amount">'+fmt(tot)+'d</div></div>';});
+  if(!html)html='<div class="empty-state"><p>Chua co du lieu</p></div>';
+  document.getElementById('dash-top-list').innerHTML=html;
+  var hist=(u.history||[]).slice(-5).reverse();var ah='';
+  hist.forEach(function(h){var c=h.amount>0?'var(--green)':'var(--red)';var ic=h.type==='task'?'ok':h.type==='withdraw'?'wallet':'people';var ic2=h.type==='task'?'[task]':h.type==='withdraw'?'[rut]':'[ref]';ah+='<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);"><div class="act-icon">'+ic2+'</div><div class="act-info"><div class="act-name">'+h.name+'</div><div class="act-time">'+h.date+'</div></div><div class="act-amount" style="color:'+c+';">'+(h.amount>0?'+':'')+fmt(h.amount)+'d</div></div>';});
+  if(!ah)ah='<div class="empty-state"><div class="es-icon">-</div><p>Chua co hoat dong nao</p></div>';
+  document.getElementById('dash-activity').innerHTML=ah;
+}
+
+function rTasks(){
+  var tasks=gd('lb_tasks',[]).filter(function(t){return t.active;});
+  var hH='',aH='';
+  tasks.forEach(function(t){
+    var pct=Math.min(100,(t.usedSlots/t.slots)*100);
+    var card='<div class="task-card"'+(t.hot?' style="border-color:rgba(255,107,53,.3);"':'')+'>'+
+      '<div class="task-header"><div class="task-icon-wrap">'+t.name[0]+'</div>'+
+      '<div class="task-info"><div class="task-name">'+t.name+'</div><div class="task-meta">Lv.'+t.level+' &middot; '+t.xp+' Exp</div></div>'+
+      (t.hot?'<div class="task-hot">HOT</div>':'')+
+      '</div><div class="task-reward"><div><span style="font-size:22px;font-weight:800;color:var(--gold);">'+t.reward+'</span><span style="font-size:14px;color:var(--text2);"> d/luot</span></div><div style="font-size:12px;color:var(--text2);">'+t.usedSlots+'/'+t.slots+' luot</div></div>'+
+      '<div class="task-bar"><div class="task-bar-fill" style="width:'+pct+'%"></div></div>'+
+      '<button class="btn-task'+(t.hot?' btn-task-hot':'')+'" onclick="doTask('+t.id+')">Lam nhiem vu</button></div>';
+    if(t.hot)hH+=card;aH+=card;
   });
+  if(!hH)hH='<div class="empty-state"><p>Khong co nhiem vu Hot</p></div>';
+  if(!aH)aH='<div class="empty-state"><p>Chua co nhiem vu nao</p></div>';
+  document.getElementById('tt-hot').innerHTML=hH;
+  document.getElementById('tt-all').innerHTML=aH;
+  var u=fr();var th=(u.history||[]).filter(function(h){return h.type==='task';}).slice(-20).reverse();var tH='';
+  th.forEach(function(h){var sc=h.status==='approved'?'var(--green)':h.status==='pending'?'var(--orange)':'var(--red)';var st=h.status==='approved'?'Da duyet':h.status==='pending'?'Cho duyet':'Tu choi';tH+='<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);"><div class="hi-icon" style="background:rgba(245,166,35,.1);">[T]</div><div style="flex:1;"><div class="hi-name">'+h.name+'</div><div class="hi-time">'+h.date+'</div></div><div style="text-align:right;"><div class="hi-amount" style="color:var(--green);">+'+fmt(h.amount)+'d</div><div style="font-size:10px;font-weight:700;color:'+sc+';">'+st+'</div></div></div>';});
+  if(!tH)tH='<div class="empty-state"><p>Chua co lich su</p></div>';
+  document.getElementById('task-history-list').innerHTML=tH;
+}
 
-  // ===== TOAST =====
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  }
+function doTask(tid){
+  var u=fr();if(!u)return;
+  var tasks=gd('lb_tasks',[]);var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
+  if(!task)return;
+  if(task.usedSlots>=task.slots){toast('Het luot!');return;}
+  var pt=gd('lb_pt',[]);
+  if(pt.some(function(p){return p.userEmail===u.email&&p.taskId===tid&&p.status==='pending';})){toast('Ban da gui nhiem vu nay, cho duyet!');return;}
+  var e={id:Date.now(),userEmail:u.email,userName:u.name,taskId:tid,taskName:task.name,amount:task.reward,xp:task.xp,date:new Date().toLocaleString('vi-VN'),status:'pending'};
+  pt.push(e);sd('lb_pt',pt);
+  u.history=u.history||[];u.history.push({type:'task',name:task.name,amount:task.reward,date:e.date,status:'pending',pendingId:e.id});
+  su(u);CU=u;toast('Da gui nhiem vu! Cho Admin duyet de nhan tien.');rTasks();
+}
 
-  // ===== CAPTCHA =====
-  function triggerCaptcha(id) {
-    const el = document.getElementById(id);
-    if(el.classList.contains('verified') || el.classList.contains('checking')) return;
-    el.classList.add('checking');
-    el.querySelector('.cf-text').textContent = 'Đang xác minh...';
-    setTimeout(() => {
-      el.classList.remove('checking');
-      el.classList.add('verified');
-      el.querySelector('.cf-text').textContent = 'Xác minh thành công ✓';
-    }, 1200);
-  }
+function rWd(){
+  var u=fr();if(!u)return;
+  document.getElementById('wd-balance').textContent=fmt(u.balance);
+  document.getElementById('wd-total').textContent=fmt(u.totalWithdrawn)+'d';
+  document.getElementById('wd-pending').textContent=fmt(u.pendingWithdraw||0)+'d';
+  var myWd=gd('lb_wd',[]).filter(function(w){return w.userEmail===u.email;}).slice(-10).reverse();
+  var html='';
+  myWd.forEach(function(w){var sc=w.status==='pending'?'sp-pending':w.status==='approved'?'sp-approved':w.status==='paid'?'sp-paid':'sp-cancel';var st=w.status==='pending'?'Cho duyet':w.status==='paid'?'Da TT':'Huy';html+='<div class="withdraw-item"><div class="wi-icon" style="background:rgba(245,166,35,.1);">[W]</div><div class="wi-info"><div class="wi-name">Rut tien - '+w.method+'</div><div class="wi-time">'+w.date+'</div></div><div style="text-align:right;"><div class="wi-amount" style="color:var(--red);">-'+fmt(w.amount)+'d</div><div class="status-pill '+sc+'">'+st+'</div></div></div>';});
+  if(!html)html='<div class="empty-state"><p>Chua co lich su rut tien</p></div>';
+  document.getElementById('wd-history').innerHTML=html;
+}
 
-  // Auto verify captcha after short delay on page show
-  function autoVerifyCaptcha(id) {
-    const el = document.getElementById(id);
-    if(!el || el.classList.contains('verified')) return;
-    setTimeout(() => {
-      el.classList.add('checking');
-      el.querySelector('.cf-text').textContent = 'Đang xác minh...';
-      setTimeout(() => {
-        el.classList.remove('checking');
-        el.classList.add('verified');
-        el.querySelector('.cf-text').textContent = 'Xác minh thành công ✓';
-      }, 1000);
-    }, 800);
-  }
+function doWithdraw(){
+  var u=fr();if(!u)return;
+  var amount=parseInt(document.getElementById('wd-amount').value)||0;
+  if(amount<10000){toast('Rut toi thieu 10.000d!');return;}
+  if(amount>u.balance){toast('So du khong du!');return;}
+  var sel=document.querySelector('.pay-method.selected .pm-name');var method=sel?sel.textContent:'Ngan hang';
+  var w={id:Date.now(),userEmail:u.email,userName:u.name,amount:amount,method:method,date:new Date().toLocaleString('vi-VN'),status:'pending'};
+  var wds=gd('lb_wd',[]);wds.push(w);sd('lb_wd',wds);
+  u.balance-=amount;u.pendingWithdraw=(u.pendingWithdraw||0)+amount;
+  u.history=u.history||[];u.history.push({type:'withdraw',name:'Rut tien - '+method,amount:-amount,date:w.date,status:'pending',wdId:w.id});
+  su(u);CU=u;document.getElementById('wd-amount').value='';
+  toast('Da gui yeu cau rut '+fmt(amount)+'d! Cho Admin duyet.');rWd();updateSB(u);
+}
 
-  // Run auto verify when login/register page shows
-  document.addEventListener('DOMContentLoaded', () => {
-    autoVerifyCaptcha('cf1');
-  });
+function rRank(){
+  var users=gd('lb_users',{});
+  var arr=Object.values(users).sort(function(a,b){return(b.balance+b.totalWithdrawn)-(a.balance+a.totalWithdrawn);});
+  var pO=[1,0,2];var pC=['p1','p2','p3'];var bC=['b1','b2','b3'];var pH='';
+  pO.forEach(function(idx){var u=arr[idx];if(!u)return;var it=ini(u.name);var tot=u.balance+u.totalWithdrawn;pH+='<div class="podium-item"><div class="pod-avatar '+pC[idx]+'">'+it+'</div><div class="pod-name">'+u.name+'</div><div class="pod-amount">'+fmt(tot)+'d</div><div class="pod-block '+bC[idx]+'">'+(idx+1)+'</div></div>';});
+  document.getElementById('rank-podium').innerHTML=pH;
+  var lH='';arr.slice(3).forEach(function(u,i){var it=ini(u.name);var tot=u.balance+u.totalWithdrawn;lH+='<div class="rank-list-item"><div class="rl-rank">'+(i+4)+'</div><div class="rl-avatar">'+it+'</div><div class="rl-info"><div class="rl-name">'+u.name+'</div><div class="rl-tasks">'+(u.tasksCompleted||0)+' nhiem vu</div></div><div class="rl-amount">'+fmt(tot)+'d</div></div>';});
+  if(!lH)lH='<div class="empty-state"><p>Chua du thanh vien</p></div>';
+  document.getElementById('rank-list').innerHTML=lH;
+}
 
-  // ===== RANK LIST =====
-  const rankData = [
-    {r:4,n:'Vuhoang',t:64,a:'20.150đ'},{r:5,n:'Nguyễn Văn Đạt',t:65,a:'20.100đ'},
-    {r:6,n:'Lưu Nam Khánh',t:64,a:'20.050đ'},{r:7,n:'Midmanreal',t:64,a:'20.000đ'},
-    {r:8,n:'Nguyễn Nhật Huy',t:60,a:'19.050đ'},{r:9,n:'Lam duy',t:60,a:'18.800đ'},
-    {r:10,n:'phong',t:59,a:'18.400đ'},{r:11,n:'Phan Hoàng Giáp',t:56,a:'17.650đ'},
-    {r:12,n:'Hồ tuan khoi',t:56,a:'17.200đ'},{r:13,n:'Nguyễn hữu luân',t:51,a:'15.850đ'},
-    {r:14,n:'Nguyễn Tiến Phát',t:50,a:'15.400đ'},{r:15,n:'Lương Tiến Thành',t:43,a:'13.600đ'},
-  ];
-  const rl = document.getElementById('rank-list');
-  if(rl) 
+function rRef(){
+  var u=fr();if(!u)return;
+  document.getElementById('ref-count').textContent=u.refs||0;
+  document.getElementById('ref-earn').textContent=fmt(u.refEarned||0)+'d';
+  var slug=u.email.split('@')[0];document.getElementById('ref-link').textContent='https://linkbeta.online/ref/'+slug;
+}
+
+function copyRef(){
+  var u=fr();var slug=u.email.split('@')[0];var link='https://linkbeta.online/ref/'+slug;
+  if(navigator.clipboard){navigator.clipboard.writeText(link).then(function(){toast('Da sao chep link!');});}else{toast('Link: '+link);}
+}
+
+function rHist(type){
+  var u=fr();if(!u)return;
+  var h=(u.history||[]).filter(function(x){return type==='all'||x.type===type;}).reverse();
+  var html='';
+  h.forEach(function(x){var c=x.amount>0?'var(--green)':'var(--red)';var ic=x.type==='task'?'[T]':x.type==='withdraw'?'[W]':'[R]';var sH='';if(x.status==='pending')sH='<div style="font-size:10px;color:var(--orange);font-weight:700;">Cho duyet</div>';else if(x.status==='approved')sH='<div style="font-size:10px;color:var(--green);font-weight:700;">Da duyet</div>';else if(x.status==='paid')sH='<div style="font-size:10px;color:var(--green);font-weight:700;">Da TT</div>';else if(x.status==='rejected')sH='<div style="font-size:10px;color:var(--red);font-weight:700;">Tu choi</div>';html+='<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);"><div class="hi-icon" style="background:rgba(245,166,35,.1);">'+ic+'</div><div style="flex:1;"><div class="hi-name">'+x.name+'</div><div class="hi-time">'+x.date+'</div></div><div style="text-align:right;"><div class="hi-amount" style="color:'+c+';">'+(x.amount>0?'+':'')+fmt(x.amount)+'d</div>'+sH+'</div></div>';});
+  if(!html)html='<div class="empty-state"><p>Chua co giao dich nao</p></div>';
+  document.getElementById('history-list').innerHTML=html;
+}
+
+function filterHistory(el,type){document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');rHist(type);}
+
+function rAcc(){
+  var u=fr();if(!u)return;
+  function s(id){return document.getElementById(id);}
+  var it=ini(u.name);
+  if(s('acc-av-icon'))s('acc-av-icon').textContent=it;
+  if(s('acc-hd-name'))s('acc-hd-name').textContent=u.name;
+  if(s('acc-hd-email'))s('acc-hd-email').textContent=u.email;
+  var balBadge=document.querySelector('.acc-bal-badge');if(balBadge)balBadge.textContent=fmt(u.balance)+'d';
+  if(s('acc-name'))s('acc-name').textContent=u.name;
+  if(s('acc-email'))s('acc-email').textContent=u.email;
+  if(s('acc-phone'))s('acc-phone').textContent=u.phone||'—';
+  if(s('acc-ip'))s('acc-ip').textContent=u.ip||'—';
+  if(s('acc-joined'))s('acc-joined').textContent=u.joinedAt||'—';
+  if(s('acc-xp'))s('acc-xp').textContent=(u.xp||0)+' Exp';
+  if(s('acc-status'))s('acc-status').textContent=u.active===false?'Bị khóa':'Đang hoạt động';
+  // Contact
+  if(s('contact-fb'))s('contact-fb').value=u.contactFb||'';
+  if(s('contact-zalo'))s('contact-zalo').value=u.contactZalo||'';
+  if(s('contact-tg'))s('contact-tg').value=u.contactTg||'';
+  if(s('contact-skype'))s('contact-skype').value=u.contactSkype||'';
+  // Bank
+  renderBanks(u);
+  // Login history
+  var lh=u.loginHistory||[];var lhH='';
+  lh.slice().reverse().slice(0,5).forEach(function(h){lhH+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);"><div style="width:32px;height:32px;border-radius:10px;background:rgba(13,148,136,.15);display:flex;align-items:center;justify-content:center;font-size:14px;">🔐</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Đăng nhập thành công</div><div style="font-size:11px;color:var(--text2);">'+h.date+'</div></div></div>';});
+  if(s('login-history-list'))s('login-history-list').innerHTML=lhH||'<div style="text-align:center;padding:20px;color:var(--text3);font-size:13px;">Chưa có lịch sử đăng nhập</div>';
+}
+
+function renderBanks(u){
+  var banks=u.banks||[];
+  var countTxt=document.getElementById('bank-count-txt');
+  if(countTxt)countTxt.textContent=banks.length+' tài khoản đã liên kết';
+  var bl=document.getElementById('bank-list');if(!bl)return;
+  if(banks.length===0){bl.innerHTML='<div class="acc-empty"><div class="acc-empty-icon">🏦</div><div class="acc-empty-title">Chưa có tài khoản ngân hàng</div><div class="acc-empty-sub">Thêm tài khoản để rút tiền nhanh hơn</div><button class="acc-btn-outline" onclick="showAddBank()">⊕ Thêm tài khoản</button></div>';return;}
+  var bH='';
+  banks.forEach(function(b,i){bH+='<div class="acc-bank-item"><div class="acc-bank-icon">🏦</div><div style="flex:1;"><div class="acc-bank-name">'+b.name+'</div><div class="acc-bank-num">'+b.num+' &middot; '+b.owner+'</div></div><button class="acc-bank-del" onclick="delBank('+i+')">Xóa</button></div>';});
+  bl.innerHTML=bH;
+}
+
+function showAddBank(){var f=document.getElementById('add-bank-form');if(f)f.style.display='block';}
+function hideAddBank(){var f=document.getElementById('add-bank-form');if(f)f.style.display='none';}
+
+function saveBank(){
+  var name=document.getElementById('bank-name').value.trim();
+  var num=document.getElementById('bank-num').value.trim();
+  var owner=document.getElementById('bank-owner').value.trim();
+  if(!name||!num||!owner){toast('Vui long dien day du thong tin!');return;}
+  var u=fr();u.banks=u.banks||[];
+  u.banks.push({name:name,num:num,owner:owner});
+  su(u);CU=u;hideAddBank();
+  document.getElementById('bank-name').value='';document.getElementById('bank-num').value='';document.getElementById('bank-owner').value='';
+  renderBanks(u);toast('Da them tai khoan ngan hang!');
+}
+
+function delBank(idx){
+  var u=fr();u.banks=u.banks||[];u.banks.splice(idx,1);su(u);CU=u;renderBanks(u);toast('Da xoa tai khoan ngan hang!');
+}
+
+function saveContact(){
+  var u=fr();
+  u.contactFb=document.getElementById('contact-fb').value.trim();
+  u.contactZalo=document.getElementById('contact-zalo').value.trim();
+  u.contactTg=document.getElementById('contact-tg').value.trim();
+  u.contactSkype=document.getElementById('contact-skype').value.trim();
+  su(u);CU=u;toast('Da luu thong tin lien he!');
+}
+
+function tpw(id,e){var i=document.getElementById(id);if(i.type==='password'){i.type='text';e.textContent='🙈';}else{i.type='password';e.textContent='👁';}}
+
+function changePassword(){
+  var u=fr();var old=document.getElementById('pw-old').value;var nw=document.getElementById('pw-new').value;var cf=document.getElementById('pw-cfm').value;
+  if(old!==u.password){toast('Mat khau hien tai sai!');return;}
+  if(nw.length<6){toast('Mat khau moi it nhat 6 ky tu!');return;}
+  if(nw!==cf){toast('Mat khau xac nhan khong khop!');return;}
+  u.password=nw;su(u);CU=u;
+  document.getElementById('pw-old').value='';document.getElementById('pw-new').value='';document.getElementById('pw-confirm').value='';
+  toast('Da cap nhat mat khau!');
+}
+
+function rAdmin(){
+  var u=fr();if(!u||u.role!=='admin'){navTo('dashboard');return;}
+  var users=gd('lb_users',{});var uArr=Object.values(users).filter(function(x){return x.role!=='admin';});
+  var pt=gd('lb_pt',[]).filter(function(p){return p.status==='pending';});
+  var wds=gd('lb_wd',[]);var wPend=wds.filter(function(w){return w.status==='pending';});
+  var paid=wds.filter(function(w){return w.status==='paid';});var totPaid=paid.reduce(function(s,w){return s+w.amount;},0);
+  document.getElementById('adm-members').textContent=uArr.length;document.getElementById('adm-tasks-pending').textContent=pt.length;
+  document.getElementById('adm-wd-pending').textContent=wPend.length;document.getElementById('adm-total-paid').textContent=fmt(totPaid)+'d';
+  document.getElementById('adm-member-count').textContent=uArr.length+' nguoi';
+  var mH='';uArr.sort(function(a,b){return(b.balance+b.totalWithdrawn)-(a.balance+a.totalWithdrawn);}).forEach(function(x){var it=ini(x.name);mH+='<div class="member-item"><div class="mi-avatar">'+it+'</div><div class="mi-info"><div class="mi-name">'+x.name+'</div><div class="mi-email">'+x.email+'</div></div><div style="text-align:right;"><div class="mi-balance">'+fmt(x.balance)+'d</div><div style="font-size:11px;color:var(--text2);">'+(x.tasksCompleted||0)+' nhiem vu</div></div></div>';});
+  if(!mH)mH='<div class="empty-state"><p>Chua co thanh vien</p></div>';document.getElementById('admin-member-list').innerHTML=mH;
+  var ptH='';pt.forEach(function(p){ptH+='<div class="task-pending-item"><div style="flex:1;"><div class="tpi-name">'+p.taskName+'</div><div class="tpi-user">'+p.userName+' &middot; '+p.date+'</div></div><div class="tpi-amount">+'+fmt(p.amount)+'d</div><button class="btn-approve" onclick="aAT('+p.id+')">Duyet</button><button class="btn-reject" onclick="aRT('+p.id+')">Tu choi</button></div>';});
+  if(!ptH)ptH='<div class="empty-state"><p>Khong co nhiem vu cho duyet</p></div>';document.getElementById('admin-task-pending-list').innerHTML=ptH;
+  var wH='';wPend.forEach(function(w){wH+='<div class="withdraw-pending-item"><div class="wpi-info"><div class="wpi-user">'+w.userName+'</div><div class="wpi-detail">'+w.method+' &middot; '+w.date+'</div></div><div class="wpi-amount">'+fmt(w.amount)+'d</div><button class="btn-approve" onclick="aAW('+w.id+')">Duyet</button><button class="btn-reject" onclick="aRW('+w.id+')">Tu choi</button></div>';});
+  if(!wH)wH='<div class="empty-state"><p>Khong co lenh rut cho duyet</p></div>';document.getElementById('admin-wd-pending-list').innerHTML=wH;
+  var tasks=gd('lb_tasks',[]);var tkH='';
+  tasks.forEach(function(t){tkH+='<div class="task-manage-item"><div class="tmi-info"><div class="tmi-name">'+t.name+'</div><div class="tmi-meta">Lv.'+t.level+' &middot; '+t.xp+' XP &middot; '+t.usedSlots+'/'+t.slots+' luot &middot; '+(t.active?'Bat':'Tat')+'</div></div><div class="tmi-reward">'+t.reward+'d</div><button class="btn-approve" onclick="aTog('+t.id+')">'+(t.active?'Tat':'Bat')+'</button><button class="btn-del" onclick="aDel('+t.id+')">Xoa</button></div>';});
+  if(!tkH)tkH='<div class="empty-state"><p>Chua co nhiem vu</p></div>';document.getElementById('admin-task-list').innerHTML=tkH;
+}
+
+function aAT(pid){
+  var pt=gd('lb_pt',[]);var e=null;pt.forEach(function(p){if(p.id===pid){p.status='approved';e=p;}});sd('lb_pt',pt);
+  if(e){var u=gu(e.userEmail);if(u){u.balance=(u.balance||0)+e.amount;u.xp=(u.xp||0)+e.xp;u.tasksCompleted=(u.tasksCompleted||0)+1;u.history=(u.history||[]).map(function(h){if(h.pendingId===pid)h.status='approved';return h;});su(u);}var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===e.taskId)t.usedSlots=(t.usedSlots||0)+1;});sd('lb_tasks',tasks);toast('Da duyet nhiem vu cho '+e.userName+' (+'+fmt(e.amount)+'d)');}
+  rAdmin();
+}
+function aRT(pid){
+  var pt=gd('lb_pt',[]);var e=null;pt.forEach(function(p){if(p.id===pid){p.status='rejected';e=p;}});sd('lb_pt',pt);
+  if(e){var u=gu(e.userEmail);if(u){u.history=(u.history||[]).map(function(h){if(h.pendingId===pid)h.status='rejected';return h;});su(u);}}
+  toast('Da tu choi nhiem vu');rAdmin();
+}
+function aAW(wid){
+  var wds=gd('lb_wd',[]);var wd=null;wds.forEach(function(w){if(w.id===wid){w.status='paid';wd=w;}});sd('lb_wd',wds);
+  if(wd){var u=gu(wd.userEmail);if(u){u.totalWithdrawn=(u.totalWithdrawn||0)+wd.amount;u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-wd.amount);u.history=(u.history||[]).map(function(h){if(h.wdId===wid)h.status='paid';return h;});su(u);}toast('Da duyet rut '+fmt(wd.amount)+'d cho '+wd.userName);}
+  rAdmin();
+}
+function aRW(wid){
+  var wds=gd('lb_wd',[]);var wd=null;wds.forEach(function(w){if(w.id===wid){w.status='cancelled';wd=w;}});sd('lb_wd',wds);
+  if(wd){var u=gu(wd.userEmail);if(u){u.balance=(u.balance||0)+wd.amount;u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-wd.amount);su(u);}toast('Da tu choi va hoan tien cho '+wd.userName);}
+  rAdmin();
+}
+function adminAddTask(){
+  var name=document.getElementById('new-task-name').value.trim();var reward=parseInt(document.getElementById('new-task-reward').value)||0;
+  var slots=parseInt(document.getElementById('new-task-slots').value)||100;var level=parseInt(document.getElementById('new-task-level').value)||0;var xp=parseInt(document.getElementById('new-task-xp').value)||10;
+  if(!name){toast('Nhap ten nhiem vu!');return;}if(reward<=0){toast('Nhap so tien thuong!');return;}
+  var tasks=gd('lb_tasks',[]);var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
+  tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,level:level,xp:xp,hot:false,active:true});sd('lb_tasks',tasks);
+  document.getElementById('new-task-name').value='';document.getElementById('new-task-reward').value='';document.getElementById('new-task-slots').value='';
+  toast('Da them nhiem vu: '+name);rAdmin();
+}
+function aTog(tid){var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Da thay doi trang thai');rAdmin();}
+function aDel(tid){sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.id!==tid;}));toast('Da xoa nhiem vu');rAdmin();}
+
+function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
+function switchAdminTab(el,id){['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
+function selectPay(el){el.closest('.pay-methods').querySelectorAll('.pay-method').forEach(function(p){p.classList.remove('selected');});el.classList.add('selected');}
+function togglePw(id,e){var i=document.getElementById(id);if(i.type==='password'){i.type='text';e.textContent='hide';}else{i.type='password';e.textContent='show';}}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2800);}
+document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
+init();
+</script>
+</body>
+</html>

@@ -370,6 +370,100 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .acc-bank-name{font-size:13px;font-weight:700;}
 .acc-bank-num{font-size:12px;color:var(--text2);margin-top:2px;}
 .acc-bank-del{margin-left:auto;background:rgba(231,76,60,.15);border:none;border-radius:8px;color:var(--red);font-size:12px;font-weight:700;padding:6px 10px;cursor:pointer;}
+
+/* ===== TASKS PAGE ===== */
+.tk-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.tk-hd-icon{width:48px;height:48px;background:linear-gradient(135deg,#d97706,#b45309);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tk-hd-title{font-size:20px;font-weight:900;}
+.tk-hd-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.tk-stats{display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:12px 0;margin-bottom:12px;overflow:hidden;}
+.tk-stat{flex:1;text-align:center;border-right:1px solid var(--border);padding:4px 8px;}
+.tk-stat:last-child{border-right:none;}
+.tk-stat-icon{display:flex;justify-content:center;margin-bottom:4px;}
+.tk-stat-val{font-size:16px;font-weight:800;}
+.tk-stat-lbl{font-size:10px;color:var(--text2);margin-top:1px;}
+.tk-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.tk-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 6px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text2);background:var(--bg2);border:1px solid var(--border);transition:all .2s;}
+.tk-tab.active{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;border-color:transparent;}
+.tk-tab-cnt{background:rgba(0,0,0,.2);border-radius:20px;padding:1px 6px;font-size:11px;}
+.tk-tab.active .tk-tab-cnt{background:rgba(0,0,0,.25);}
+.tk-search-wrap{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px;}
+.tk-search{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:14px;}
+.tk-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:12px 14px;margin-top:8px;font-size:12px;color:var(--text2);line-height:1.6;}
+.tk-hist-stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.tk-hist-badge{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;}
+.task-card2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px;transition:border-color .2s;}
+.task-card2.hot{border-color:rgba(239,68,68,.4);background:linear-gradient(135deg,rgba(239,68,68,.05),var(--bg2));}
+.task2-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.task2-icon{width:44px;height:44px;border-radius:14px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--gold);flex-shrink:0;}
+.task2-name{font-size:15px;font-weight:800;}
+.task2-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+.task2-hot-badge{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.task2-reward-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.task2-price{font-size:24px;font-weight:900;color:var(--gold);}
+.task2-price span{font-size:14px;color:var(--text2);}
+.task2-slots{font-size:12px;color:var(--text2);}
+.task2-bar{height:5px;background:var(--bg4);border-radius:5px;overflow:hidden;margin-bottom:10px;}
+.task2-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--gold-dark));transition:width .5s;}
+.task2-bar-fill.hot-fill{background:linear-gradient(90deg,#ef4444,#f97316);}
+.task2-note{font-size:12px;color:var(--text2);background:var(--bg3);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;}
+.btn-do-task{width:100%;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-do-task.normal{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;}
+.btn-do-task.hot-btn{background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;}
+
+/* ===== BANK MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;backdrop-filter:blur(4px);align-items:flex-end;}
+.modal-overlay.show{display:flex;}
+.modal-sheet{width:100%;background:var(--bg2);border-radius:24px 24px 0 0;padding:20px 16px 32px;animation:slideUp .3s ease;max-height:90vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-hd{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.modal-hd-icon{width:36px;height:36px;border-radius:12px;background:rgba(5,150,105,.2);display:flex;align-items:center;justify-content:center;}
+.modal-hd h3{font-size:17px;font-weight:800;flex:1;}
+.modal-close{background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;}
+.bank-select{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;appearance:none;}
+.bank-select:focus{border-color:var(--gold);}
+.modal-lbl{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;}
+.modal-inp{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;transition:border .2s;}
+.modal-inp:focus{border-color:var(--gold);}
+
+/* ===== EMAIL VERIFY ===== */
+.ev-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px;}
+.ev-unverified{background:rgba(225,29,72,.15);color:#f43f5e;border:1px solid rgba(225,29,72,.3);}
+.ev-done{background:rgba(5,150,105,.15);color:#10b981;border:1px solid rgba(5,150,105,.3);}
+.ev-desc{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
+.ev-email-row{display:flex;align-items:center;gap:12px;background:var(--bg3);border-radius:12px;padding:12px 14px;margin-bottom:14px;}
+.ev-email-icon{width:36px;height:36px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ev-send-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;color:#000;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;}
+.ev-send-btn:disabled{opacity:.6;cursor:not-allowed;}
+.otp-boxes{display:flex;gap:10px;justify-content:center;margin-bottom:16px;}
+.otp-box{width:44px;height:52px;background:var(--bg3);border:2px solid var(--border);border-radius:12px;text-align:center;font-size:22px;font-weight:800;color:var(--text);font-family:inherit;outline:none;transition:border .2s;}
+.otp-box:focus{border-color:var(--gold);background:var(--bg4);}
+.otp-box.filled{border-color:var(--gold);}
+.ev-confirm-btn{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#047857);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;}
+.ev-spam-note{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:10px 12px;line-height:1.5;}
+
+/* ===== TASK MODAL ===== */
+.tm-drag-bar{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
+.tm-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.tm-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#d97706,#b45309);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0;}
+.tm-name{font-size:16px;font-weight:800;line-height:1.2;}
+.tm-meta{font-size:12px;color:var(--text2);margin-top:3px;}
+.tm-hot-badge{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;flex-shrink:0;}
+.tm-reward-row{display:flex;gap:8px;margin-bottom:12px;}
+.tm-reward-box{flex:1;background:var(--bg3);border-radius:12px;padding:10px;text-align:center;}
+.tm-reward-lbl{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.tm-reward-val{font-size:16px;font-weight:800;color:var(--gold);}
+.tm-bar{height:6px;background:var(--bg4);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.tm-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold-dark));}
+.tm-note-box{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;}
+.tm-note-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+.tm-note-text{font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-wrap;}
+.tm-steps{margin-bottom:16px;}
+.tm-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.tm-step-num{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#000;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tm-step-txt{font-size:13px;color:var(--text2);line-height:1.5;}
+.tm-btn-link{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:12px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;margin-bottom:10px;}
+.tm-btn-done{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#047857);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
 </style>
 </head>
 <body>
@@ -539,16 +633,63 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
     <!-- TASKS -->
     <div class="content" id="sec-tasks" style="display:none;">
-      <div class="tabs">
-        <div class="tab active" onclick="switchTab(this,'tab-hot')">🔥 Hot</div>
-        <div class="tab" onclick="switchTab(this,'tab-all')">📋 Tất cả</div>
-        <div class="tab" onclick="switchTab(this,'tab-hist')">⏰ Lịch sử</div>
+      <!-- Header -->
+      <div class="tk-header">
+        <div class="tk-hd-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="22" height="22"><rect x="3" y="4" width="18" height="2" rx="1"/><rect x="3" y="11" width="18" height="2" rx="1"/><rect x="3" y="18" width="12" height="2" rx="1"/></svg>
+        </div>
+        <div>
+          <div class="tk-hd-title">Nhiệm Vụ</div>
+          <div class="tk-hd-sub" id="tk-avail-txt">0 nhiệm vụ khả dụng</div>
+        </div>
       </div>
+      <!-- Stats bar -->
+      <div class="tk-stats">
+        <div class="tk-stat"><div class="tk-stat-icon" style="color:#3b82f6;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div><div class="tk-stat-val" id="tk-stat-avail">0</div><div class="tk-stat-lbl">Khả dụng</div></div>
+        <div class="tk-stat"><div class="tk-stat-icon" style="color:#22c55e;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 6L9 17l-5-5"/></svg>
+        </div><div class="tk-stat-val" id="tk-stat-done">0</div><div class="tk-stat-lbl">Hoàn thành</div></div>
+        <div class="tk-stat"><div class="tk-stat-icon" style="color:#f59e0b;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div><div class="tk-stat-val" id="tk-stat-income">0đ</div><div class="tk-stat-lbl">Thu nhập</div></div>
+        <div class="tk-stat"><div class="tk-stat-icon" style="color:#a78bfa;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div><div class="tk-stat-val" id="tk-stat-remain">0</div><div class="tk-stat-lbl">Còn lại</div></div>
+      </div>
+      <!-- Tabs -->
+      <div class="tk-tabs">
+        <div class="tk-tab active" onclick="tkTab(this,'tab-hot')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2c0 6-8 8-8 14a8 8 0 0 0 16 0c0-6-8-8-8-14z"/></svg>
+          Hot <span class="tk-tab-cnt" id="tk-hot-cnt">0</span>
+        </div>
+        <div class="tk-tab" onclick="tkTab(this,'tab-all')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="2" rx="1"/><rect x="3" y="11" width="18" height="2" rx="1"/><rect x="3" y="18" width="12" height="2" rx="1"/></svg>
+          Tất cả <span class="tk-tab-cnt" id="tk-all-cnt">0</span>
+        </div>
+        <div class="tk-tab" onclick="tkTab(this,'tab-hist')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          Lịch sử
+        </div>
+      </div>
+      <!-- Search -->
+      <div class="tk-search-wrap" id="tk-search-wrap">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="tk-search" id="tk-search-inp" placeholder="Tìm nhiệm vụ..." oninput="filterTasks()">
+      </div>
+      <!-- Tab panels -->
       <div id="tab-hot"></div>
       <div id="tab-all" style="display:none;"></div>
-      <div id="tab-hist" style="display:none;"></div>
-      <div style="background:var(--bg3);border-radius:var(--r2);padding:12px;font-size:12px;color:var(--text2);line-height:1.7;margin-top:8px;">
-        Dùng <b style="color:var(--gold);">Chrome</b> để tránh lỗi · Không dùng <b style="color:var(--red);">VPN/Proxy</b> · Không bật tắt 4G khi làm nhiệm vụ
+      <div id="tab-hist" style="display:none;">
+        <!-- History sub-stats -->
+        <div class="tk-hist-stats" id="tk-hist-stats"></div>
+        <div id="task-history-list"></div>
+      </div>
+      <!-- Notice -->
+      <div class="tk-notice">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Dùng <b style="color:var(--gold);">Chrome</b> để tránh lỗi · Nhiệm vụ <b style="color:var(--gold);">vượt link</b> cần duyệt · Ưu tiên <b style="color:var(--gold);">LinkBeta</b> · Không dùng <b style="color:var(--red);">VPN/Proxy</b></span>
       </div>
     </div>
 
@@ -728,6 +869,77 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         </div>
       </div>
 
+      <!-- Xác thực Email -->
+      <div class="acc-section-header">
+        <div class="acc-sec-icon" style="background:linear-gradient(135deg,#e11d48,#9f1239);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div>
+          <div class="acc-sec-title">Xác thực Email</div>
+          <div class="acc-sec-sub">Xác thực để làm nhiệm vụ và nhận thưởng</div>
+        </div>
+      </div>
+      <div class="acc-card" id="ev-card">
+        <!-- CHƯA XÁC THỰC -->
+        <div id="ev-unverified">
+          <div class="ev-status-badge ev-unverified">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Chưa xác thực
+          </div>
+          <p class="ev-desc">Xác thực email để có thể làm nhiệm vụ và nhận thưởng.</p>
+          <div class="ev-email-row">
+            <div class="ev-email-icon">
+              <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2" fill="#7c3aed"/><path d="m22 7-10 7L2 7" stroke="white" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;">EMAIL</div>
+              <div style="font-size:14px;font-weight:700;" id="ev-email-show">—</div>
+            </div>
+          </div>
+          <button class="ev-send-btn" id="ev-send-btn" onclick="sendOTP()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Gửi mã xác thực
+          </button>
+          <!-- OTP INPUT (ẩn ban đầu) -->
+          <div id="ev-otp-section" style="display:none;margin-top:16px;">
+            <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;">Nhập mã xác thực 6 số</div>
+            <div class="otp-boxes" id="otp-boxes">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,0)" onkeydown="otpKey(event,0)">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,1)" onkeydown="otpKey(event,1)">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,2)" onkeydown="otpKey(event,2)">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,3)" onkeydown="otpKey(event,3)">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,4)" onkeydown="otpKey(event,4)">
+              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,5)" onkeydown="otpKey(event,5)">
+            </div>
+            <button class="ev-confirm-btn" onclick="verifyOTP()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Xác nhận
+            </button>
+            <div class="ev-spam-note">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+              Không nhận được mã? <span style="color:var(--gold);font-weight:700;cursor:pointer;" onclick="sendOTP()">Gửi lại</span> · Kiểm tra thư mục <span style="color:var(--gold);font-weight:700;">Spam</span>
+            </div>
+          </div>
+        </div>
+        <!-- ĐÃ XÁC THỰC -->
+        <div id="ev-verified" style="display:none;">
+          <div class="ev-status-badge ev-done">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Đã xác thực
+          </div>
+          <div class="ev-email-row" style="margin-top:12px;">
+            <div class="ev-email-icon">
+              <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><rect x="2" y="4" width="20" height="16" rx="2" fill="#059669"/><path d="m22 7-10 7L2 7" stroke="white" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;">EMAIL ĐÃ XÁC THỰC</div>
+              <div style="font-size:14px;font-weight:700;" id="ev-verified-email">—</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--green);margin-top:10px;">✓ Tài khoản đã được xác thực. Bạn có thể làm nhiệm vụ và nhận thưởng.</p>
+        </div>
+      </div>
+
       <!-- Bảo mật -->
       <div class="acc-section-header">
         <div class="acc-sec-icon" style="background:linear-gradient(135deg,#d97706,#b45309);">
@@ -869,11 +1081,13 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
           <input class="tf-input" id="new-task-name" placeholder="Tên nhiệm vụ (VD: Uptolink 3 Step)">
           <input class="tf-input" id="new-task-reward" type="number" placeholder="Thưởng (đ) VD: 350">
           <input class="tf-input" id="new-task-slots" type="number" placeholder="Số lượt tối đa VD: 300">
+          <input class="tf-input" id="new-task-url" placeholder="Link vượt (link4sub, uptolink...) để trống nếu không có">
+          <input class="tf-input" id="new-task-note" placeholder="Ghi chú cho member (VD: Bước 1: Truy cập link, bước 2: chờ 30s...)">
           <select class="tf-input" id="new-task-hot">
             <option value="0">Bình thường</option>
             <option value="1">🔥 HOT</option>
           </select>
-          <button class="btn-add-task" onclick="addTask()">➕ Thêm Nhiệm Vụ</button>
+          <button class="btn-add-task" onclick="adminAddTask()">➕ Thêm Nhiệm Vụ</button>
         </div>
       </div>
 
@@ -1014,42 +1228,82 @@ function rDash(){
   document.getElementById('dash-activity').innerHTML=ah;
 }
 
-function rTasks(){
-  var tasks=gd('lb_tasks',[]).filter(function(t){return t.active;});
+var tkSearchTerm='';
+function filterTasks(){tkSearchTerm=document.getElementById('tk-search-inp').value.toLowerCase();renderTaskList();}
+function tkTab(el,id){
+  ['tab-hot','tab-all','tab-hist'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});
+  var tg=document.getElementById(id);if(tg)tg.style.display='block';
+  document.querySelectorAll('.tk-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');
+  var sw=document.getElementById('tk-search-wrap');if(sw)sw.style.display=id==='tab-hist'?'none':'flex';
+}
+function mkTaskCard(t){
+  var pct=Math.min(100,(t.usedSlots/t.slots)*100);
+  var remain=t.slots-t.usedSlots;
+  var noteHtml=t.note?'<div class="task2-note">'+t.note+'</div>':'';
+  return '<div class="task-card2'+(t.hot?' hot':'')+'">'+
+    '<div class="task2-top">'+
+    '<div class="task2-icon">'+t.name[0]+'</div>'+
+    '<div style="flex:1;"><div class="task2-name">'+t.name+'</div><div class="task2-meta">Lv.'+t.level+' &middot; '+t.xp+' Exp</div></div>'+
+    (t.hot?'<div class="task2-hot-badge">HOT</div>':'')+
+    '</div>'+
+    '<div class="task2-reward-row"><div class="task2-price">'+t.reward+'<span> d/luot</span></div><div class="task2-slots">'+t.usedSlots+'/'+t.slots+' luot</div></div>'+
+    '<div class="task2-bar"><div class="task2-bar-fill'+(t.hot?' hot-fill':'')+'" style="width:'+pct+'%"></div></div>'+
+    noteHtml+
+    '<button class="btn-do-task'+(t.hot?' hot-btn':' normal')+'" onclick="doTask('+t.id+')">'+
+    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+
+    'Lam nhiem vu</button></div>';
+}
+function renderTaskList(){
+  var tasks=gd('lb_tasks',[]).filter(function(t){return t.active&&(!tkSearchTerm||t.name.toLowerCase().indexOf(tkSearchTerm)>=0);});
+  var hotTasks=tasks.filter(function(t){return t.hot;});
   var hH='',aH='';
-  tasks.forEach(function(t){
-    var pct=Math.min(100,(t.usedSlots/t.slots)*100);
-    var card='<div class="task-card"'+(t.hot?' style="border-color:rgba(255,107,53,.3);"':'')+'>'+
-      '<div class="task-header"><div class="task-icon-wrap">'+t.name[0]+'</div>'+
-      '<div class="task-info"><div class="task-name">'+t.name+'</div><div class="task-meta">Lv.'+t.level+' &middot; '+t.xp+' Exp</div></div>'+
-      (t.hot?'<div class="task-hot">HOT</div>':'')+
-      '</div><div class="task-reward"><div><span style="font-size:22px;font-weight:800;color:var(--gold);">'+t.reward+'</span><span style="font-size:14px;color:var(--text2);"> d/luot</span></div><div style="font-size:12px;color:var(--text2);">'+t.usedSlots+'/'+t.slots+' luot</div></div>'+
-      '<div class="task-bar"><div class="task-bar-fill" style="width:'+pct+'%"></div></div>'+
-      '<button class="btn-task'+(t.hot?' btn-task-hot':'')+'" onclick="doTask('+t.id+')">Lam nhiem vu</button></div>';
-    if(t.hot)hH+=card;aH+=card;
+  hotTasks.forEach(function(t){hH+=mkTaskCard(t);});
+  tasks.forEach(function(t){aH+=mkTaskCard(t);});
+  if(!hH)hH='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px;">Khong co nhiem vu Hot</div>';
+  if(!aH)aH='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px;">Chua co nhiem vu nao</div>';
+  var h1=document.getElementById('tab-hot');if(h1)h1.innerHTML=hH;
+  var h2=document.getElementById('tab-all');if(h2)h2.innerHTML=aH;
+  var hcnt=document.getElementById('tk-hot-cnt');if(hcnt)hcnt.textContent=hotTasks.length;
+  var acnt=document.getElementById('tk-all-cnt');if(acnt)acnt.textContent=tasks.length;
+}
+function rTasks(){
+  var allTasks=gd('lb_tasks',[]).filter(function(t){return t.active;});
+  var u=fr();if(!u)return;
+  var myHist=(u.history||[]).filter(function(h){return h.type==='task';});
+  var done=myHist.filter(function(h){return h.status==='approved';}).length;
+  var income=myHist.filter(function(h){return h.status==='approved';}).reduce(function(s,h){return s+h.amount;},0);
+  var remain=allTasks.reduce(function(s,t){return s+(t.slots-t.usedSlots);},0);
+  var el=document.getElementById('tk-avail-txt');if(el)el.textContent=allTasks.length+' nhiem vu kha dung';
+  var e1=document.getElementById('tk-stat-avail');if(e1)e1.textContent=allTasks.length;
+  var e2=document.getElementById('tk-stat-done');if(e2)e2.textContent=done;
+  var e3=document.getElementById('tk-stat-income');if(e3)e3.textContent=fmt(income)+'d';
+  var e4=document.getElementById('tk-stat-remain');if(e4)e4.textContent=remain;
+  renderTaskList();
+  // History tab
+  var approved=myHist.filter(function(h){return h.status==='approved';}).length;
+  var pending=myHist.filter(function(h){return h.status==='pending';}).length;
+  var doing=myHist.filter(function(h){return h.status==='doing';}).length;
+  var rejected=myHist.filter(function(h){return h.status==='rejected';}).length;
+  var hs=document.getElementById('tk-hist-stats');
+  if(hs)hs.innerHTML='<div class="tk-hist-badge" style="background:rgba(34,197,94,.15);color:#22c55e;">'+approved+' Da duyet</div>'+
+    '<div class="tk-hist-badge" style="background:rgba(245,158,11,.15);color:#f59e0b;">'+pending+' Cho duyet</div>'+
+    '<div class="tk-hist-badge" style="background:rgba(59,130,246,.15);color:#3b82f6;">'+doing+' Dang lam</div>'+
+    '<div class="tk-hist-badge" style="background:rgba(239,68,68,.15);color:#ef4444;">'+rejected+' Tu choi</div>';
+  var tH='';
+  myHist.slice().reverse().slice(0,30).forEach(function(h){
+    var sc=h.status==='approved'?'var(--green)':h.status==='pending'?'var(--orange)':'var(--red)';
+    var st=h.status==='approved'?'Da duyet':h.status==='pending'?'Cho duyet':h.status==='rejected'?'Tu choi':'Dang lam';
+    tH+='<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);">'+
+      '<div style="width:36px;height:36px;border-radius:10px;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">[T]</div>'+
+      '<div style="flex:1;"><div style="font-size:13px;font-weight:600;">'+h.name+'</div><div style="font-size:11px;color:var(--text2);">'+h.date+'</div></div>'+
+      '<div style="text-align:right;"><div style="font-size:14px;font-weight:700;color:var(--green);">+'+fmt(h.amount)+'d</div>'+
+      '<div style="font-size:10px;font-weight:700;color:'+sc+';">'+st+'</div></div></div>';
   });
-  if(!hH)hH='<div class="empty-state"><p>Khong co nhiem vu Hot</p></div>';
-  if(!aH)aH='<div class="empty-state"><p>Chua co nhiem vu nao</p></div>';
-  document.getElementById('tt-hot').innerHTML=hH;
-  document.getElementById('tt-all').innerHTML=aH;
-  var u=fr();var th=(u.history||[]).filter(function(h){return h.type==='task';}).slice(-20).reverse();var tH='';
-  th.forEach(function(h){var sc=h.status==='approved'?'var(--green)':h.status==='pending'?'var(--orange)':'var(--red)';var st=h.status==='approved'?'Da duyet':h.status==='pending'?'Cho duyet':'Tu choi';tH+='<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);"><div class="hi-icon" style="background:rgba(245,166,35,.1);">[T]</div><div style="flex:1;"><div class="hi-name">'+h.name+'</div><div class="hi-time">'+h.date+'</div></div><div style="text-align:right;"><div class="hi-amount" style="color:var(--green);">+'+fmt(h.amount)+'d</div><div style="font-size:10px;font-weight:700;color:'+sc+';">'+st+'</div></div></div>';});
-  if(!tH)tH='<div class="empty-state"><p>Chua co lich su</p></div>';
-  document.getElementById('task-history-list').innerHTML=tH;
+  if(!tH)tH='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px;">Chua co lich su nhiem vu</div>';
+  var thl=document.getElementById('task-history-list');if(thl)thl.innerHTML=tH;
 }
 
-function doTask(tid){
-  var u=fr();if(!u)return;
-  var tasks=gd('lb_tasks',[]);var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
-  if(!task)return;
-  if(task.usedSlots>=task.slots){toast('Het luot!');return;}
-  var pt=gd('lb_pt',[]);
-  if(pt.some(function(p){return p.userEmail===u.email&&p.taskId===tid&&p.status==='pending';})){toast('Ban da gui nhiem vu nay, cho duyet!');return;}
-  var e={id:Date.now(),userEmail:u.email,userName:u.name,taskId:tid,taskName:task.name,amount:task.reward,xp:task.xp,date:new Date().toLocaleString('vi-VN'),status:'pending'};
-  pt.push(e);sd('lb_pt',pt);
-  u.history=u.history||[];u.history.push({type:'task',name:task.name,amount:task.reward,date:e.date,status:'pending',pendingId:e.id});
-  su(u);CU=u;toast('Da gui nhiem vu! Cho Admin duyet de nhan tien.');rTasks();
-}
+/* doTask moved below */
 
 function rWd(){
   var u=fr();if(!u)return;
@@ -1137,6 +1391,7 @@ function rAcc(){
   var lh=u.loginHistory||[];var lhH='';
   lh.slice().reverse().slice(0,5).forEach(function(h){lhH+='<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);"><div style="width:32px;height:32px;border-radius:10px;background:rgba(13,148,136,.15);display:flex;align-items:center;justify-content:center;font-size:14px;">🔐</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">Đăng nhập thành công</div><div style="font-size:11px;color:var(--text2);">'+h.date+'</div></div></div>';});
   if(s('login-history-list'))s('login-history-list').innerHTML=lhH||'<div style="text-align:center;padding:20px;color:var(--text3);font-size:13px;">Chưa có lịch sử đăng nhập</div>';
+  updateEmailVerifyUI(u);
 }
 
 function renderBanks(u){
@@ -1150,19 +1405,26 @@ function renderBanks(u){
   bl.innerHTML=bH;
 }
 
-function showAddBank(){var f=document.getElementById('add-bank-form');if(f)f.style.display='block';}
-function hideAddBank(){var f=document.getElementById('add-bank-form');if(f)f.style.display='none';}
-
+function showAddBank(){var m=document.getElementById('bank-modal');if(m)m.classList.add('show');}
+function closeBankModal(e){
+  if(!e||e.target===document.getElementById('bank-modal')){
+    var m=document.getElementById('bank-modal');if(m)m.classList.remove('show');
+  }
+}
 function saveBank(){
-  var name=document.getElementById('bank-name').value.trim();
-  var num=document.getElementById('bank-num').value.trim();
-  var owner=document.getElementById('bank-owner').value.trim();
-  if(!name||!num||!owner){toast('Vui long dien day du thong tin!');return;}
+  var name=document.getElementById('modal-bank-name').value.trim();
+  var num=document.getElementById('modal-bank-num').value.trim();
+  var owner=document.getElementById('modal-bank-owner').value.trim();
+  if(!name){toast('Vui long chon ngan hang!');return;}
+  if(!num){toast('Vui long nhap so tai khoan!');return;}
+  if(!owner){toast('Vui long nhap ten chu tai khoan!');return;}
   var u=fr();u.banks=u.banks||[];
   u.banks.push({name:name,num:num,owner:owner});
-  su(u);CU=u;hideAddBank();
-  document.getElementById('bank-name').value='';document.getElementById('bank-num').value='';document.getElementById('bank-owner').value='';
-  renderBanks(u);toast('Da them tai khoan ngan hang!');
+  su(u);CU=u;
+  document.getElementById('modal-bank-name').value='';
+  document.getElementById('modal-bank-num').value='';
+  document.getElementById('modal-bank-owner').value='';
+  closeBankModal();renderBanks(u);toast('Da them tai khoan '+name+'!');
 }
 
 function delBank(idx){
@@ -1211,32 +1473,81 @@ function rAdmin(){
 }
 
 function aAT(pid){
-  var pt=gd('lb_pt',[]);var e=null;pt.forEach(function(p){if(p.id===pid){p.status='approved';e=p;}});sd('lb_pt',pt);
-  if(e){var u=gu(e.userEmail);if(u){u.balance=(u.balance||0)+e.amount;u.xp=(u.xp||0)+e.xp;u.tasksCompleted=(u.tasksCompleted||0)+1;u.history=(u.history||[]).map(function(h){if(h.pendingId===pid)h.status='approved';return h;});su(u);}var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===e.taskId)t.usedSlots=(t.usedSlots||0)+1;});sd('lb_tasks',tasks);toast('Da duyet nhiem vu cho '+e.userName+' (+'+fmt(e.amount)+'d)');}
+  pid=String(pid);
+  var pt=gd('lb_pt',[]);var e=null;
+  pt.forEach(function(p){if(String(p.id)===pid){p.status='approved';e=p;}});
+  sd('lb_pt',pt);
+  if(e){
+    var u=gu(e.userEmail);
+    if(u){
+      u.balance=(u.balance||0)+Number(e.amount);
+      u.xp=(u.xp||0)+Number(e.xp||10);
+      u.tasksCompleted=(u.tasksCompleted||0)+1;
+      u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='approved';return h;});
+      su(u);
+    }
+    var tasks=gd('lb_tasks',[]);
+    tasks.forEach(function(t){if(String(t.id)===String(e.taskId))t.usedSlots=(t.usedSlots||0)+1;});
+    sd('lb_tasks',tasks);
+    toast('Da duyet nhiem vu cho '+e.userName+' (+'+fmt(e.amount)+'d)');
+  } else {
+    toast('Loi: Khong tim thay nhiem vu (id='+pid+')');
+  }
   rAdmin();
 }
 function aRT(pid){
-  var pt=gd('lb_pt',[]);var e=null;pt.forEach(function(p){if(p.id===pid){p.status='rejected';e=p;}});sd('lb_pt',pt);
-  if(e){var u=gu(e.userEmail);if(u){u.history=(u.history||[]).map(function(h){if(h.pendingId===pid)h.status='rejected';return h;});su(u);}}
+  pid=String(pid);
+  var pt=gd('lb_pt',[]);var e=null;
+  pt.forEach(function(p){if(String(p.id)===pid){p.status='rejected';e=p;}});
+  sd('lb_pt',pt);
+  if(e){var u=gu(e.userEmail);if(u){u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='rejected';return h;});su(u);}}
   toast('Da tu choi nhiem vu');rAdmin();
 }
 function aAW(wid){
-  var wds=gd('lb_wd',[]);var wd=null;wds.forEach(function(w){if(w.id===wid){w.status='paid';wd=w;}});sd('lb_wd',wds);
-  if(wd){var u=gu(wd.userEmail);if(u){u.totalWithdrawn=(u.totalWithdrawn||0)+wd.amount;u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-wd.amount);u.history=(u.history||[]).map(function(h){if(h.wdId===wid)h.status='paid';return h;});su(u);}toast('Da duyet rut '+fmt(wd.amount)+'d cho '+wd.userName);}
+  wid=String(wid);
+  var wds=gd('lb_wd',[]);var wd=null;
+  wds.forEach(function(w){if(String(w.id)===wid){w.status='paid';wd=w;}});
+  sd('lb_wd',wds);
+  if(wd){
+    var u=gu(wd.userEmail);
+    if(u){
+      u.totalWithdrawn=(u.totalWithdrawn||0)+Number(wd.amount);
+      u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));
+      u.history=(u.history||[]).map(function(h){if(String(h.wdId)===wid)h.status='paid';return h;});
+      su(u);
+    }
+    toast('Da duyet rut '+fmt(wd.amount)+'d cho '+wd.userName);
+  }
   rAdmin();
 }
 function aRW(wid){
-  var wds=gd('lb_wd',[]);var wd=null;wds.forEach(function(w){if(w.id===wid){w.status='cancelled';wd=w;}});sd('lb_wd',wds);
-  if(wd){var u=gu(wd.userEmail);if(u){u.balance=(u.balance||0)+wd.amount;u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-wd.amount);su(u);}toast('Da tu choi va hoan tien cho '+wd.userName);}
+  wid=String(wid);
+  var wds=gd('lb_wd',[]);var wd=null;
+  wds.forEach(function(w){if(String(w.id)===wid){w.status='cancelled';wd=w;}});
+  sd('lb_wd',wds);
+  if(wd){
+    var u=gu(wd.userEmail);
+    if(u){u.balance=(u.balance||0)+Number(wd.amount);u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));su(u);}
+    toast('Da tu choi va hoan tien cho '+wd.userName);
+  }
   rAdmin();
 }
 function adminAddTask(){
-  var name=document.getElementById('new-task-name').value.trim();var reward=parseInt(document.getElementById('new-task-reward').value)||0;
-  var slots=parseInt(document.getElementById('new-task-slots').value)||100;var level=parseInt(document.getElementById('new-task-level').value)||0;var xp=parseInt(document.getElementById('new-task-xp').value)||10;
-  if(!name){toast('Nhap ten nhiem vu!');return;}if(reward<=0){toast('Nhap so tien thuong!');return;}
+  var name=document.getElementById('new-task-name').value.trim();
+  var reward=parseInt(document.getElementById('new-task-reward').value)||0;
+  var slots=parseInt(document.getElementById('new-task-slots').value)||100;
+  var urlEl=document.getElementById('new-task-url');var url=urlEl?urlEl.value.trim():'';
+  var noteEl=document.getElementById('new-task-note');var note=noteEl?noteEl.value.trim():'';
+  var hotEl=document.getElementById('new-task-hot');var hot=hotEl?hotEl.value==='1':false;
+  var levelEl=document.getElementById('new-task-level');var level=levelEl?parseInt(levelEl.value)||0:0;
+  var xpEl=document.getElementById('new-task-xp');var xp=xpEl?parseInt(xpEl.value)||10:10;
+  if(!name){toast('Nhap ten nhiem vu!');return;}
+  if(reward<=0){toast('Nhap so tien thuong!');return;}
   var tasks=gd('lb_tasks',[]);var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
-  tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,level:level,xp:xp,hot:false,active:true});sd('lb_tasks',tasks);
-  document.getElementById('new-task-name').value='';document.getElementById('new-task-reward').value='';document.getElementById('new-task-slots').value='';
+  tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,level:level,xp:xp,hot:hot,active:true});
+  sd('lb_tasks',tasks);
+  ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  if(hotEl)hotEl.value='0';
   toast('Da them nhiem vu: '+name);rAdmin();
 }
 function aTog(tid){var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Da thay doi trang thai');rAdmin();}
@@ -1249,6 +1560,385 @@ function togglePw(id,e){var i=document.getElementById(id);if(i.type==='password'
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2800);}
 document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
 init();
+
+/* ===== EMAIL OTP SYSTEM ===== */
+var _otpCode='';
+var _otpTimer=null;
+
+function sendOTP(){
+  var u=fr();if(!u)return;
+  if(u.emailVerified){toast('Email da duoc xac thuc!');return;}
+  // Generate 6-digit code
+  _otpCode=String(Math.floor(100000+Math.random()*900000));
+  u.pendingOTP=_otpCode;
+  u.otpExpiry=Date.now()+10*60*1000; // 10 phút
+  su(u);CU=u;
+  
+  // Show OTP section
+  var sec=document.getElementById('ev-otp-section');
+  if(sec)sec.style.display='block';
+  
+  // Countdown button
+  startOTPCountdown();
+  
+  // Hiển thị mã trong toast (giả lập gửi mail)
+  toast('Ma OTP: '+_otpCode+' (kiem tra email!)');
+  
+  // Fake: show OTP in a visible alert style for demo
+  showOTPDemo(_otpCode, u.email);
+}
+
+var _pendingFillCode='';
+function showOTPDemo(code, email){
+  var existing=document.getElementById('otp-demo-popup');
+  if(existing)existing.remove();
+  _pendingFillCode=code;
+  var popup=document.createElement('div');
+  popup.id='otp-demo-popup';
+  popup.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a2e;border:2px solid var(--gold);border-radius:20px;padding:24px 20px;z-index:999;width:300px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.8);';
+  var btn1=document.createElement('button');
+  btn1.textContent='Điền mã tự động';
+  btn1.style.cssText='background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:800;cursor:pointer;width:100%;';
+  btn1.onclick=function(){fillOTP(_pendingFillCode);popup.remove();};
+  var btn2=document.createElement('button');
+  btn2.textContent='Tôi sẽ tự nhập';
+  btn2.style.cssText='background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;margin-top:8px;display:block;width:100%;';
+  btn2.onclick=function(){popup.remove();};
+  popup.innerHTML=
+    '<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">Xác thực email của bạn</div>'+
+    '<div style="font-size:11px;color:var(--text3);margin-bottom:16px;"><b style="color:var(--gold);">'+email+'</b></div>'+
+    '<div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Mã xác thực của bạn là:</div>'+
+    '<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Mã có hiệu lực trong 10 phút</div>'+
+    '<div style="background:#0f172a;border-radius:12px;padding:16px;margin-bottom:16px;">'+
+    '<div style="font-size:36px;font-weight:900;letter-spacing:12px;color:#60a5fa;">'+code+'</div>'+
+    '</div>';
+  popup.appendChild(btn1);
+  popup.appendChild(btn2);
+  document.body.appendChild(popup);
+}
+
+function fillOTP(code){
+  var boxes=document.querySelectorAll('.otp-box');
+  boxes.forEach(function(b,i){
+    b.value=code[i]||'';
+    b.classList.toggle('filled',!!code[i]);
+  });
+}
+
+function startOTPCountdown(){
+  var btn=document.getElementById('ev-send-btn');
+  if(!btn)return;
+  var secs=45;
+  btn.disabled=true;
+  clearInterval(_otpTimer);
+  _otpTimer=setInterval(function(){
+    secs--;
+    btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Gửi lại ('+secs+'s)';
+    if(secs<=0){
+      clearInterval(_otpTimer);
+      btn.disabled=false;
+      btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Gửi lại mã';
+    }
+  },1000);
+}
+
+function otpInput(el,idx){
+  el.value=el.value.replace(/[^0-9]/g,'');
+  el.classList.toggle('filled',el.value.length>0);
+  if(el.value.length===1&&idx<5){
+    var next=document.querySelectorAll('.otp-box')[idx+1];
+    if(next)next.focus();
+  }
+  // Auto verify when all 6 filled
+  var boxes=document.querySelectorAll('.otp-box');
+  var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+  if(code.length===6)verifyOTP();
+}
+
+function otpKey(e,idx){
+  if(e.key==='Backspace'){
+    var boxes=document.querySelectorAll('.otp-box');
+    if(!boxes[idx].value&&idx>0){
+      boxes[idx-1].focus();
+      boxes[idx-1].value='';
+      boxes[idx-1].classList.remove('filled');
+    }
+  }
+}
+
+function verifyOTP(){
+  var boxes=document.querySelectorAll('.otp-box');
+  var entered=Array.from(boxes).map(function(b){return b.value;}).join('');
+  if(entered.length<6){toast('Nhap du 6 so!');return;}
+  var u=fr();
+  if(!u.pendingOTP){toast('Chua gui ma OTP!');return;}
+  if(Date.now()>u.otpExpiry){toast('Ma OTP da het han! Gui lai.');return;}
+  if(entered===u.pendingOTP){
+    u.emailVerified=true;
+    u.pendingOTP=null;
+    u.otpExpiry=null;
+    su(u);CU=u;
+    clearInterval(_otpTimer);
+    updateEmailVerifyUI(u);
+    toast('Xac thuc email thanh cong!');
+    // Remove demo popup if still open
+    var p=document.getElementById('otp-demo-popup');if(p)p.remove();
+  } else {
+    // Shake boxes
+    var ob=document.getElementById('otp-boxes');
+    if(ob){ob.style.animation='shake .4s ease';setTimeout(function(){ob.style.animation='';},400);}
+    toast('Ma OTP khong dung!');
+    boxes.forEach(function(b){b.value='';b.classList.remove('filled');});
+    boxes[0].focus();
+  }
+}
+
+function updateEmailVerifyUI(u){
+  var unv=document.getElementById('ev-unverified');
+  var vfd=document.getElementById('ev-verified');
+  var vEmail=document.getElementById('ev-verified-email');
+  var eShow=document.getElementById('ev-email-show');
+  if(eShow)eShow.textContent=u.email;
+  if(u.emailVerified){
+    if(unv)unv.style.display='none';
+    if(vfd)vfd.style.display='block';
+    if(vEmail)vEmail.textContent=u.email;
+  } else {
+    if(unv)unv.style.display='block';
+    if(vfd)vfd.style.display='none';
+  }
+}
+
+/* ===== TASK MODAL ===== */
+var _currentTaskId=null;
+
+function doTask(tid){
+  var u=fr();if(!u)return;
+  
+  // Check email verified
+  if(!u.emailVerified){
+    // Show prompt
+    showVerifyPrompt();
+    return;
+  }
+  
+  var tasks=gd('lb_tasks',[]);
+  var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
+  if(!task)return;
+  
+  _currentTaskId=tid;
+  
+  // Fill modal info
+  var nameEl=document.getElementById('tm-name');if(nameEl)nameEl.textContent=task.name;
+  var iconEl=document.getElementById('tm-icon');if(iconEl)iconEl.textContent=task.name[0];
+  var metaEl=document.getElementById('tm-meta');if(metaEl)metaEl.textContent='Lv.'+task.level+' · '+(task.xp||10)+' Exp';
+  var hotBadge=document.getElementById('tm-hot-badge');if(hotBadge)hotBadge.style.display=task.hot?'block':'none';
+  var rewEl=document.getElementById('tm-reward');if(rewEl)rewEl.textContent=fmt(task.reward)+'đ';
+  var remain=task.slots-task.usedSlots;
+  var remEl=document.getElementById('tm-remain');if(remEl)remEl.textContent=remain+' lượt';
+  var xpEl=document.getElementById('tm-xp');if(xpEl)xpEl.textContent='+'+(task.xp||10)+' Exp';
+  var usedEl=document.getElementById('tm-used');if(usedEl)usedEl.textContent=task.usedSlots+' đã làm';
+  var totEl=document.getElementById('tm-total');if(totEl)totEl.textContent=task.slots+' tổng';
+  var pct=Math.min(100,(task.usedSlots/task.slots)*100);
+  var barEl=document.getElementById('tm-bar-fill');if(barEl)barEl.style.width=pct+'%';
+  
+  // Note
+  var noteBox=document.getElementById('tm-note-box');
+  var noteText=document.getElementById('tm-note-text');
+  if(task.note&&task.note.trim()){
+    if(noteBox)noteBox.style.display='block';
+    if(noteText)noteText.textContent=task.note;
+  } else {
+    if(noteBox)noteBox.style.display='none';
+  }
+  
+  // Link button
+  var linkBtn=document.getElementById('tm-link-btn');
+  if(linkBtn){
+    if(task.url&&task.url.trim()){
+      linkBtn.href=task.url;
+      linkBtn.style.display='flex';
+    } else {
+      linkBtn.href='#';
+      linkBtn.style.display='flex';
+      linkBtn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Truy cập link nhiệm vụ';
+    }
+  }
+  
+  // Check already pending
+  var pt=gd('lb_pt',[]);
+  var alreadyPending=pt.some(function(p){return p.userEmail===u.email&&p.taskId===tid&&p.status==='pending';});
+  var doneBtn=document.getElementById('tm-done-btn');
+  var alreadyMsg=document.getElementById('tm-already-msg');
+  if(alreadyPending){
+    if(doneBtn)doneBtn.style.display='none';
+    if(alreadyMsg)alreadyMsg.style.display='block';
+  } else {
+    if(doneBtn)doneBtn.style.display='flex';
+    if(alreadyMsg)alreadyMsg.style.display='none';
+  }
+  
+  // Open modal
+  var m=document.getElementById('task-modal');
+  if(m)m.classList.add('show');
+}
+
+function closeTaskModal(e){
+  if(!e||e.target===document.getElementById('task-modal')){
+    var m=document.getElementById('task-modal');
+    if(m)m.classList.remove('show');
+    _currentTaskId=null;
+  }
+}
+
+function confirmTask(){
+  if(!_currentTaskId){toast('Loi: khong tim thay nhiem vu!');return;}
+  var u=fr();if(!u)return;
+  var tasks=gd('lb_tasks',[]);var task=null;
+  tasks.forEach(function(t){if(t.id===_currentTaskId)task=t;});
+  if(!task){toast('Nhiem vu khong ton tai!');return;}
+  if(task.usedSlots>=task.slots){toast('Da het luot!');return;}
+  var pt=gd('lb_pt',[]);
+  if(pt.some(function(p){return p.userEmail===u.email&&p.taskId===_currentTaskId&&p.status==='pending';})){
+    toast('Ban da gui nhiem vu nay, cho duyet!');return;
+  }
+  var e={id:String(Date.now()),userEmail:u.email,userName:u.name,taskId:_currentTaskId,taskName:task.name,amount:task.reward,xp:task.xp||10,date:new Date().toLocaleString('vi-VN'),status:'pending'};
+  pt.push(e);sd('lb_pt',pt);
+  u.history=u.history||[];
+  u.history.push({type:'task',name:task.name,amount:task.reward,date:e.date,status:'pending',pendingId:String(e.id)});
+  su(u);CU=u;
+  
+  // Update UI
+  var doneBtn=document.getElementById('tm-done-btn');
+  var alreadyMsg=document.getElementById('tm-already-msg');
+  if(doneBtn)doneBtn.style.display='none';
+  if(alreadyMsg)alreadyMsg.style.display='block';
+  
+  toast('Da gui nhiem vu! Cho Admin duyet de nhan tien.');
+  rTasks();
+  // Close after delay
+  setTimeout(function(){closeTaskModal();},1500);
+}
+
+function showVerifyPrompt(){
+  var popup=document.createElement('div');
+  popup.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg2);border:1.5px solid var(--border);border-radius:20px;padding:24px 20px;z-index:999;width:300px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.8);';
+  popup.innerHTML=
+    '<div style="width:56px;height:56px;background:rgba(225,29,72,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">'+
+    '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#f43f5e" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg></div>'+
+    '<div style="font-size:17px;font-weight:800;margin-bottom:8px;">Chua xac thuc Email</div>'+
+    '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;">Ban can xac thuc email truoc khi lam nhiem vu va nhan thuong.</div>';
+  var btn1=document.createElement('button');
+  btn1.textContent='Xac thuc ngay';
+  btn1.style.cssText='width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:8px;';
+  btn1.onclick=function(){navTo('account');popup.remove();};
+  var btn2=document.createElement('button');
+  btn2.textContent='De sau';
+  btn2.style.cssText='width:100%;padding:10px;background:none;border:none;color:var(--text2);font-size:13px;cursor:pointer;';
+  btn2.onclick=function(){popup.remove();};
+  popup.appendChild(btn1);
+  popup.appendChild(btn2);
+  document.body.appendChild(popup);
+}
+
+// Add shake animation
+var shakeStyle=document.createElement('style');
+shakeStyle.textContent='@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}';
+document.head.appendChild(shakeStyle);
 </script>
+
+<!-- BANK MODAL -->
+<div class="modal-overlay" id="bank-modal" onclick="closeBankModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-hd">
+      <div class="modal-hd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" width="18" height="18"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 12h20M6 7V5a6 6 0 0 1 12 0v2"/></svg></div>
+      <h3>Thêm tài khoản ngân hàng</h3>
+      <button class="modal-close" onclick="closeBankModal()">✕</button>
+    </div>
+    <div class="modal-lbl">Tên ngân hàng *</div>
+    <select class="bank-select" id="modal-bank-name">
+      <option value="">Chọn ngân hàng</option>
+      <optgroup label="Ví điện tử"><option>MoMo</option><option>ZaloPay</option><option>ViettelMoney</option><option>VNPay</option><option>ShopeePay</option><option>Cake by VPBank</option><option>Timo</option></optgroup>
+      <optgroup label="Ngân hàng"><option>Vietcombank (VCB)</option><option>MB Bank</option><option>Techcombank (TCB)</option><option>ACB</option><option>BIDV</option><option>Agribank</option><option>VPBank</option><option>TPBank</option><option>Sacombank</option><option>SHB</option><option>HDBank</option><option>OCB</option><option>VIB</option><option>MSB</option><option>SeABank</option><option>ABBank</option><option>Bac A Bank</option><option>BaoViet Bank</option><option>BVBank</option><option>Eximbank</option><option>LienVietPostBank</option><option>NamABank</option><option>NCB</option><option>OceanBank</option><option>PGBank</option><option>PVcomBank</option><option>Saigonbank</option><option>SCB</option><option>VietABank</option><option>VietBank</option><option>GPBank</option><option>KienLongBank</option></optgroup>
+    </select>
+    <div class="modal-lbl">Số tài khoản *</div>
+    <input class="modal-inp" type="text" id="modal-bank-num" placeholder="Nhập số tài khoản">
+    <div class="modal-lbl">Tên chủ tài khoản *</div>
+    <input class="modal-inp" type="text" id="modal-bank-owner" placeholder="VD: NGUYEN VAN A (in hoa không dấu)">
+    <button class="acc-btn-gold" onclick="saveBank()">⊕ Thêm tài khoản</button>
+  </div>
+</div>
+
+<!-- TASK DO MODAL -->
+<div class="modal-overlay" id="task-modal" onclick="closeTaskModal(event)">
+  <div class="modal-sheet" style="border-radius:24px 24px 0 0;">
+    <div class="tm-drag-bar"></div>
+    <div class="tm-header">
+      <div class="tm-icon" id="tm-icon">U</div>
+      <div style="flex:1;">
+        <div class="tm-name" id="tm-name">Tên nhiệm vụ</div>
+        <div class="tm-meta" id="tm-meta">Lv.0 · 10 Exp</div>
+      </div>
+      <div class="tm-hot-badge" id="tm-hot-badge" style="display:none;">HOT</div>
+      <button class="modal-close" onclick="closeTaskModal()">✕</button>
+    </div>
+    <!-- Reward row -->
+    <div class="tm-reward-row">
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">Phần thưởng</div>
+        <div class="tm-reward-val" id="tm-reward">0đ</div>
+      </div>
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">Còn lại</div>
+        <div class="tm-reward-val" id="tm-remain" style="color:var(--text);">0 lượt</div>
+      </div>
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">Kinh nghiệm</div>
+        <div class="tm-reward-val" style="color:#a78bfa;" id="tm-xp">+10 Exp</div>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div class="tm-bar"><div class="tm-bar-fill" id="tm-bar-fill" style="width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:14px;">
+      <span id="tm-used">0 đã làm</span>
+      <span id="tm-total">0 tổng</span>
+    </div>
+    <!-- Note -->
+    <div class="tm-note-box" id="tm-note-box" style="display:none;">
+      <div class="tm-note-title">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Hướng dẫn thực hiện
+      </div>
+      <div class="tm-note-text" id="tm-note-text"></div>
+    </div>
+    <!-- Steps -->
+    <div class="tm-steps">
+      <div class="tm-step">
+        <div class="tm-step-num">1</div>
+        <div class="tm-step-txt">Bấm <b>Truy cập link</b> bên dưới — link sẽ mở trong tab mới</div>
+      </div>
+      <div class="tm-step">
+        <div class="tm-step-num">2</div>
+        <div class="tm-step-txt">Chờ đủ thời gian / hoàn thành yêu cầu trang web</div>
+      </div>
+      <div class="tm-step">
+        <div class="tm-step-num">3</div>
+        <div class="tm-step-txt">Quay lại đây và bấm <b>Đã hoàn thành</b> để gửi duyệt</div>
+      </div>
+    </div>
+    <!-- Buttons -->
+    <a class="tm-btn-link" id="tm-link-btn" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Truy cập link nhiệm vụ
+    </a>
+    <button class="tm-btn-done" id="tm-done-btn" onclick="confirmTask()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      Đã hoàn thành · Gửi duyệt
+    </button>
+    <div id="tm-already-msg" style="display:none;text-align:center;padding:10px;background:rgba(245,166,35,.1);border-radius:10px;font-size:13px;color:var(--gold);">
+      ⏳ Bạn đã gửi nhiệm vụ này, đang chờ Admin duyệt
+    </div>
+  </div>
+</div>
 </body>
 </html>

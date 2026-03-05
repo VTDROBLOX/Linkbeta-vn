@@ -3,6 +3,9 @@
 <head>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkBeta - Kiếm Tiền Online</title>
@@ -527,6 +530,93 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 .task2-daily-full .task2-daily-fill{background:linear-gradient(90deg,#dc2626,#b91c1c);}
 .task-limit-badge{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(220,38,38,.3);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;}
 .task-limit-ok{background:rgba(5,150,105,.15);color:#34d399;border:1px solid rgba(5,150,105,.3);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;}
+
+/* ===== ADMIN DASHBOARD ===== */
+.adm-header{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid rgba(245,166,35,.2);}
+.adm-header-title{font-size:20px;font-weight:900;color:#fff;margin-bottom:4px;}
+.adm-header-sub{font-size:12px;color:var(--text3);}
+.adm-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.adm-stat-card{background:var(--bg2);border-radius:14px;padding:14px 10px;text-align:center;border:1px solid var(--border);}
+.adm-stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px;}
+.adm-stat-val{font-size:18px;font-weight:900;color:var(--gold);margin-bottom:2px;}
+.adm-stat-lbl{font-size:10px;color:var(--text3);}
+.adm-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;}
+.adm-tabs::-webkit-scrollbar{height:0;}
+.adm-tab{flex-shrink:0;padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;position:relative;}
+.adm-tab.active{background:linear-gradient(135deg,#f5a623,#c8820a);color:#000;border-color:transparent;}
+.adm-tab-badge{background:rgba(239,68,68,.8);color:#fff;border-radius:20px;padding:1px 6px;font-size:10px;margin-left:4px;}
+.adm-tab.active .adm-tab-badge{background:rgba(0,0,0,.2);}
+.adm-section-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.adm-empty{text-align:center;padding:24px;color:var(--text3);font-size:13px;}
+.adm-search-row{margin-bottom:12px;}
+.adm-search{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:14px;box-sizing:border-box;outline:none;}
+.adm-search:focus{border-color:var(--gold);}
+
+/* MEMBER CARD */
+.adm-member-card{background:var(--bg2);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border);}
+.adm-mc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.adm-mc-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#000;flex-shrink:0;}
+.adm-mc-name{font-size:15px;font-weight:800;}
+.adm-mc-email{font-size:11px;color:var(--text3);}
+.adm-mc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+.adm-mc-stat{background:var(--bg3);border-radius:8px;padding:8px;text-align:center;}
+.adm-mc-stat-val{font-size:14px;font-weight:800;color:var(--gold);}
+.adm-mc-stat-lbl{font-size:10px;color:var(--text3);margin-top:2px;}
+.adm-mc-actions{display:flex;gap:8px;}
+.adm-btn-money{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#059669,#047857);color:#fff;}
+.adm-btn-minus{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;}
+.adm-btn-ban{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--bg4);color:var(--text2);}
+
+/* WD CARD */
+.adm-wd-card{background:var(--bg2);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border);}
+.adm-wd-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.adm-wd-amount{font-size:22px;font-weight:900;color:var(--gold);}
+.adm-wd-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.adm-wd-info{background:var(--bg3);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--text2);line-height:1.8;}
+.adm-wd-actions{display:flex;gap:8px;}
+.adm-btn-approve{flex:1;padding:10px;border-radius:10px;border:none;font-size:13px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#059669,#047857);color:#fff;}
+.adm-btn-reject{flex:1;padding:10px;border-radius:10px;border:none;font-size:13px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;}
+.adm-wd-hist-item{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border-radius:10px;margin-bottom:8px;}
+.adm-wd-hist-status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;}
+
+/* TASK MANAGE CARD */
+.adm-task-card{background:var(--bg2);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--border);}
+.adm-task-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.adm-task-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#000;flex-shrink:0;}
+.adm-task-actions{display:flex;gap:8px;margin-top:10px;}
+.adm-btn-edit{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:rgba(59,130,246,.15);color:#60a5fa;}
+.adm-btn-toggle{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;}
+.adm-btn-del{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:rgba(239,68,68,.15);color:#ef4444;}
+
+/* FORM */
+.adm-form-card{background:var(--bg2);border-radius:16px;padding:16px;border:1px solid var(--border);}
+.adm-form-title{font-size:16px;font-weight:800;margin-bottom:14px;color:var(--text);}
+.adm-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.adm-fg{display:flex;flex-direction:column;gap:5px;}
+.adm-fg label{font-size:11px;font-weight:700;color:var(--text2);}
+.adm-inp{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;width:100%;}
+.adm-inp:focus{border-color:var(--gold);}
+.adm-btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,#f5a623,#c8820a);border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;color:#000;}
+.adm-tool-btn{padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);}
+
+/* HANA CLAIM BUTTON */
+.hana-claim-wrap{background:linear-gradient(135deg,rgba(5,150,105,.08),rgba(16,185,129,.04));border:1px solid rgba(5,150,105,.25);border-radius:18px;padding:24px 16px;text-align:center;margin-bottom:4px;}
+.hana-confetti{font-size:40px;margin-bottom:10px;animation:bounce .6s infinite alternate;}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-8px);}}
+.hana-claim-title{font-size:20px;font-weight:900;color:#fff;margin-bottom:6px;}
+.hana-claim-sub{font-size:13px;color:var(--text2);margin-bottom:16px;}
+.hana-reward-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:8px 20px;font-size:22px;font-weight:900;color:var(--gold);margin-bottom:16px;}
+.hana-claim-btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 24px rgba(16,185,129,.4);animation:pulse-claim 1.5s infinite;}
+@keyframes pulse-claim{0%,100%{box-shadow:0 4px 24px rgba(16,185,129,.4);}50%{box-shadow:0 4px 40px rgba(16,185,129,.7);}}
+.hana-btn-shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shine 2s infinite;}
+@keyframes shine{to{left:200%;}}
+.hana-claim-note{font-size:11px;color:var(--text3);margin-top:10px;}
+
+/* Firebase setup banner */
+.fb-setup-banner{background:linear-gradient(135deg,rgba(255,167,0,.1),rgba(255,167,0,.05));border:1px solid rgba(255,167,0,.3);border-radius:14px;padding:16px;margin-bottom:16px;}
+.fb-setup-title{font-size:14px;font-weight:800;color:#f5a623;margin-bottom:8px;}
+.fb-setup-step{font-size:12px;color:var(--text2);line-height:2;}
+.fb-code{background:#0f172a;border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:#60a5fa;margin:6px 0;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -1212,56 +1302,122 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 
     <!-- ADMIN PANEL -->
     <div class="content" id="sec-admin" style="display:none;">
-      <div class="admin-section">
-        <h3>⚙️ Bảng Quản Trị Admin</h3>
-        <div class="admin-stat-grid">
-          <div class="as-box"><div class="as-val" id="adm-members">0</div><div class="as-lbl">Thành viên</div></div>
-          <div class="as-box"><div class="as-val" id="adm-pending-tasks">0</div><div class="as-lbl">Chờ duyệt NV</div></div>
-          <div class="as-box"><div class="as-val" id="adm-pending-wd">0</div><div class="as-lbl">Chờ rút tiền</div></div>
+      <!-- ADMIN HEADER -->
+      <div class="adm-header">
+        <div class="adm-header-title">⚙️ Quản Trị Admin</div>
+        <div class="adm-header-sub">Bảng điều khiển LinkBeta</div>
+      </div>
+
+      <!-- STAT GRID -->
+      <div class="adm-stat-grid">
+        <div class="adm-stat-card" style="border-color:rgba(245,166,35,.3);">
+          <div class="adm-stat-icon" style="background:rgba(245,166,35,.15);">👥</div>
+          <div class="adm-stat-val" id="adm-members">0</div>
+          <div class="adm-stat-lbl">Thành viên</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(239,68,68,.3);">
+          <div class="adm-stat-icon" style="background:rgba(239,68,68,.15);">📋</div>
+          <div class="adm-stat-val" id="adm-tasks-pending" style="color:#ef4444;">0</div>
+          <div class="adm-stat-lbl">Chờ duyệt NV</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(16,185,129,.3);">
+          <div class="adm-stat-icon" style="background:rgba(16,185,129,.15);">💳</div>
+          <div class="adm-stat-val" id="adm-pending-wd" style="color:#10b981;">0</div>
+          <div class="adm-stat-lbl">Chờ rút tiền</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(139,92,246,.3);">
+          <div class="adm-stat-icon" style="background:rgba(139,92,246,.15);">💰</div>
+          <div class="adm-stat-val" id="adm-total-paid" style="color:#8b5cf6;">0đ</div>
+          <div class="adm-stat-lbl">Đã chi trả</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(59,130,246,.3);">
+          <div class="adm-stat-icon" style="background:rgba(59,130,246,.15);">🏦</div>
+          <div class="adm-stat-val" id="adm-total-balance" style="color:#3b82f6;">0đ</div>
+          <div class="adm-stat-lbl">Tổng số dư</div>
+        </div>
+        <div class="adm-stat-card" style="border-color:rgba(245,166,35,.3);">
+          <div class="adm-stat-icon" style="background:rgba(245,166,35,.15);">✅</div>
+          <div class="adm-stat-val" id="adm-total-tasks" style="color:#f5a623;">0</div>
+          <div class="adm-stat-lbl">Tổng NV đã làm</div>
         </div>
       </div>
 
-      <!-- Phê duyệt nhiệm vụ -->
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">📋</div><h3>Phê Duyệt Nhiệm Vụ</h3><div class="badge-sm" id="task-pending-count">0 chờ</div></div>
-        <div id="admin-task-approvals"><div style="text-align:center;padding:20px;color:var(--text3);">Không có nhiệm vụ nào chờ duyệt</div></div>
+      <!-- TABS -->
+      <div class="adm-tabs">
+        <button class="adm-tab active" onclick="switchAdminTab(this,'at-wd-pending')">💳 Rút tiền <span class="adm-tab-badge" id="adm-badge-wd">0</span></button>
+        <button class="adm-tab" onclick="switchAdminTab(this,'at-members')">👥 Thành viên <span class="adm-tab-badge" id="adm-badge-mem">0</span></button>
+        <button class="adm-tab" onclick="switchAdminTab(this,'at-manage-tasks')">🗂 Nhiệm vụ</button>
+        <button class="adm-tab" onclick="switchAdminTab(this,'at-add-task')">➕ Thêm NV</button>
+        <button class="adm-tab" onclick="switchAdminTab(this,'at-settings')">⚙️ Cài đặt</button>
       </div>
 
-      <!-- Duyệt lệnh rút tiền -->
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">💳</div><h3>Duyệt Lệnh Rút Tiền</h3><div class="badge-sm" id="wd-pending-count">0 chờ</div></div>
-        <div id="admin-wd-approvals"><div style="text-align:center;padding:20px;color:var(--text3);">Không có lệnh rút nào chờ duyệt</div></div>
+      <!-- TAB: RÚT TIỀN -->
+      <div id="at-wd-pending">
+        <div class="adm-section-title">💳 Lệnh Rút Tiền Chờ Duyệt</div>
+        <div id="admin-wd-pending-list"><div class="adm-empty">Không có lệnh rút nào chờ duyệt</div></div>
+        <div class="adm-section-title" style="margin-top:20px;">📜 Lịch Sử Rút Tiền</div>
+        <div id="admin-wd-history-list"><div class="adm-empty">Chưa có lịch sử</div></div>
       </div>
 
-      <!-- Thêm nhiệm vụ mới -->
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(155,89,182,0.15);">➕</div><h3>Thêm Nhiệm Vụ Mới</h3></div>
-        <div class="task-form">
-          <input class="tf-input" id="new-task-name" placeholder="Tên nhiệm vụ (VD: Uptolink 3 Step)">
-          <input class="tf-input" id="new-task-reward" type="number" placeholder="Thưởng (đ) VD: 350">
-          <input class="tf-input" id="new-task-slots" type="number" placeholder="Số lượt tối đa VD: 300">
-          <input class="tf-input" id="new-task-url" placeholder="Link vượt (link4sub, uptolink...) để trống nếu không có">
-          <input class="tf-input" id="new-task-note" placeholder="Ghi chú cho member (VD: Bước 1: Truy cập link, bước 2: chờ 30s...)">
-          <input class="tf-input" id="new-task-waitsecs" type="number" placeholder="Thời gian chờ (giây) - mặc định 30s" min="5" max="120">
-          <select class="tf-input" id="new-task-hot">
-            <option value="0">Bình thường</option>
-            <option value="1">🔥 HOT</option>
-          </select>
-          <button class="btn-add-task" onclick="adminAddTask()">➕ Thêm Nhiệm Vụ</button>
+      <!-- TAB: THÀNH VIÊN -->
+      <div id="at-members" style="display:none;">
+        <div class="adm-search-row">
+          <input class="adm-search" id="adm-member-search" placeholder="🔍 Tìm theo tên hoặc email..." oninput="filterAdminMembers()">
+        </div>
+        <div id="admin-member-list"><div class="adm-empty">Chưa có thành viên</div></div>
+      </div>
+
+      <!-- TAB: QUẢN LÝ NHIỆM VỤ -->
+      <div id="at-manage-tasks" style="display:none;">
+        <div class="adm-section-title">📝 Danh Sách Nhiệm Vụ</div>
+        <div id="admin-task-list"><div class="adm-empty">Chưa có nhiệm vụ</div></div>
+      </div>
+
+      <!-- TAB: THÊM NHIỆM VỤ -->
+      <div id="at-add-task" style="display:none;">
+        <div class="adm-form-card">
+          <div class="adm-form-title">➕ Thêm Nhiệm Vụ Mới</div>
+          <div class="adm-form-grid">
+            <div class="adm-fg"><label>Tên nhiệm vụ *</label><input class="adm-inp" id="new-task-name" placeholder="VD: Uptolink 3 Step"></div>
+            <div class="adm-fg"><label>Thưởng (đ) *</label><input class="adm-inp" type="number" id="new-task-reward" placeholder="VD: 350"></div>
+            <div class="adm-fg"><label>Số lượt tối đa</label><input class="adm-inp" type="number" id="new-task-slots" placeholder="VD: 300"></div>
+            <div class="adm-fg"><label>Thời gian chờ (giây)</label><input class="adm-inp" type="number" id="new-task-waitsecs" placeholder="Mặc định 30s" min="5" max="300"></div>
+            <div class="adm-fg" style="grid-column:1/-1;"><label>Link vượt</label><input class="adm-inp" id="new-task-url" placeholder="https://link4sub.com/..."></div>
+            <div class="adm-fg" style="grid-column:1/-1;"><label>Hướng dẫn cho member</label><textarea class="adm-inp" id="new-task-note" rows="3" placeholder="Bước 1: Vào link, Bước 2: Chờ 30s, Bước 3: Ấn nút..."></textarea></div>
+            <div class="adm-fg"><label>Loại</label>
+              <select class="adm-inp" id="new-task-hot">
+                <option value="0">Bình thường</option>
+                <option value="1">🔥 HOT</option>
+              </select>
+            </div>
+            <div class="adm-fg"><label>Level yêu cầu</label><input class="adm-inp" type="number" id="new-task-level" placeholder="0" min="0"></div>
+            <div class="adm-fg"><label>XP thưởng</label><input class="adm-inp" type="number" id="new-task-xp" placeholder="10" min="1"></div>
+          </div>
+          <button class="adm-btn-submit" onclick="adminAddTask()">➕ Thêm Nhiệm Vụ</button>
         </div>
       </div>
 
-      <!-- Danh sách nhiệm vụ hiện tại -->
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">📝</div><h3>Danh Sách Nhiệm Vụ</h3></div>
-        <div id="admin-task-list"></div>
+      <!-- TAB: CÀI ĐẶT -->
+      <div id="at-settings" style="display:none;">
+        <div class="adm-form-card">
+          <div class="adm-form-title">⚙️ Cài Đặt Hệ Thống</div>
+          <div class="adm-fg"><label>Tên website</label><input class="adm-inp" id="cfg-site-name" placeholder="LinkBeta"></div>
+          <div class="adm-fg"><label>Số tiền rút tối thiểu (đ)</label><input class="adm-inp" type="number" id="cfg-min-wd" placeholder="10000"></div>
+          <div class="adm-fg"><label>Thưởng giới thiệu (đ)</label><input class="adm-inp" type="number" id="cfg-ref-bonus" placeholder="500"></div>
+          <div class="adm-fg"><label>Thông báo hệ thống</label><textarea class="adm-inp" id="cfg-notice" rows="3" placeholder="Nhập thông báo hiển thị cho tất cả member..."></textarea></div>
+          <button class="adm-btn-submit" onclick="saveConfig()">💾 Lưu cài đặt</button>
+        </div>
+        <div class="adm-form-card" style="margin-top:14px;">
+          <div class="adm-form-title">🔧 Công Cụ Admin</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+            <button class="adm-tool-btn" onclick="adminExport()">📤 Export dữ liệu</button>
+            <button class="adm-tool-btn" onclick="adminResetTasks()">🔄 Reset slot nhiệm vụ</button>
+            <button class="adm-tool-btn" onclick="adminClearDaily()">🗑 Xóa giới hạn ngày</button>
+            <button class="adm-tool-btn" style="background:rgba(239,68,68,.15);color:#ef4444;" onclick="adminClearAll()">⚠️ Xóa tất cả dữ liệu</button>
+          </div>
+        </div>
       </div>
 
-      <!-- Danh sách thành viên -->
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">👥</div><h3>Danh Sách Thành Viên</h3></div>
-        <div id="admin-member-list"></div>
-      </div>
     </div>
 
   </div>
@@ -1272,8 +1428,69 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 
 <script>
 var ADMIN_EMAIL='tvu727531@gmail.com';
-function gd(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function sd(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+/* ===== FIREBASE CONFIG - ĐIỀN VÀO ĐÂY ===== */
+var FB_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT_ID"
+};
+/* ========================================= */
+
+var _db = null;
+var _fbReady = false;
+var _memCache = {}; // Local cache để app chạy nhanh
+
+function initFirebase(){
+  if(FB_CONFIG.apiKey === 'YOUR_API_KEY'){
+    console.warn('Firebase chưa cấu hình - dùng localStorage');
+    _fbReady = false;
+    return;
+  }
+  try {
+    if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    _db = firebase.database();
+    _fbReady = true;
+    console.log('Firebase connected!');
+    // Sync realtime listeners
+    _db.ref('lb_users').on('value', function(snap){
+      var v = snap.val();
+      if(v) _memCache['lb_users'] = v;
+    });
+    _db.ref('lb_tasks').on('value', function(snap){
+      var v = snap.val();
+      if(v !== null) _memCache['lb_tasks'] = v;
+    });
+    _db.ref('lb_wd').on('value', function(snap){
+      var v = snap.val();
+      if(v !== null) _memCache['lb_wd'] = v;
+    });
+    _db.ref('lb_pt').on('value', function(snap){
+      var v = snap.val();
+      if(v !== null) _memCache['lb_pt'] = v;
+    });
+  } catch(e){
+    console.error('Firebase init error:', e);
+    _fbReady = false;
+  }
+}
+
+function gd(k, d){
+  // Đọc từ cache trước (nhanh), nếu không có dùng localStorage
+  if(_memCache[k] !== undefined) return _memCache[k];
+  try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; }
+}
+
+function sd(k, v){
+  // Lưu cache local ngay lập tức (để UI không bị lag)
+  _memCache[k] = v;
+  // Lưu localStorage backup
+  try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
+  // Sync lên Firebase nếu đã kết nối
+  if(_fbReady && _db){
+    _db.ref(k).set(v).catch(function(e){ console.error('Firebase write error:', e); });
+  }
+}
 function init(){
   if(!gd('lb_tasks',null)){sd('lb_tasks',[{id:1,name:'Uptolink 2 Step',reward:300,slots:300,usedSlots:0,level:0,xp:10,hot:true,active:true},{id:2,name:'Uptolink 3 Step',reward:350,slots:300,usedSlots:0,level:0,xp:10,hot:false,active:true}]);}
   if(!gd('lb_users',null)){sd('lb_users',{});}
@@ -1300,6 +1517,24 @@ function doLogin(){
   if(!email){showErr('login-err','Vui long nhap email','li-email');return;}
   if(!validEmail(email)){showErr('login-err','Email khong hop le','li-email');return;}
   if(!pass){showErr('login-err','Vui long nhap mat khau','li-pass');return;}
+  // Loading state
+  var loginBtn=document.querySelector('#page-login .btn-main');
+  if(loginBtn){loginBtn.textContent='Đang kiểm tra...';loginBtn.disabled=true;}
+  var resetBtn=function(){if(loginBtn){loginBtn.textContent='Đăng Nhập →';loginBtn.disabled=false;}};
+  // Nếu Firebase đang kết nối, fetch data mới nhất trước khi login
+  if(_fbReady && _db){
+    _db.ref('lb_users').once('value').then(function(snap){
+      var v=snap.val();
+      if(v){_memCache['lb_users']=v;try{localStorage.setItem('lb_users',JSON.stringify(v));}catch(e){}}
+      resetBtn();
+      _doLoginCheck(email,pass);
+    }).catch(function(){resetBtn();_doLoginCheck(email,pass);});
+    return;
+  }
+  resetBtn();
+  _doLoginCheck(email,pass);
+}
+function _doLoginCheck(email,pass){
   if(pass.length<6){showErr('login-err','Mat khau it nhat 6 ky tu','li-pass');return;}
   var u=gu(email);
   if(!u){showErr('login-err','Email chua duoc dang ky. Hay dang ky truoc!','li-email');return;}
@@ -1311,12 +1546,27 @@ function doRegister(){
   var name=document.getElementById('rg-name').value.trim();
   var email=document.getElementById('rg-email').value.trim().toLowerCase();
   var pass=document.getElementById('rg-pass').value;
+  var ref=document.getElementById('rg-ref').value.trim().toLowerCase();
   if(!name){showErr('reg-err','Vui long nhap ho ten','rg-name');return;}
-  if(!email){showErr('reg-err','Vui long nhap email','rg-email');return;}
   if(!validEmail(email)){showErr('reg-err','Email khong hop le','rg-email');return;}
-  if(!pass){showErr('reg-err','Vui long nhap mat khau','rg-pass');return;}
   if(pass.length<6){showErr('reg-err','Mat khau it nhat 6 ky tu','rg-pass');return;}
+  // Fetch Firebase mới nhất để check email trùng
+  if(_fbReady && _db){
+    _db.ref('lb_users').once('value').then(function(snap){
+      var v=snap.val();
+      if(v){_memCache['lb_users']=v;}
+      if(gu(email)){showErr('reg-err','Email nay da duoc dang ky roi!','rg-email');return;}
+      _doRegisterFinish(email,name,pass,ref);
+    }).catch(function(){
+      if(gu(email)){showErr('reg-err','Email nay da duoc dang ky','rg-email');return;}
+      _doRegisterFinish(email,name,pass,ref);
+    });
+    return;
+  }
   if(gu(email)){showErr('reg-err','Email nay da duoc dang ky','rg-email');return;}
+  _doRegisterFinish(email,name,pass,ref);
+}
+function _doRegisterFinish(email,name,pass,ref){
   var u={email:email,name:name,password:pass,role:email===ADMIN_EMAIL?'admin':'member',balance:0,totalWithdrawn:0,pendingWithdraw:0,tasksCompleted:0,xp:0,refs:0,refEarned:0,streak:1,joinedAt:new Date().toLocaleDateString('vi-VN'),history:[]};
   su(u);toast('Dang ky thanh cong! Chao mung '+name);enterApp(u);
 }
@@ -1502,13 +1752,55 @@ function doWithdraw(){
   var amount=parseInt(document.getElementById('wd-amount').value)||0;
   if(amount<10000){toast('Rut toi thieu 10.000d!');return;}
   if(amount>u.balance){toast('So du khong du!');return;}
-  var sel=document.querySelector('.pay-method.selected .pm-name');var method=sel?sel.textContent:'Ngan hang';
-  var w={id:Date.now(),userEmail:u.email,userName:u.name,amount:amount,method:method,date:new Date().toLocaleString('vi-VN'),status:'pending'};
+  var sel=document.querySelector('.pay-method.selected .pm-name');
+  var method=sel?sel.textContent:'Ngan hang';
+  // Lấy thông tin ngân hàng nếu có
+  var bankInfo=null;
+  var savedBank=u.bankInfo||null;
+  if(savedBank){bankInfo={bank:savedBank.bankName||'',acc:savedBank.accNum||'',name:savedBank.accName||''};}
+  var wid=String(Date.now());
+  var w={id:wid,userEmail:u.email,userName:u.name,amount:amount,method:method,bankInfo:bankInfo,date:new Date().toLocaleString('vi-VN'),status:'pending'};
   var wds=gd('lb_wd',[]);wds.push(w);sd('lb_wd',wds);
   u.balance-=amount;u.pendingWithdraw=(u.pendingWithdraw||0)+amount;
-  u.history=u.history||[];u.history.push({type:'withdraw',name:'Rut tien - '+method,amount:-amount,date:w.date,status:'pending',wdId:w.id});
-  su(u);CU=u;document.getElementById('wd-amount').value='';
-  toast('Da gui yeu cau rut '+fmt(amount)+'d! Cho Admin duyet.');rWd();updateSB(u);
+  u.history=u.history||[];
+  u.history.push({type:'withdraw',name:'Rut tien - '+method,amount:-amount,date:w.date,status:'pending',wdId:wid});
+  su(u);CU=u;
+  document.getElementById('wd-amount').value='';
+  updateSB(u);rWd();
+  toast('Da gui yeu cau rut '+fmt(amount)+'d! Admin se xu ly som!');
+  // Gửi email thông báo cho Admin
+  sendWithdrawEmailToAdmin(u, w);
+}
+
+function sendWithdrawEmailToAdmin(u, w){
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
+  try{
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    var bankDetail=w.bankInfo?('\nNH: '+w.bankInfo.bank+' | STK: '+w.bankInfo.acc+' | Tên: '+w.bankInfo.name):'';
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: ADMIN_EMAIL,
+      to_name: 'Admin LinkBeta',
+      otp_code: '⚠️ YÊU CẦU RÚT TIỀN',
+      expire_mins: '---',
+      app_name: 'LinkBeta',
+      // Dùng otp_code field để gửi nội dung
+      subject_override: '[LinkBeta] Yeu cau rut tien moi!'
+    }).catch(function(){});
+    // Thử gửi qua template khác nếu có ADMIN_TEMPLATE_ID
+    if(typeof ADMIN_TEMPLATE_ID !== 'undefined' && ADMIN_TEMPLATE_ID && ADMIN_TEMPLATE_ID!=='YOUR_ADMIN_TEMPLATE_ID'){
+      emailjs.send(EMAILJS_SERVICE_ID, ADMIN_TEMPLATE_ID, {
+        to_email: ADMIN_EMAIL,
+        to_name: 'Admin',
+        member_name: u.name,
+        member_email: u.email,
+        amount: fmt(w.amount)+'d',
+        method: w.method,
+        bank_detail: bankDetail,
+        request_date: w.date,
+        app_name: 'LinkBeta'
+      }).catch(function(){});
+    }
+  }catch(e){console.log('Email admin error:',e);}
 }
 
 function rRank(){
@@ -1716,27 +2008,123 @@ function adminAddTask(){
   var name=document.getElementById('new-task-name').value.trim();
   var reward=parseInt(document.getElementById('new-task-reward').value)||0;
   var slots=parseInt(document.getElementById('new-task-slots').value)||100;
-  var wsEl=document.getElementById('new-task-waitsecs');var waitSecs=wsEl?parseInt(wsEl.value)||30:30;
-  var urlEl=document.getElementById('new-task-url');var url=urlEl?urlEl.value.trim():'';
-  var noteEl=document.getElementById('new-task-note');var note=noteEl?noteEl.value.trim():'';
+  var waitSecs=parseInt((document.getElementById('new-task-waitsecs')||{value:30}).value)||30;
+  var url=(document.getElementById('new-task-url')||{value:''}).value.trim();
+  var note=(document.getElementById('new-task-note')||{value:''}).value.trim();
   var hotEl=document.getElementById('new-task-hot');var hot=hotEl?hotEl.value==='1':false;
-  var levelEl=document.getElementById('new-task-level');var level=levelEl?parseInt(levelEl.value)||0:0;
-  var xpEl=document.getElementById('new-task-xp');var xp=xpEl?parseInt(xpEl.value)||10:10;
+  var level=parseInt((document.getElementById('new-task-level')||{value:0}).value)||0;
+  var xp=parseInt((document.getElementById('new-task-xp')||{value:10}).value)||10;
   if(!name){toast('Nhap ten nhiem vu!');return;}
   if(reward<=0){toast('Nhap so tien thuong!');return;}
-  var tasks=gd('lb_tasks',[]);var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
-  var newTask={id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:true};
-  tasks.push(newTask);
-  sd('lb_tasks',tasks);
-  ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note','new-task-waitsecs'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  var tasks=gd('lb_tasks',[]);
+  // Edit mode
+  if(window._editingTaskId){
+    tasks=tasks.map(function(t){
+      if(t.id===window._editingTaskId){
+        return {id:t.id,name:name,reward:reward,slots:slots,usedSlots:t.usedSlots||0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:t.active};
+      }
+      return t;
+    });
+    sd('lb_tasks',tasks);
+    window._editingTaskId=null;
+    toast('Da cap nhat nhiem vu: '+name);
+  } else {
+    var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
+    tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:true});
+    sd('lb_tasks',tasks);
+    toast('Da them nhiem vu: '+name);
+  }
+  ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note','new-task-waitsecs','new-task-level','new-task-xp'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   if(hotEl)hotEl.value='0';
-  toast('Da them nhiem vu: '+name);rAdmin();
+  rAdmin();
+  // Switch back to task list
+  var tabs=document.querySelectorAll('.adm-tab');
+  if(tabs[2])switchAdminTab(tabs[2],'at-manage-tasks');
 }
 function aTog(tid){var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Da thay doi trang thai');rAdmin();}
 function aDel(tid){sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.id!==tid;}));toast('Da xoa nhiem vu');rAdmin();}
 
 function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
-function switchAdminTab(el,id){['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
+
+function adminAddMoney(email){
+  var amt=parseInt(prompt('Cong bao nhieu tien cho '+email+' (d)?'));
+  if(!amt||amt<=0)return;
+  var u=gu(email);if(!u)return;
+  u.balance=(u.balance||0)+amt;
+  u.history=u.history||[];
+  u.history.push({type:'admin',name:'Admin cong tien',amount:amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+  su(u);toast('Da cong '+fmt(amt)+'d cho '+u.name);rAdmin();
+}
+function adminMinusMoney(email){
+  var amt=parseInt(prompt('Tru bao nhieu tien cua '+email+' (d)?'));
+  if(!amt||amt<=0)return;
+  var u=gu(email);if(!u)return;
+  u.balance=Math.max(0,(u.balance||0)-amt);
+  u.history=u.history||[];
+  u.history.push({type:'admin',name:'Admin tru tien',amount:-amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+  su(u);toast('Da tru '+fmt(amt)+'d cua '+u.name);rAdmin();
+}
+function adminBan(email){
+  var u=gu(email);if(!u)return;
+  u.banned=!u.banned;su(u);
+  toast((u.banned?'Da ban':'Da bo ban')+' '+u.name);rAdmin();
+}
+function saveConfig(){
+  var cfg={
+    siteName:(document.getElementById('cfg-site-name')||{value:'LinkBeta'}).value||'LinkBeta',
+    minWd:parseInt((document.getElementById('cfg-min-wd')||{value:10000}).value)||10000,
+    refBonus:parseInt((document.getElementById('cfg-ref-bonus')||{value:500}).value)||500,
+    notice:(document.getElementById('cfg-notice')||{value:''}).value||''
+  };
+  sd('lb_config',cfg);toast('Da luu cai dat!');
+}
+function loadConfig(){
+  var cfg=gd('lb_config',{});
+  var s=function(id,v){var e=document.getElementById(id);if(e&&v!==undefined)e.value=v;};
+  s('cfg-site-name',cfg.siteName||'LinkBeta');
+  s('cfg-min-wd',cfg.minWd||10000);
+  s('cfg-ref-bonus',cfg.refBonus||500);
+  s('cfg-notice',cfg.notice||'');
+}
+function adminExport(){
+  var data={users:gd('lb_users',{}),tasks:gd('lb_tasks',[]),withdrawals:gd('lb_wd',[]),date:new Date().toLocaleString('vi-VN')};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='linkbeta_export_'+Date.now()+'.json';a.click();
+  toast('Da xuat du lieu!');
+}
+function adminResetTasks(){
+  if(!confirm('Reset slot tat ca nhiem vu ve 0?'))return;
+  var tasks=gd('lb_tasks',[]);
+  tasks.forEach(function(t){t.usedSlots=0;});
+  sd('lb_tasks',tasks);toast('Da reset slot nhiem vu!');rAdmin();
+}
+function adminClearDaily(){
+  if(!confirm('Xoa gioi han ngay hom nay?'))return;
+  var keys=[];for(var k in localStorage){if(k.indexOf('lb_daily_')===0)keys.push(k);}
+  keys.forEach(function(k){localStorage.removeItem(k);});
+  toast('Da xoa '+keys.length+' gioi han ngay!');
+}
+function adminClearAll(){
+  if(!confirm('XOA TAT CA DU LIEU? Khong the phuc hoi!'))return;
+  if(!confirm('Ban chac chan muon xoa het?'))return;
+  localStorage.clear();location.reload();
+}
+function aEdit(tid){
+  var tasks=gd('lb_tasks',[]);var t=null;
+  tasks.forEach(function(tk){if(tk.id===tid)t=tk;});
+  if(!t)return;
+  var tabs=document.querySelectorAll('.adm-tab');
+  switchAdminTab(tabs[3],'at-add-task');
+  var s=function(id,v){var e=document.getElementById(id);if(e)e.value=v;};
+  s('new-task-name',t.name);s('new-task-reward',t.reward);s('new-task-slots',t.slots);
+  s('new-task-waitsecs',t.waitSecs||30);s('new-task-url',t.url||'');s('new-task-note',t.note||'');
+  s('new-task-level',t.level||0);s('new-task-xp',t.xp||10);
+  var hotEl=document.getElementById('new-task-hot');if(hotEl)hotEl.value=t.hot?'1':'0';
+  window._editingTaskId=tid;
+  toast('Dang sua nhiem vu - Bam "Them" de luu lai');
+}
+function switchAdminTab(el,id){['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks','at-add-task','at-settings'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';document.querySelectorAll('.adm-tab').forEach(function(t){t.classList.remove('active');});if(el)el.classList.add('active');}
 function selectPay(el){el.closest('.pay-methods').querySelectorAll('.pay-method').forEach(function(p){p.classList.remove('selected');});el.classList.add('selected');}
 function togglePw(id,btn){
   var inp=document.getElementById(id);
@@ -1919,6 +2307,7 @@ var _otpTimer=null;
 var EMAILJS_PUBLIC_KEY  = 'n3o4qJ1mB7B3KjkHx';   // Lấy từ Account > API Keys
 var EMAILJS_SERVICE_ID  = 'service_85dj3ez';   // Lấy từ Email Services
 var EMAILJS_TEMPLATE_ID = 'template_t3xyvpb';  // Lấy từ Email Templates
+var ADMIN_TEMPLATE_ID = 'YOUR_ADMIN_TEMPLATE_ID'; // Template riêng cho thông báo admin (tùy chọn)
 /* ========================================= */
 
 function sendOTP(){
@@ -2459,16 +2848,23 @@ document.head.appendChild(shakeStyle);
       </button>
     </div>
 
-    <!-- Bước 3: Nút nhận thưởng sau countdown -->
+    <!-- Bước 3: Nút nhận thưởng - Kiểu Hana -->
     <div id="tm-claim-section" style="display:none;">
-      <div class="tm-success-box">
-        <div class="tm-success-icon">✓</div>
-        <div class="tm-success-txt">Hoàn thành! Bấm nhận thưởng</div>
+      <div class="hana-claim-wrap">
+        <div class="hana-confetti">🎉</div>
+        <div class="hana-claim-title">Hoàn thành nhiệm vụ!</div>
+        <div class="hana-claim-sub">Bấm nút bên dưới để nhận thưởng</div>
+        <div class="hana-reward-badge">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          +<span id="tm-claim-amount">0đ</span>
+        </div>
+        <button class="hana-claim-btn" id="tm-claim-btn" onclick="claimTask()">
+          <span class="hana-btn-shine"></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Nhận thưởng ngay!
+        </button>
+        <div class="hana-claim-note">💸 Tiền vào tài khoản ngay lập tức</div>
       </div>
-      <button class="tm-btn-claim" id="tm-claim-btn" onclick="claimTask()">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        Nhận <span id="tm-claim-amount">0đ</span> ngay
-      </button>
     </div>
 
     <!-- Đã nhận -->

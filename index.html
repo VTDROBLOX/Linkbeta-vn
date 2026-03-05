@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkBeta - Kiếm Tiền Online</title>
@@ -464,6 +466,67 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .tm-step-txt{font-size:13px;color:var(--text2);line-height:1.5;}
 .tm-btn-link{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:12px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;margin-bottom:10px;}
 .tm-btn-done{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#047857);border:none;border-radius:12px;color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+
+/* ===== TASK COUNTDOWN & CLAIM ===== */
+.tm-countdown-box{text-align:center;padding:16px 0 20px;}
+.tm-cd-ring{position:relative;width:100px;height:100px;margin:0 auto 14px;}
+.tm-cd-svg{width:100px;height:100px;}
+.tm-cd-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:900;color:var(--gold);}
+.tm-cd-label{font-size:14px;font-weight:700;margin-bottom:4px;}
+.tm-cd-sub{font-size:12px;color:var(--text2);}
+.tm-success-box{display:flex;align-items:center;gap:12px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.tm-success-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#059669,#047857);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;flex-shrink:0;}
+.tm-success-txt{font-size:14px;font-weight:700;color:#10b981;}
+.tm-btn-claim{width:100%;padding:16px;background:linear-gradient(135deg,#059669,#047857);border:none;border-radius:14px;color:#fff;font-family:inherit;font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px rgba(5,150,105,.35);animation:pulse-green 1.5s infinite;}
+@keyframes pulse-green{0%,100%{box-shadow:0 8px 24px rgba(5,150,105,.35);}50%{box-shadow:0 8px 32px rgba(5,150,105,.6);}}
+.tm-btn-done:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ===== PASSWORD EYE FIELD ===== */
+.fg-pw-wrap{position:relative;display:flex;align-items:center;}
+.fg-pw-inp{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:13px 48px 13px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border .2s;box-sizing:border-box;}
+.fg-pw-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,.1);}
+.fg-eye-btn{position:absolute;right:14px;background:none;border:none;cursor:pointer;color:var(--text3);display:flex;align-items:center;padding:4px;transition:color .2s;}
+.fg-eye-btn:hover{color:var(--text);}
+/* override .fg input so pw-wrap doesn't get double-styled */
+.fg .fg-pw-inp{background:var(--bg3);border:1.5px solid var(--border);}
+
+/* ===== FORGOT LINK ROW ===== */
+.fg-forgot-row{display:flex;justify-content:flex-end;margin:-8px 0 12px;}
+.forgot-link{font-size:13px;color:var(--gold);font-weight:600;cursor:pointer;text-decoration:none;}
+
+/* ===== FORGOT PASSWORD PAGE ===== */
+.fp-desc{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6;text-align:center;}
+.fp-check-icon{width:52px;height:52px;background:linear-gradient(135deg,#059669,#047857);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.fp-success-icon{font-size:48px;margin-bottom:12px;}
+
+/* ===== GLOBAL FONT FIX ===== */
+*{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple-system,BlinkMacSystemFont,sans-serif;}
+
+/* ===== FIX NÚT BỊ LỖI MÀU ===== */
+.btn-approve{background:linear-gradient(135deg,#059669,#047857)!important;color:#fff!important;border-radius:8px!important;padding:8px 14px!important;font-weight:700!important;border:none!important;}
+.btn-reject{background:linear-gradient(135deg,#dc2626,#b91c1c)!important;color:#fff!important;border-radius:8px!important;padding:8px 14px!important;font-weight:700!important;border:none!important;}
+.btn-del{background:linear-gradient(135deg,#dc2626,#b91c1c)!important;color:#fff!important;border-radius:8px!important;padding:8px 14px!important;font-weight:700!important;border:none!important;}
+.btn-do-task{transition:all .2s!important;}
+.btn-do-task:active{transform:scale(.97)!important;}
+.btn-do-task.normal{background:linear-gradient(135deg,#f5a623,#c8820a)!important;color:#000!important;}
+.btn-do-task.hot-btn{background:linear-gradient(135deg,#ef4444,#f97316)!important;color:#fff!important;}
+
+/* ===== TAB ACTIVE FIX ===== */
+.tk-tab{transition:all .2s!important;}
+.tk-tab.active{background:linear-gradient(135deg,#f5a623,#c8820a)!important;color:#000!important;border-color:transparent!important;box-shadow:0 4px 12px rgba(245,166,35,.35)!important;}
+.tk-tab.active .tk-tab-cnt{background:rgba(0,0,0,.2)!important;color:#000!important;}
+.tab.active{background:linear-gradient(135deg,#f5a623,#c8820a)!important;color:#000!important;}
+.nav-item.active{background:linear-gradient(135deg,rgba(245,166,35,.2),rgba(196,125,14,.1))!important;color:#f5a623!important;border-left:3px solid #f5a623;}
+.admin-tab.active{background:linear-gradient(135deg,#f5a623,#c8820a)!important;color:#000!important;}
+
+/* ===== DAILY LIMIT BADGE ===== */
+.task2-daily{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);margin-top:4px;}
+.task2-daily-bar{flex:1;height:3px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.task2-daily-fill{height:100%;background:linear-gradient(90deg,#f5a623,#c8820a);border-radius:3px;transition:width .3s;}
+.task2-daily-full .task2-daily-fill{background:linear-gradient(90deg,#dc2626,#b91c1c);}
+.task-limit-badge{background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(220,38,38,.3);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;}
+.task-limit-ok{background:rgba(5,150,105,.15);color:#34d399;border:1px solid rgba(5,150,105,.3);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -479,8 +542,17 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
     <div class="auth-card">
       <h2>Đăng Nhập</h2>
       <div id="login-err" class="err-box"></div>
-      <div class="fg"><label>Email</label><input type="email" id="li-email" placeholder="email@gmail.com"></div>
-      <div class="fg"><label>Mật Khẩu</label><input type="password" id="li-pass" placeholder="Tối thiểu 6 ký tự"></div>
+      <div class="fg"><label>Email</label><input type="email" id="li-email" placeholder="email@example.com"></div>
+      <div class="fg">
+        <label>Mật khẩu</label>
+        <div class="fg-pw-wrap">
+          <input type="password" id="li-pass" placeholder="••••••••" class="fg-pw-inp">
+          <button type="button" class="fg-eye-btn" onclick="togglePw('li-pass',this)" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <div class="fg-forgot-row">
+        <a class="forgot-link" onclick="showPg('page-forgot')">Quên mật khẩu?</a>
+      </div>
       <button class="btn-main" onclick="doLogin()">Đăng Nhập →</button>
       <div class="auth-sw">Chưa có tài khoản? <a onclick="showPg('page-register')">Đăng ký ngay</a></div>
     </div>
@@ -499,12 +571,99 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       <h2>Đăng Ký</h2>
       <div id="reg-err" class="err-box"></div>
       <div class="fg"><label>Họ Tên</label><input type="text" id="rg-name" placeholder="Nguyễn Văn A"></div>
-      <div class="fg"><label>Email</label><input type="email" id="rg-email" placeholder="email@gmail.com"></div>
-      <div class="fg"><label>Mật Khẩu</label><input type="password" id="rg-pass" placeholder="Tối thiểu 6 ký tự"></div>
+      <div class="fg"><label>Email</label><input type="email" id="rg-email" placeholder="email@example.com"></div>
+      <div class="fg">
+        <label>Mật khẩu</label>
+        <div class="fg-pw-wrap">
+          <input type="password" id="rg-pass" placeholder="Tối thiểu 6 ký tự" class="fg-pw-inp">
+          <button type="button" class="fg-eye-btn" onclick="togglePw('rg-pass',this)" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
       <div class="fg"><label>Mã Giới Thiệu (tuỳ chọn)</label><input type="text" id="rg-ref" placeholder="Nhập mã nếu có"></div>
       <button class="btn-main" onclick="doRegister()">Đăng Ký →</button>
       <div class="auth-sw">Đã có tài khoản? <a onclick="showPg('page-login')">Đăng nhập</a></div>
     </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD PAGE -->
+<div class="page" id="page-forgot">
+  <div class="auth-bg">
+    <div class="auth-logo">
+      <div class="auth-logo-box" style="background:linear-gradient(135deg,#1a1a2e,#16213e);">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h1>Link<span>Beta</span></h1>
+      <p>Khôi phục mật khẩu</p>
+    </div>
+
+    <!-- Step 1: Nhập email -->
+    <div class="auth-card" id="fp-card-1">
+      <h2>Quên mật khẩu</h2>
+      <p class="fp-desc">Nhập email đăng ký, chúng tôi sẽ gửi mã xác nhận để đặt lại mật khẩu.</p>
+      <div id="fp-err-1" class="err-box"></div>
+      <div class="fg"><label>Email đăng ký</label><input type="email" id="fp-email" placeholder="email@example.com"></div>
+      <button class="btn-main" id="fp-send-btn" onclick="sendForgotOTP()">
+        Gửi mã xác nhận →
+      </button>
+      <div class="auth-sw"><a onclick="showPg('page-login')">← Quay lại đăng nhập</a></div>
+    </div>
+
+    <!-- Step 2: Nhập OTP -->
+    <div class="auth-card" id="fp-card-2" style="display:none;">
+      <div class="fp-check-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>Nhập mã xác nhận</h2>
+      <p class="fp-desc">Mã 6 số đã gửi đến<br><b id="fp-email-show" style="color:var(--gold);">—</b></p>
+      <div id="fp-err-2" class="err-box"></div>
+      <div class="otp-boxes" style="margin:16px 0;">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,0)" onkeydown="fpOtpKey(event,0)">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,1)" onkeydown="fpOtpKey(event,1)">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,2)" onkeydown="fpOtpKey(event,2)">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,3)" onkeydown="fpOtpKey(event,3)">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,4)" onkeydown="fpOtpKey(event,4)">
+        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,5)" onkeydown="fpOtpKey(event,5)">
+      </div>
+      <div style="text-align:center;margin-bottom:14px;font-size:12px;color:var(--text2);">
+        Không nhận được? <a id="fp-resend-btn" onclick="sendForgotOTP()" style="color:var(--gold);font-weight:700;cursor:pointer;">Gửi lại</a>
+      </div>
+      <div class="auth-sw"><a onclick="showFpCard(1)">← Nhập lại email</a></div>
+    </div>
+
+    <!-- Step 3: Đặt mật khẩu mới -->
+    <div class="auth-card" id="fp-card-3" style="display:none;">
+      <div class="fp-check-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <h2>Đặt mật khẩu mới</h2>
+      <p class="fp-desc">Tạo mật khẩu mới cho tài khoản của bạn</p>
+      <div id="fp-err-3" class="err-box"></div>
+      <div class="fg">
+        <label>Mật khẩu mới</label>
+        <div class="fg-pw-wrap">
+          <input type="password" id="fp-newpass" placeholder="Tối thiểu 6 ký tự" class="fg-pw-inp">
+          <button type="button" class="fg-eye-btn" onclick="togglePw('fp-newpass',this)" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Xác nhận mật khẩu</label>
+        <div class="fg-pw-wrap">
+          <input type="password" id="fp-cfmpass" placeholder="Nhập lại mật khẩu mới" class="fg-pw-inp">
+          <button type="button" class="fg-eye-btn" onclick="togglePw('fp-cfmpass',this)" tabindex="-1"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+        </div>
+      </div>
+      <button class="btn-main" onclick="doResetPassword()">Đặt lại mật khẩu →</button>
+    </div>
+
+    <!-- Step 4: Thành công -->
+    <div class="auth-card" id="fp-card-4" style="display:none;text-align:center;">
+      <div class="fp-success-icon">✓</div>
+      <h2>Thành công!</h2>
+      <p class="fp-desc">Mật khẩu đã được đặt lại.<br>Bạn có thể đăng nhập ngay bây giờ.</p>
+      <button class="btn-main" onclick="showPg('page-login')">Đăng nhập ngay →</button>
+    </div>
+
   </div>
 </div>
 
@@ -532,15 +691,15 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
     <div class="sb-nav" id="sb-nav">
-      <div class="nav-item active" data-sec="dashboard" onclick="navTo('dashboard')">
+      <div class="nav-item active" data-sec="dashboard" data-sec="dashboard" onclick="navTo('dashboard')">
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         Tổng Quan
       </div>
-      <div class="nav-item" data-sec="account" onclick="navTo('account')">
+      <div class="nav-item" data-sec="account" data-sec="account" onclick="navTo('account')">
         <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         Tài Khoản
       </div>
-      <div class="nav-item" data-sec="tasks" onclick="navTo('tasks')">
+      <div class="nav-item" data-sec="tasks" data-sec="tasks" onclick="navTo('tasks')">
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="2" rx="1"/><rect x="3" y="11" width="18" height="2" rx="1"/><rect x="3" y="18" width="12" height="2" rx="1"/></svg>
         Nhiệm Vụ
       </div>
@@ -552,24 +711,24 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M2 20c0-3 3-5 7-5s7 2 7 5"/><circle cx="17" cy="7" r="3"/><path d="M17 12c2 0 5 1.3 5 4"/></svg>
         Giới Thiệu
       </div>
-      <div class="nav-item" data-sec="withdraw" onclick="navTo('withdraw')">
+      <div class="nav-item" data-sec="withdraw" data-sec="withdraw" onclick="navTo('withdraw')">
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="7" cy="15" r="1.5"/></svg>
         Rút Tiền
       </div>
-      <div class="nav-item" data-sec="history" onclick="navTo('history')">
+      <div class="nav-item" data-sec="history" data-sec="history" onclick="navTo('history')">
         <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M12 7v5l3 3"/></svg>
         Lịch Sử
       </div>
-      <div class="nav-item" data-sec="rules" onclick="navTo('rules')">
+      <div class="nav-item" data-sec="rules" data-sec="rules" onclick="navTo('rules')">
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" fill="none" stroke-width="2"/><path d="M8 7h8M8 12h8M8 17h5"/></svg>
         Quy Định
       </div>
-      <div class="nav-item nav-support" data-sec="support" onclick="navTo('support')">
+      <div class="nav-item nav-support" data-sec="support" data-sec="support" onclick="navTo('support')">
         <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M9 9a3 3 0 1 1 4 2.8c-.8.3-1 .9-1 1.7v.5"/><circle cx="12" cy="17" r="1"/></svg>
         Hỗ Trợ
       </div>
       <div class="nav-sep"></div>
-      <div class="nav-item" id="nav-admin" style="display:none;" data-sec="admin" onclick="navTo('admin')">
+      <div class="nav-item" id="nav-admin" style="display:none;" data-sec="admin" data-sec="admin" onclick="navTo('admin')">
         <svg class="nav-svg" viewBox="0 0 24 24"><path d="M12 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
         Quản Trị Admin
       </div>
@@ -586,7 +745,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
     <button class="menu-btn" onclick="openSB()">☰</button>
     <div class="topbar-title" id="topbar-title">Tổng Quan</div>
     <div class="tb-icon tb-dot">🔔</div>
-    <div class="tb-icon" onclick="navTo('account')">👤</div>
+    <div class="tb-icon" data-sec="account" onclick="navTo('account')">👤</div>
   </div>
 
   <div class="main">
@@ -597,7 +756,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <div class="wc-streak">🔥 <span id="wc-streak">1</span> ngày liên tiếp</div>
         <div class="wc-title">Xin chào, <span id="wc-name">bạn</span> 👋</div>
         <div class="wc-sub">Hoàn thành nhiệm vụ hôm nay để nhận thưởng bonus</div>
-        <button class="btn-sm" onclick="navTo('tasks')">📋 Làm nhiệm vụ</button>
+        <button class="btn-sm" data-sec="tasks" onclick="navTo('tasks')">📋 Làm nhiệm vụ</button>
       </div>
       <div class="prog-card">
         <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">⚙️ Tiến độ hôm nay</div>
@@ -611,7 +770,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
             <div class="cir-sub">nhiệm vụ</div>
           </div>
         </div>
-        <div style="color:var(--gold);font-size:13px;font-weight:700;cursor:pointer;" onclick="navTo('tasks')">Làm nhiệm vụ ngay ›</div>
+        <div style="color:var(--gold);font-size:13px;font-weight:700;cursor:pointer;" data-sec="tasks" onclick="navTo('tasks')">Làm nhiệm vụ ngay ›</div>
       </div>
       <div class="stats2">
         <div class="stat-box"><div class="si">💹</div><div class="sv" id="dash-income">0đ</div><div class="sl">Thu nhập hôm nay</div></div>
@@ -620,10 +779,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <div class="stat-box"><div class="si">💰</div><div class="sv" id="dash-bal">0đ</div><div class="sl">Số dư hiện tại</div></div>
       </div>
       <div class="qa-grid">
-        <div class="qa-box" onclick="navTo('tasks')"><div class="qa-ico" style="background:rgba(245,166,35,0.15);">📋</div><div class="qa-lbl">Làm nhiệm vụ</div></div>
-        <div class="qa-box" onclick="navTo('withdraw')"><div class="qa-ico" style="background:rgba(46,204,113,0.15);">💳</div><div class="qa-lbl">Rút tiền</div></div>
+        <div class="qa-box" data-sec="tasks" onclick="navTo('tasks')"><div class="qa-ico" style="background:rgba(245,166,35,0.15);">📋</div><div class="qa-lbl">Làm nhiệm vụ</div></div>
+        <div class="qa-box" data-sec="withdraw" onclick="navTo('withdraw')"><div class="qa-ico" style="background:rgba(46,204,113,0.15);">💳</div><div class="qa-lbl">Rút tiền</div></div>
         <div class="qa-box" onclick="navTo('referral')"><div class="qa-ico" style="background:rgba(155,89,182,0.15);">👥</div><div class="qa-lbl">Giới thiệu</div></div>
-        <div class="qa-box" onclick="navTo('support')"><div class="qa-ico" style="background:rgba(52,152,219,0.15);">🎧</div><div class="qa-lbl">Hỗ trợ</div></div>
+        <div class="qa-box" data-sec="support" onclick="navTo('support')"><div class="qa-ico" style="background:rgba(52,152,219,0.15);">🎧</div><div class="qa-lbl">Hỗ trợ</div></div>
       </div>
       <div class="card">
         <div class="card-title"><div class="card-icon" style="background:rgba(245,166,35,0.15);">🏆</div><h3>Top tháng này</h3><div class="badge-sm" onclick="navTo('ranking')" style="cursor:pointer;">Xem thêm ›</div></div>
@@ -1029,7 +1188,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <input class="acc-pw-inp" type="text" id="contact-skype" placeholder="Liên kết Skype">
         <div style="display:flex;align-items:center;gap:12px;margin-top:12px;">
           <button class="acc-btn-gold" style="flex:1;" onclick="saveContact()">✓ Lưu thay đổi</button>
-          <div style="display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;" onclick="navTo('account')">🔒 Bảo mật</div>
+          <div style="display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;" data-sec="account" onclick="navTo('account')">🔒 Bảo mật</div>
         </div>
       </div>
 
@@ -1083,6 +1242,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
           <input class="tf-input" id="new-task-slots" type="number" placeholder="Số lượt tối đa VD: 300">
           <input class="tf-input" id="new-task-url" placeholder="Link vượt (link4sub, uptolink...) để trống nếu không có">
           <input class="tf-input" id="new-task-note" placeholder="Ghi chú cho member (VD: Bước 1: Truy cập link, bước 2: chờ 30s...)">
+          <input class="tf-input" id="new-task-waitsecs" type="number" placeholder="Thời gian chờ (giây) - mặc định 30s" min="5" max="120">
           <select class="tf-input" id="new-task-hot">
             <option value="0">Bình thường</option>
             <option value="1">🔥 HOT</option>
@@ -1192,6 +1352,8 @@ function navTo(sec){
   var T={dashboard:'Tong Quan',tasks:'Nhiem Vu',withdraw:'Rut Tien',ranking:'Xep Hang',referral:'Gioi Thieu',history:'Lich Su',rules:'Quy Dinh',support:'Ho Tro',account:'Tai Khoan',admin:'Quan Tri'};
   document.getElementById('topbar-title').textContent=T[sec]||sec;
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  var activeNav=document.querySelector('.nav-item[data-sec="'+sec+'"]');
+  if(activeNav)activeNav.classList.add('active');
   window.scrollTo(0,0);
   if(sec==='dashboard')rDash();
   if(sec==='tasks')rTasks();
@@ -1236,22 +1398,40 @@ function tkTab(el,id){
   document.querySelectorAll('.tk-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');
   var sw=document.getElementById('tk-search-wrap');if(sw)sw.style.display=id==='tab-hist'?'none':'flex';
 }
+function getTodayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function getDailyCount(userEmail,taskId){try{var k='lb_daily_'+userEmail+'_'+taskId+'_'+getTodayKey();var v=localStorage.getItem(k);return v?parseInt(v):0;}catch(e){return 0;}}
+function incDailyCount(userEmail,taskId){try{var k='lb_daily_'+userEmail+'_'+taskId+'_'+getTodayKey();var cnt=getDailyCount(userEmail,taskId)+1;localStorage.setItem(k,cnt);return cnt;}catch(e){return 0;}}
+var DAILY_LIMIT=10;
+
 function mkTaskCard(t){
+  var u2=fr();
+  var dailyCnt=u2?getDailyCount(u2.email,String(t.id)):0;
+  var dailyLeft=DAILY_LIMIT-dailyCnt;
   var pct=Math.min(100,(t.usedSlots/t.slots)*100);
-  var remain=t.slots-t.usedSlots;
   var noteHtml=t.note?'<div class="task2-note">'+t.note+'</div>':'';
-  return '<div class="task-card2'+(t.hot?' hot':'')+'">'+
-    '<div class="task2-top">'+
-    '<div class="task2-icon">'+t.name[0]+'</div>'+
-    '<div style="flex:1;"><div class="task2-name">'+t.name+'</div><div class="task2-meta">Lv.'+t.level+' &middot; '+t.xp+' Exp</div></div>'+
-    (t.hot?'<div class="task2-hot-badge">HOT</div>':'')+
-    '</div>'+
-    '<div class="task2-reward-row"><div class="task2-price">'+t.reward+'<span> d/luot</span></div><div class="task2-slots">'+t.usedSlots+'/'+t.slots+' luot</div></div>'+
-    '<div class="task2-bar"><div class="task2-bar-fill'+(t.hot?' hot-fill':'')+'" style="width:'+pct+'%"></div></div>'+
-    noteHtml+
-    '<button class="btn-do-task'+(t.hot?' hot-btn':' normal')+'" onclick="doTask('+t.id+')">'+
-    '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+
-    'Lam nhiem vu</button></div>';
+  var dailyColor=dailyLeft<=0?'#ef4444':'#10b981';
+  var dailyTxt=dailyLeft<=0?'Het luot':'Con '+dailyLeft+'/'+DAILY_LIMIT;
+  var btnTxt=dailyLeft<=0?'Het luot hom nay':'Lam nhiem vu';
+  var btnClick=dailyLeft<=0?'toast(\'Ban da lam du '+DAILY_LIMIT+' lan hom nay!\')':'doTask('+t.id+')';
+  var btnExtra=dailyLeft<=0?' disabled style="opacity:.5;cursor:not-allowed;"':'';
+  return '<div class="task-card2'+(t.hot?' hot':'')+'">'
+    +'<div class="task2-top">'
+    +'<div class="task2-icon">'+t.name[0]+'</div>'
+    +'<div style="flex:1;"><div class="task2-name">'+t.name+'</div><div class="task2-meta">Lv.'+t.level+' - '+t.xp+' Exp</div></div>'
+    +(t.hot?'<div class="task2-hot-badge">HOT</div>':'')
+    +'</div>'
+    +'<div class="task2-reward-row"><div class="task2-price">'+t.reward+'<span>d/luot</span></div><div class="task2-slots">'+t.usedSlots+'/'+t.slots+' luot</div></div>'
+    +'<div class="task2-bar"><div class="task2-bar-fill'+(t.hot?' hot-fill':'')+'" style="width:'+pct+'%"></div></div>'
+    +noteHtml
+    +'<div style="display:flex;align-items:center;gap:8px;margin:6px 0 10px;font-size:11px;color:var(--text3);">'
+    +'<span>Hom nay:</span>'
+    +'<div style="flex:1;height:4px;background:var(--bg4);border-radius:4px;overflow:hidden;"><div style="width:'+Math.min(100,(dailyCnt/DAILY_LIMIT)*100)+'%;height:100%;background:'+dailyColor+';border-radius:4px;"></div></div>'
+    +'<span style="color:'+dailyColor+';font-weight:700;">'+dailyTxt+'</span>'
+    +'</div>'
+    +'<button class="btn-do-task'+(t.hot?' hot-btn':' normal')+'"'+btnExtra+' onclick="'+btnClick+'">'
+    +'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
+    +' '+btnTxt+'</button>'
+    +'</div>';
 }
 function renderTaskList(){
   var tasks=gd('lb_tasks',[]).filter(function(t){return t.active&&(!tkSearchTerm||t.name.toLowerCase().indexOf(tkSearchTerm)>=0);});
@@ -1536,6 +1716,7 @@ function adminAddTask(){
   var name=document.getElementById('new-task-name').value.trim();
   var reward=parseInt(document.getElementById('new-task-reward').value)||0;
   var slots=parseInt(document.getElementById('new-task-slots').value)||100;
+  var wsEl=document.getElementById('new-task-waitsecs');var waitSecs=wsEl?parseInt(wsEl.value)||30:30;
   var urlEl=document.getElementById('new-task-url');var url=urlEl?urlEl.value.trim():'';
   var noteEl=document.getElementById('new-task-note');var note=noteEl?noteEl.value.trim():'';
   var hotEl=document.getElementById('new-task-hot');var hot=hotEl?hotEl.value==='1':false;
@@ -1544,9 +1725,10 @@ function adminAddTask(){
   if(!name){toast('Nhap ten nhiem vu!');return;}
   if(reward<=0){toast('Nhap so tien thuong!');return;}
   var tasks=gd('lb_tasks',[]);var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
-  tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,level:level,xp:xp,hot:hot,active:true});
+  var newTask={id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:true};
+  tasks.push(newTask);
   sd('lb_tasks',tasks);
-  ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note','new-task-waitsecs'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   if(hotEl)hotEl.value='0';
   toast('Da them nhiem vu: '+name);rAdmin();
 }
@@ -1556,7 +1738,175 @@ function aDel(tid){sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.i
 function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
 function switchAdminTab(el,id){['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
 function selectPay(el){el.closest('.pay-methods').querySelectorAll('.pay-method').forEach(function(p){p.classList.remove('selected');});el.classList.add('selected');}
-function togglePw(id,e){var i=document.getElementById(id);if(i.type==='password'){i.type='text';e.textContent='hide';}else{i.type='password';e.textContent='show';}}
+function togglePw(id,btn){
+  var inp=document.getElementById(id);
+  if(!inp)return;
+  var isHidden=inp.type==='password';
+  inp.type=isHidden?'text':'password';
+  // Swap SVG icons
+  var svgs=btn.querySelectorAll('svg');
+  if(svgs.length>=2){
+    svgs[0].style.display=isHidden?'none':'block';
+    svgs[1].style.display=isHidden?'block':'none';
+  } else {
+    btn.innerHTML=isHidden
+      ?'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+      :'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  }
+}
+
+/* ===== FORGOT PASSWORD SYSTEM ===== */
+var _fpEmail='';
+var _fpOTP='';
+var _fpTimer=null;
+
+function showFpCard(n){
+  [1,2,3,4].forEach(function(i){
+    var el=document.getElementById('fp-card-'+i);
+    if(el)el.style.display=i===n?'block':'none';
+  });
+}
+
+function sendForgotOTP(){
+  var emailEl=document.getElementById('fp-email');
+  var email=emailEl?emailEl.value.trim().toLowerCase():'';
+  
+  if(!validEmail(email)){
+    showErr('fp-err-1','Email khong hop le','fp-email');
+    return;
+  }
+  var u=gu(email);
+  if(!u){
+    showErr('fp-err-1','Email nay chua duoc dang ky','fp-email');
+    return;
+  }
+
+  // Check EmailJS configured
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){
+    showErr('fp-err-1','Chua cau hinh EmailJS!','fp-email');
+    return;
+  }
+
+  _fpEmail=email;
+  _fpOTP=String(Math.floor(100000+Math.random()*900000));
+
+  // Save OTP to user
+  u.resetOTP=_fpOTP;
+  u.resetOTPExpiry=Date.now()+10*60*1000;
+  su(u);
+
+  // Disable send button
+  var btn=document.getElementById('fp-send-btn');
+  if(btn){btn.disabled=true;btn.textContent='Đang gửi...';}
+
+  // Send via EmailJS
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    to_email: email,
+    to_name:  u.name||email,
+    otp_code: _fpOTP,
+    app_name: 'LinkBeta',
+    expire_mins: '10'
+  }).then(function(){
+    // Show step 2
+    var esh=document.getElementById('fp-email-show');
+    if(esh)esh.textContent=email;
+    showFpCard(2);
+    // Reset fp-otp boxes
+    document.querySelectorAll('#fp-card-2 .otp-box').forEach(function(b){b.value='';b.classList.remove('filled');});
+    document.querySelectorAll('#fp-card-2 .otp-box')[0].focus();
+    // Countdown resend
+    startFpCountdown();
+    if(btn){btn.disabled=false;btn.textContent='Gửi mã xác nhận →';}
+    toast('Da gui ma den '+email);
+  }, function(err){
+    if(btn){btn.disabled=false;btn.textContent='Gửi mã xác nhận →';}
+    showErr('fp-err-1','Loi gui email: '+(err.text||'Thu lai!'),'fp-email');
+  });
+}
+
+function startFpCountdown(){
+  var resend=document.getElementById('fp-resend-btn');
+  if(!resend)return;
+  var secs=60;
+  resend.style.pointerEvents='none';
+  resend.style.opacity='0.4';
+  clearInterval(_fpTimer);
+  _fpTimer=setInterval(function(){
+    secs--;
+    resend.textContent='Gửi lại ('+secs+'s)';
+    if(secs<=0){
+      clearInterval(_fpTimer);
+      resend.textContent='Gửi lại';
+      resend.style.pointerEvents='auto';
+      resend.style.opacity='1';
+    }
+  },1000);
+}
+
+function fpOtp(el,idx){
+  el.value=el.value.replace(/[^0-9]/g,'');
+  el.classList.toggle('filled',el.value.length>0);
+  if(el.value.length===1&&idx<5){
+    var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
+    if(boxes[idx+1])boxes[idx+1].focus();
+  }
+  // Auto verify
+  var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
+  var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+  if(code.length===6)verifyForgotOTP(code);
+}
+
+function fpOtpKey(e,idx){
+  if(e.key==='Backspace'){
+    var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
+    if(!boxes[idx].value&&idx>0){
+      boxes[idx-1].focus();
+      boxes[idx-1].value='';
+      boxes[idx-1].classList.remove('filled');
+    }
+  }
+}
+
+function verifyForgotOTP(code){
+  var u=gu(_fpEmail);
+  if(!u||!u.resetOTP){
+    showErr('fp-err-2','Chua gui ma OTP!','');
+    return;
+  }
+  if(Date.now()>u.resetOTPExpiry){
+    showErr('fp-err-2','Ma OTP da het han! Gui lai.','');
+    return;
+  }
+  if(code===u.resetOTP){
+    clearInterval(_fpTimer);
+    showFpCard(3);
+    var fp1=document.getElementById('fp-newpass');
+    if(fp1)fp1.focus();
+  } else {
+    var ob=document.querySelectorAll('#fp-card-2 .otp-box');
+    var wrap=document.getElementById('fp-card-2');
+    if(wrap){wrap.style.animation='shake .4s ease';setTimeout(function(){wrap.style.animation='';},400);}
+    ob.forEach(function(b){b.value='';b.classList.remove('filled');});
+    if(ob[0])ob[0].focus();
+    showErr('fp-err-2','Ma OTP khong dung!','');
+  }
+}
+
+function doResetPassword(){
+  var np=document.getElementById('fp-newpass').value;
+  var cp=document.getElementById('fp-cfmpass').value;
+  if(!np||np.length<6){showErr('fp-err-3','Mat khau moi it nhat 6 ky tu','fp-newpass');return;}
+  if(np!==cp){showErr('fp-err-3','Mat khau xac nhan khong khop','fp-cfmpass');return;}
+  var u=gu(_fpEmail);
+  if(!u){showErr('fp-err-3','Loi: Khong tim thay tai khoan','fp-newpass');return;}
+  u.password=np;
+  u.resetOTP=null;
+  u.resetOTPExpiry=null;
+  su(u);
+  showFpCard(4);
+  toast('Da dat lai mat khau thanh cong!');
+}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2800);}
 document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
 init();
@@ -1565,27 +1915,107 @@ init();
 var _otpCode='';
 var _otpTimer=null;
 
+/* ===== EMAILJS CONFIG - ĐIỀN VÀO ĐÂY ===== */
+var EMAILJS_PUBLIC_KEY  = 'n3o4qJ1mB7B3KjkHx';   // Lấy từ Account > API Keys
+var EMAILJS_SERVICE_ID  = 'service_85dj3ez';   // Lấy từ Email Services
+var EMAILJS_TEMPLATE_ID = 'template_t3xyvpb';  // Lấy từ Email Templates
+/* ========================================= */
+
 function sendOTP(){
   var u=fr();if(!u)return;
   if(u.emailVerified){toast('Email da duoc xac thuc!');return;}
-  // Generate 6-digit code
-  _otpCode=String(Math.floor(100000+Math.random()*900000));
-  u.pendingOTP=_otpCode;
-  u.otpExpiry=Date.now()+10*60*1000; // 10 phút
+
+  // Kiểm tra config
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){
+    toast('Chua cau hinh EmailJS! Xem huong dan.');
+    showEmailJSGuide();
+    return;
+  }
+
+  var code=String(Math.floor(100000+Math.random()*900000));
+  _otpCode=code;
+  u.pendingOTP=code;
+  u.otpExpiry=Date.now()+10*60*1000;
   su(u);CU=u;
+
+  // Disable button + show sending state
+  var btn=document.getElementById('ev-send-btn');
+  if(btn){btn.disabled=true;btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Đang gửi...';}
+
+  // Init EmailJS
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  // Send email
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    to_email: u.email,
+    to_name:  u.name||u.email,
+    otp_code: code,
+    app_name: 'LinkBeta',
+    expire_mins: '10'
+  }).then(function(){
+    var sec=document.getElementById('ev-otp-section');
+    if(sec)sec.style.display='block';
+    startOTPCountdown();
+    toast('Da gui ma OTP den '+u.email+' - Kiem tra hop thu!');
+  }, function(err){
+    if(btn){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Gửi lại mã';}
+    toast('Loi gui email: '+(err.text||'Thu lai sau!'));
+    console.error('EmailJS error:', err);
+  });
+}
+
+function showEmailJSGuide(){
+  var popup=document.createElement('div');
+  popup.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:flex-end;';
   
-  // Show OTP section
-  var sec=document.getElementById('ev-otp-section');
-  if(sec)sec.style.display='block';
+  var sheet=document.createElement('div');
+  sheet.style.cssText='width:100%;background:var(--bg2);border-radius:24px 24px 0 0;padding:24px 20px 36px;max-height:90vh;overflow-y:auto;';
   
-  // Countdown button
-  startOTPCountdown();
+  var closeBtn=document.createElement('button');
+  closeBtn.innerHTML='✕';
+  closeBtn.style.cssText='margin-left:auto;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;';
+  closeBtn.onclick=function(){popup.remove();};
   
-  // Hiển thị mã trong toast (giả lập gửi mail)
-  toast('Ma OTP: '+_otpCode+' (kiem tra email!)');
+  var hdr=document.createElement('div');
+  hdr.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:20px;';
+  hdr.innerHTML='<div style="width:40px;height:40px;background:rgba(245,166,35,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;">📧</div>'+
+    '<div><div style="font-size:17px;font-weight:800;">Cấu hình EmailJS</div><div style="font-size:12px;color:var(--text2);">Để gửi OTP qua Gmail thật</div></div>';
+  hdr.appendChild(closeBtn);
   
-  // Fake: show OTP in a visible alert style for demo
-  showOTPDemo(_otpCode, u.email);
+  var body=document.createElement('div');
+  body.innerHTML=
+    '<div style="background:var(--bg3);border-radius:14px;padding:16px;margin-bottom:14px;">'+
+    '<div style="font-size:13px;font-weight:800;margin-bottom:10px;color:var(--gold);">📋 Hướng dẫn 4 bước:</div>'+
+    '<div style="font-size:13px;color:var(--text2);line-height:2;">'+
+    '<b style="color:var(--text);">Bước 1:</b> Vào <b style="color:#60a5fa;">emailjs.com</b> → Đăng ký miễn phí<br>'+
+    '<b style="color:var(--text);">Bước 2:</b> Email Services → Add New Service → Gmail<br>'+
+    '<b style="color:var(--text);">Bước 3:</b> Email Templates → Create Template<br>'+
+    '<div style="background:var(--bg4);border-radius:10px;padding:10px;margin:6px 0;font-size:12px;font-family:monospace;line-height:1.6;">'+
+    'Subject: Mã xác thực {{app_name}}<br>'+
+    'Body: Xin chào {{to_name}},<br>'+
+    'Mã OTP: <b>{{otp_code}}</b><br>'+
+    'Hiệu lực: {{expire_mins}} phút</div>'+
+    '<b style="color:var(--text);">Bước 4:</b> Account → API Keys → copy Public Key'+
+    '</div></div>'+
+    '<div style="background:var(--bg3);border-radius:14px;padding:16px;margin-bottom:16px;">'+
+    '<div style="font-size:13px;font-weight:800;margin-bottom:8px;color:var(--gold);">⚙️ Mở file index.html và sửa 3 dòng này:</div>'+
+    '<div style="background:#0f172a;border-radius:10px;padding:12px;font-family:monospace;font-size:12px;color:#60a5fa;line-height:1.8;">'+
+    "EMAILJS_PUBLIC_KEY  = 'abc123...'<br>"+
+    "EMAILJS_SERVICE_ID  = 'service_xxx'<br>"+
+    "EMAILJS_TEMPLATE_ID = 'template_xxx'"+
+    '</div></div>';
+  
+  var okBtn=document.createElement('button');
+  okBtn.textContent='Đã hiểu, tôi sẽ cấu hình';
+  okBtn.style.cssText='width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;';
+  okBtn.onclick=function(){popup.remove();};
+  
+  sheet.appendChild(hdr);
+  sheet.appendChild(body);
+  sheet.appendChild(okBtn);
+  popup.appendChild(sheet);
+  popup.onclick=function(e){if(e.target===popup)popup.remove();};
+  document.body.appendChild(popup);
 }
 
 var _pendingFillCode='';
@@ -1628,16 +2058,18 @@ function fillOTP(code){
 function startOTPCountdown(){
   var btn=document.getElementById('ev-send-btn');
   if(!btn)return;
-  var secs=45;
+  var secs=60;
   btn.disabled=true;
   clearInterval(_otpTimer);
+  var ico='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ';
+  var ico2='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> ';
   _otpTimer=setInterval(function(){
     secs--;
-    btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Gửi lại ('+secs+'s)';
+    btn.innerHTML=ico+'Gửi lại ('+secs+'s)';
     if(secs<=0){
       clearInterval(_otpTimer);
       btn.disabled=false;
-      btn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Gửi lại mã';
+      btn.innerHTML=ico2+'Gửi lại mã';
     }
   },1000);
 }
@@ -1712,75 +2144,145 @@ function updateEmailVerifyUI(u){
 /* ===== TASK MODAL ===== */
 var _currentTaskId=null;
 
+var _taskTimer=null;
+var _taskTimerSecs=30;
+
 function doTask(tid){
   var u=fr();if(!u)return;
-  
-  // Check email verified
-  if(!u.emailVerified){
-    // Show prompt
-    showVerifyPrompt();
-    return;
-  }
-  
+  if(!u.emailVerified){showVerifyPrompt();return;}
   var tasks=gd('lb_tasks',[]);
   var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
   if(!task)return;
-  
+  if(task.usedSlots>=task.slots){toast('Het luot nhiệm vụ này!');return;}
+  // Check daily limit 10 lần/ngày
+  var dailyCount=getDailyCount(u.email,String(tid));
+  if(dailyCount>=DAILY_LIMIT){
+    toast('Ban da lam nhiem vu nay '+DAILY_LIMIT+' lan hom nay! Thu lai ngay mai.');
+    return;
+  }
   _currentTaskId=tid;
   
+  // Check already done today
+  var pt=gd('lb_pt',[]);
+  var alreadyDone=pt.some(function(p){return p.userEmail===u.email&&String(p.taskId)===String(tid)&&(p.status==='approved'||p.status==='pending');});
+  
   // Fill modal info
-  var nameEl=document.getElementById('tm-name');if(nameEl)nameEl.textContent=task.name;
-  var iconEl=document.getElementById('tm-icon');if(iconEl)iconEl.textContent=task.name[0];
-  var metaEl=document.getElementById('tm-meta');if(metaEl)metaEl.textContent='Lv.'+task.level+' · '+(task.xp||10)+' Exp';
-  var hotBadge=document.getElementById('tm-hot-badge');if(hotBadge)hotBadge.style.display=task.hot?'block':'none';
-  var rewEl=document.getElementById('tm-reward');if(rewEl)rewEl.textContent=fmt(task.reward)+'đ';
-  var remain=task.slots-task.usedSlots;
-  var remEl=document.getElementById('tm-remain');if(remEl)remEl.textContent=remain+' lượt';
-  var xpEl=document.getElementById('tm-xp');if(xpEl)xpEl.textContent='+'+(task.xp||10)+' Exp';
-  var usedEl=document.getElementById('tm-used');if(usedEl)usedEl.textContent=task.usedSlots+' đã làm';
-  var totEl=document.getElementById('tm-total');if(totEl)totEl.textContent=task.slots+' tổng';
+  function se(id){return document.getElementById(id);}
+  if(se('tm-name'))se('tm-name').textContent=task.name;
+  if(se('tm-icon'))se('tm-icon').textContent=task.name[0];
+  if(se('tm-meta'))se('tm-meta').textContent='Lv.'+task.level+' · '+(task.xp||10)+' Exp';
+  var hb=se('tm-hot-badge');if(hb)hb.style.display=task.hot?'flex':'none';
+  if(se('tm-reward'))se('tm-reward').textContent=fmt(task.reward)+'đ';
+  if(se('tm-remain'))se('tm-remain').textContent=(task.slots-task.usedSlots)+' lượt';
+  if(se('tm-xp'))se('tm-xp').textContent='+'+(task.xp||10)+' Exp';
+  if(se('tm-used'))se('tm-used').textContent=task.usedSlots+' đã làm';
+  if(se('tm-total'))se('tm-total').textContent=task.slots+' tổng';
   var pct=Math.min(100,(task.usedSlots/task.slots)*100);
-  var barEl=document.getElementById('tm-bar-fill');if(barEl)barEl.style.width=pct+'%';
+  if(se('tm-bar-fill'))se('tm-bar-fill').style.width=pct+'%';
+  if(se('tm-claim-amount'))se('tm-claim-amount').textContent=fmt(task.reward)+'đ';
   
   // Note
-  var noteBox=document.getElementById('tm-note-box');
-  var noteText=document.getElementById('tm-note-text');
-  if(task.note&&task.note.trim()){
-    if(noteBox)noteBox.style.display='block';
-    if(noteText)noteText.textContent=task.note;
-  } else {
-    if(noteBox)noteBox.style.display='none';
+  var nb=se('tm-note-box');var nt=se('tm-note-text');
+  if(task.note&&task.note.trim()){if(nb)nb.style.display='block';if(nt)nt.textContent=task.note;}
+  else{if(nb)nb.style.display='none';}
+  
+  // Link
+  var lb=se('tm-link-btn');
+  if(lb){
+    lb.href=task.url&&task.url.trim()?task.url:'#';
+    lb.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Truy cập link nhiệm vụ';
   }
   
-  // Link button
-  var linkBtn=document.getElementById('tm-link-btn');
-  if(linkBtn){
-    if(task.url&&task.url.trim()){
-      linkBtn.href=task.url;
-      linkBtn.style.display='flex';
-    } else {
-      linkBtn.href='#';
-      linkBtn.style.display='flex';
-      linkBtn.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Truy cập link nhiệm vụ';
-    }
-  }
-  
-  // Check already pending
-  var pt=gd('lb_pt',[]);
-  var alreadyPending=pt.some(function(p){return p.userEmail===u.email&&p.taskId===tid&&p.status==='pending';});
-  var doneBtn=document.getElementById('tm-done-btn');
-  var alreadyMsg=document.getElementById('tm-already-msg');
-  if(alreadyPending){
-    if(doneBtn)doneBtn.style.display='none';
-    if(alreadyMsg)alreadyMsg.style.display='block';
-  } else {
-    if(doneBtn)doneBtn.style.display='flex';
-    if(alreadyMsg)alreadyMsg.style.display='none';
-  }
+  // Reset sections
+  if(se('tm-step1-section'))se('tm-step1-section').style.display=alreadyDone?'none':'block';
+  if(se('tm-countdown-section'))se('tm-countdown-section').style.display='none';
+  if(se('tm-claim-section'))se('tm-claim-section').style.display='none';
+  if(se('tm-claimed-msg'))se('tm-claimed-msg').style.display='none';
+  if(se('tm-already-msg'))se('tm-already-msg').style.display=alreadyDone?'block':'none';
+  clearInterval(_taskTimer);
   
   // Open modal
   var m=document.getElementById('task-modal');
   if(m)m.classList.add('show');
+}
+
+function startTaskTimer(){
+  // Đếm ngược 30 giây sau khi bấm link
+  var task=null;var tasks=gd('lb_tasks',[]);
+  tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))task=t;});
+  var waitSecs=task&&task.waitSecs?task.waitSecs:30;
+  
+  setTimeout(function(){
+    function se(id){return document.getElementById(id);}
+    if(se('tm-step1-section'))se('tm-step1-section').style.display='none';
+    if(se('tm-countdown-section'))se('tm-countdown-section').style.display='block';
+    
+    var total=waitSecs;
+    var secs=total;
+    var circumference=264;
+    clearInterval(_taskTimer);
+    
+    _taskTimer=setInterval(function(){
+      secs--;
+      var cdNum=se('tm-cd-num');var cdWait=se('tm-cd-wait');var cdCircle=se('tm-cd-circle');
+      if(cdNum)cdNum.textContent=secs;
+      if(cdWait)cdWait.textContent=secs;
+      if(cdCircle){
+        var offset=circumference*(1-secs/total);
+        cdCircle.style.strokeDashoffset=offset;
+      }
+      if(secs<=0){
+        clearInterval(_taskTimer);
+        // Show claim button
+        if(se('tm-countdown-section'))se('tm-countdown-section').style.display='none';
+        if(se('tm-claim-section'))se('tm-claim-section').style.display='block';
+      }
+    },1000);
+  },500);
+}
+
+function claimTask(){
+  if(!_currentTaskId)return;
+  var u=fr();if(!u)return;
+  var tasks=gd('lb_tasks',[]);var task=null;
+  tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))task=t;});
+  if(!task){toast('Loi nhiem vu!');return;}
+  if(task.usedSlots>=task.slots){toast('Het luot!');return;}
+  
+  // Cộng tiền ngay
+  u.balance=(u.balance||0)+Number(task.reward);
+  u.xp=(u.xp||0)+Number(task.xp||10);
+  u.tasksCompleted=(u.tasksCompleted||0)+1;
+  var now=new Date().toLocaleString('vi-VN');
+  u.history=u.history||[];
+  u.history.push({type:'task',name:task.name,amount:task.reward,date:now,status:'approved'});
+  su(u);CU=u;
+  
+  // Lưu vào lb_pt để không làm lại
+  var pt=gd('lb_pt',[]);
+  // Remove old approved entry for this task to allow re-doing
+  pt=pt.filter(function(p){return !(p.userEmail===u.email&&String(p.taskId)===String(task.id)&&p.status==='approved');});
+  pt.push({id:String(Date.now()),userEmail:u.email,userName:u.name,taskId:String(task.id),taskName:task.name,amount:task.reward,xp:task.xp||10,date:now,status:'approved'});
+  sd('lb_pt',pt);
+  // Increment daily count
+  incDailyCount(u.email,String(task.id));
+  
+  // Update task usedSlots
+  tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))t.usedSlots=(t.usedSlots||0)+1;});
+  sd('lb_tasks',tasks);
+  
+  // Update sidebar balance
+  updateSB(u);
+  
+  // Show success
+  function se(id){return document.getElementById(id);}
+  if(se('tm-claim-section'))se('tm-claim-section').style.display='none';
+  if(se('tm-claimed-msg'))se('tm-claimed-msg').style.display='block';
+  
+  toast('Da nhan +'+fmt(task.reward)+'d vao tai khoan!');
+  rTasks();
+  
+  setTimeout(function(){closeTaskModal();},2000);
 }
 
 function closeTaskModal(e){
@@ -1927,16 +2429,55 @@ document.head.appendChild(shakeStyle);
       </div>
     </div>
     <!-- Buttons -->
-    <a class="tm-btn-link" id="tm-link-btn" href="#" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Truy cập link nhiệm vụ
-    </a>
-    <button class="tm-btn-done" id="tm-done-btn" onclick="confirmTask()">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-      Đã hoàn thành · Gửi duyệt
-    </button>
+    <!-- Bước 1: Nút truy cập link -->
+    <div id="tm-step1-section">
+      <a class="tm-btn-link" id="tm-link-btn" href="#" target="_blank" rel="noopener" onclick="startTaskTimer()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Truy cập link nhiệm vụ
+      </a>
+      <div style="text-align:center;font-size:12px;color:var(--text3);margin-top:8px;">Bấm vào link trên để bắt đầu</div>
+    </div>
+
+    <!-- Bước 2: Countdown sau khi bấm link -->
+    <div id="tm-countdown-section" style="display:none;">
+      <div class="tm-countdown-box">
+        <div class="tm-cd-ring">
+          <svg class="tm-cd-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg4)" stroke-width="8"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--gold)" stroke-width="8"
+              stroke-dasharray="264" stroke-dashoffset="0" id="tm-cd-circle"
+              stroke-linecap="round" transform="rotate(-90 50 50)"/>
+          </svg>
+          <div class="tm-cd-text" id="tm-cd-num">30</div>
+        </div>
+        <div class="tm-cd-label">Đang xử lý nhiệm vụ...</div>
+        <div class="tm-cd-sub">Vui lòng chờ <span id="tm-cd-wait">30</span> giây</div>
+      </div>
+      <button class="tm-btn-done" id="tm-done-btn" disabled style="opacity:.4;cursor:not-allowed;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Vui lòng chờ...
+      </button>
+    </div>
+
+    <!-- Bước 3: Nút nhận thưởng sau countdown -->
+    <div id="tm-claim-section" style="display:none;">
+      <div class="tm-success-box">
+        <div class="tm-success-icon">✓</div>
+        <div class="tm-success-txt">Hoàn thành! Bấm nhận thưởng</div>
+      </div>
+      <button class="tm-btn-claim" id="tm-claim-btn" onclick="claimTask()">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Nhận <span id="tm-claim-amount">0đ</span> ngay
+      </button>
+    </div>
+
+    <!-- Đã nhận -->
+    <div id="tm-claimed-msg" style="display:none;text-align:center;padding:14px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);border-radius:12px;font-size:14px;font-weight:700;color:#10b981;">
+      ✓ Đã nhận thưởng thành công!
+    </div>
+    <!-- Đã gửi chờ duyệt (fallback) -->
     <div id="tm-already-msg" style="display:none;text-align:center;padding:10px;background:rgba(245,166,35,.1);border-radius:10px;font-size:13px;color:var(--gold);">
-      ⏳ Bạn đã gửi nhiệm vụ này, đang chờ Admin duyệt
+      ⏳ Bạn đã làm nhiệm vụ này rồi
     </div>
   </div>
 </div>

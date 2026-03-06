@@ -768,6 +768,19 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 .wd-hist-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
 .wd-hist-detail{font-size:11px;color:var(--text3);line-height:1.8;}
 
+
+.adm-wd-card{background:var(--bg3);border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid var(--border);}
+.adm-wd-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.adm-wd-id{font-size:10px;font-family:monospace;color:var(--gold);margin-bottom:3px;}
+.adm-wd-user{font-size:13px;font-weight:700;color:var(--text);}
+.adm-wd-amt{font-size:20px;font-weight:900;color:#f59e0b;white-space:nowrap;}
+.adm-wd-info{font-size:12px;color:var(--text2);line-height:1.9;background:var(--bg2);border-radius:10px;padding:10px 12px;margin-bottom:10px;}
+.adm-wd-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.adm-btn-approve{padding:12px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;}
+.adm-btn-reject{padding:12px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;}
+.adm-wd-hist{background:var(--bg3);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.adm-empty{text-align:center;padding:24px;color:var(--text3);font-size:13px;}
+
 </style>
 </head>
 <body>
@@ -956,11 +969,7 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="7" cy="15" r="1.5"/></svg>
         Rút Tiền
       </div>
-      <div class="nav-item" data-sec="history" data-sec="history" onclick="navTo('history')">
-        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M12 7v5l3 3"/></svg>
-        Lịch Sử
-      </div>
-      <div class="nav-item" data-sec="rules" data-sec="rules" onclick="navTo('rules')">
+<div class="nav-item" data-sec="rules" data-sec="rules" onclick="navTo('rules')">
         <svg class="nav-svg" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" fill="none" stroke-width="2"/><path d="M8 7h8M8 12h8M8 17h5"/></svg>
         Quy Định
       </div>
@@ -1176,17 +1185,7 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 
 
     <!-- HISTORY -->
-    <div class="content" id="sec-history" style="display:none;">
-      <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">📅</div><h3>Lịch Sử Giao Dịch</h3></div>
-        <div class="filter-tabs">
-          <div class="ft active" onclick="filterHist(this,'all')">Tất cả</div>
-          <div class="ft" onclick="filterHist(this,'income')">Thu nhập</div>
-          <div class="ft" onclick="filterHist(this,'withdraw')">Rút tiền</div>
-        </div>
-        <div id="hist-list"></div>
-      </div>
-    </div>
+
 
     <!-- RANKING -->
     <div class="content" id="sec-ranking" style="display:none;">
@@ -1948,7 +1947,7 @@ function navTo(sec){
   closeSB();
   document.querySelectorAll('[id^="sec-"]').forEach(function(s){s.style.display='none';});
   var el=document.getElementById('sec-'+sec);if(el)el.style.display='block';
-  var T={dashboard:'Tong Quan',tasks:'Nhiem Vu',withdraw:'Rut Tien',ranking:'Xep Hang',referral:'Gioi Thieu',history:'Lich Su',rules:'Quy Dinh',support:'Ho Tro',account:'Tai Khoan',admin:'Quan Tri'};
+  var T={dashboard:'Tong Quan',tasks:'Nhiem Vu',withdraw:'Rut Tien',ranking:'Xep Hang',referral:'Gioi Thieu',rules:'Quy Dinh',support:'Ho Tro',account:'Tai Khoan',admin:'Quan Tri'};
   document.getElementById('topbar-title').textContent=T[sec]||sec;
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
   var activeNav=document.querySelector('.nav-item[data-sec="'+sec+'"]');
@@ -1959,7 +1958,6 @@ function navTo(sec){
   if(sec==='withdraw')rWd();
   if(sec==='ranking')rRank();
   if(sec==='referral')rRef();
-  if(sec==='history')rHist('all');
   if(sec==='account')rAcc();
   if(sec==='admin')rAdmin();
 }
@@ -2260,16 +2258,7 @@ function copyRef(){
   if(navigator.clipboard){navigator.clipboard.writeText(link).then(function(){toast('Da sao chep link!');});}else{toast('Link: '+link);}
 }
 
-function rHist(type){
-  var u=fr();if(!u)return;
-  var h=(u.history||[]).filter(function(x){return type==='all'||x.type===type;}).reverse();
-  var html='';
-  h.forEach(function(x){var c=x.amount>0?'var(--green)':'var(--red)';var ic=x.type==='task'?'[T]':x.type==='withdraw'?'[W]':'[R]';var sH='';if(x.status==='pending')sH='<div style="font-size:10px;color:var(--orange);font-weight:700;">Cho duyet</div>';else if(x.status==='approved')sH='<div style="font-size:10px;color:var(--green);font-weight:700;">Da duyet</div>';else if(x.status==='paid')sH='<div style="font-size:10px;color:var(--green);font-weight:700;">Da TT</div>';else if(x.status==='rejected')sH='<div style="font-size:10px;color:var(--red);font-weight:700;">Tu choi</div>';html+='<div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);"><div class="hi-icon" style="background:rgba(245,166,35,.1);">'+ic+'</div><div style="flex:1;"><div class="hi-name">'+x.name+'</div><div class="hi-time">'+x.date+'</div></div><div style="text-align:right;"><div class="hi-amount" style="color:'+c+';">'+(x.amount>0?'+':'')+fmt(x.amount)+'d</div>'+sH+'</div></div>';});
-  if(!html)html='<div class="empty-state"><p>Chua co giao dich nao</p></div>';
-  document.getElementById('history-list').innerHTML=html;
-}
 
-function filterHistory(el,type){document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');rHist(type);}
 
 function rAcc(){
   var u=fr();if(!u)return;
@@ -2371,8 +2360,45 @@ function rAdmin(){
   if(!mH)mH='<div class="empty-state"><p>Chua co thanh vien</p></div>';document.getElementById('admin-member-list').innerHTML=mH;
   var ptH='';pt.forEach(function(p){ptH+='<div class="task-pending-item"><div style="flex:1;"><div class="tpi-name">'+p.taskName+'</div><div class="tpi-user">'+p.userName+' &middot; '+p.date+'</div></div><div class="tpi-amount">+'+fmt(p.amount)+'d</div><button class="btn-approve" onclick="aAT('+p.id+')">Duyet</button><button class="btn-reject" onclick="aRT('+p.id+')">Tu choi</button></div>';});
   if(!ptH)ptH='<div class="empty-state"><p>Khong co nhiem vu cho duyet</p></div>';document.getElementById('admin-task-pending-list').innerHTML=ptH;
-  var wH='';wPend.forEach(function(w){wH+='<div class="withdraw-pending-item"><div class="wpi-info"><div class="wpi-user">'+w.userName+'</div><div class="wpi-detail">'+w.method+' &middot; '+w.date+'</div></div><div class="wpi-amount">'+fmt(w.amount)+'d</div><button class="btn-approve" onclick="aAW('+w.id+')">Duyet</button><button class="btn-reject" onclick="aRW('+w.id+')">Tu choi</button></div>';});
-  if(!wH)wH='<div class="empty-state"><p>Khong co lenh rut cho duyet</p></div>';document.getElementById('admin-wd-pending-list').innerHTML=wH;
+  // Render WD pending
+  var wH='';
+  wPend.forEach(function(w){
+    var spd=w.speed==='fast'?'⚡ Rút nhanh':'🏦 Rút thường';
+    var feeShow=(w.fee||0)>0?'Phí: '+fmt(w.fee||0)+'đ | ':'Miễn phí | ';
+    wH+='<div class="adm-wd-card">'
+      +'<div class="adm-wd-top"><div>'
+      +'<div class="adm-wd-id">🆔 #'+(w.id||'?')+'</div>'
+      +'<div class="adm-wd-user">👤 '+(w.userName||'?')+' <span style="color:var(--text3);font-size:11px;font-weight:400;">('+( w.userEmail||'')+')</span></div>'
+      +'</div><div class="adm-wd-amt">'+fmt(w.amount||0)+'đ</div></div>'
+      +'<div class="adm-wd-info">'
+      +'🏦 '+(w.bankName||w.method||'?')+' | STK: '+(w.accNum||'?')+' | '+(w.accName||'?')+'<br>'
+      +feeShow+'💰 <b style="color:#10b981;">Thực trả: '+fmt(w.net||(w.amount||0))+'đ</b><br>'
+      +spd+' · '+(w.date||'')
+      +'</div>'
+      +'<div class="adm-wd-btns">'
+      +'<button class="adm-btn-approve" onclick="aAW(\''+(w.id||'')+'\')">✅ Duyệt - Đã chuyển</button>'
+      +'<button class="adm-btn-reject" onclick="aRW(\''+(w.id||'')+'\')">❌ Từ chối</button>'
+      +'</div></div>';
+  });
+  if(!wH)wH='<div class="adm-empty">Không có lệnh rút nào chờ duyệt</div>';
+  document.getElementById('admin-wd-pending-list').innerHTML=wH;
+  // WD history
+  var wHistArr=wds.filter(function(w){return w.status==='paid'||w.status==='cancelled';}).reverse().slice(0,30);
+  var wHistH='';
+  wHistArr.forEach(function(w){
+    var sc=w.status==='paid'?'#10b981':'#ef4444';
+    var st=w.status==='paid'?'✅ Hoàn thành':'❌ Từ chối';
+    wHistH+='<div class="adm-wd-hist">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;">'
+      +'<span style="font-size:10px;font-family:monospace;color:var(--text3);">#'+(w.id||'')+'</span>'
+      +'<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:'+sc+'22;color:'+sc+';">'+st+'</span>'
+      +'</div>'
+      +'<div style="font-size:13px;font-weight:800;color:'+sc+';">'+fmt(w.amount||0)+'đ → <span style="color:#10b981;">Đã trả: '+fmt(w.net||0)+'đ</span></div>'
+      +'<div style="font-size:11px;color:var(--text3);">'+(w.userName||'?')+' · '+(w.bankName||w.method||'?')+' · '+(w.date||'')+'</div>'
+      +'</div>';
+  });
+  if(!wHistH)wHistH='<div class="adm-empty">Chưa có lịch sử</div>';
+  var whEl=document.getElementById('admin-wd-history-list');if(whEl)whEl.innerHTML=wHistH;
   var tasks=gd('lb_tasks',[]);var tkH='';
   tasks.forEach(function(t){tkH+='<div class="task-manage-item"><div class="tmi-info"><div class="tmi-name">'+t.name+'</div><div class="tmi-meta">Lv.'+t.level+' &middot; '+t.xp+' XP &middot; '+t.usedSlots+'/'+t.slots+' luot &middot; '+(t.active?'Bat':'Tat')+'</div></div><div class="tmi-reward">'+t.reward+'d</div><button class="btn-approve" onclick="aTog('+t.id+')">'+(t.active?'Tat':'Bat')+'</button><button class="btn-del" onclick="aDel('+t.id+')">Xoa</button></div>';});
   if(!tkH)tkH='<div class="empty-state"><p>Chua co nhiem vu</p></div>';document.getElementById('admin-task-list').innerHTML=tkH;
@@ -2412,30 +2438,38 @@ function aRT(pid){
 function aAW(wid){
   wid=String(wid);
   var wds=gd('lb_wd',[]);var wd=null;
-  wds.forEach(function(w){if(String(w.id)===wid){w.status='paid';wd=w;}});
+  wds.forEach(function(w){if(String(w.id)===wid)wd=w;});
+  if(!wd){toast('Không tìm thấy lệnh rút!');return;}
+  var netAmt=wd.net||wd.amount||0;
+  if(!confirm('✅ Xác nhận đã chuyển '+fmt(netAmt)+'đ\ncho '+wd.userName+' ('+wd.userEmail+')?'))return;
+  wds.forEach(function(w){if(String(w.id)===wid)w.status='paid';});
   sd('lb_wd',wds);
-  if(wd){
-    var u=gu(wd.userEmail);
-    if(u){
-      u.totalWithdrawn=(u.totalWithdrawn||0)+Number(wd.amount);
-      u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));
-      u.history=(u.history||[]).map(function(h){if(String(h.wdId)===wid)h.status='paid';return h;});
-      su(u);
-    }
-    toast('Da duyet rut '+fmt(wd.amount)+'d cho '+wd.userName);
+  var u=gu(wd.userEmail);
+  if(u){
+    u.totalWithdrawn=(u.totalWithdrawn||0)+Number(wd.amount);
+    u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));
+    u.history=(u.history||[]).map(function(h){if(String(h.wdId)===wid)h.status='paid';return h;});
+    su(u);
   }
+  toast('✅ Đã duyệt! Thực trả: '+fmt(netAmt)+'đ cho '+wd.userName);
   rAdmin();
 }
 function aRW(wid){
   wid=String(wid);
   var wds=gd('lb_wd',[]);var wd=null;
-  wds.forEach(function(w){if(String(w.id)===wid){w.status='cancelled';wd=w;}});
+  wds.forEach(function(w){if(String(w.id)===wid)wd=w;});
+  if(!wd){toast('Không tìm thấy!');return;}
+  if(!confirm('❌ Từ chối và hoàn '+fmt(wd.amount||0)+'đ cho '+wd.userName+'?'))return;
+  wds.forEach(function(w){if(String(w.id)===wid)w.status='cancelled';});
   sd('lb_wd',wds);
-  if(wd){
-    var u=gu(wd.userEmail);
-    if(u){u.balance=(u.balance||0)+Number(wd.amount);u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));su(u);}
-    toast('Da tu choi va hoan tien cho '+wd.userName);
+  var u=gu(wd.userEmail);
+  if(u){
+    u.balance=(u.balance||0)+Number(wd.amount);
+    u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));
+    u.history=(u.history||[]).map(function(h){if(String(h.wdId)===wid)h.status='cancelled';return h;});
+    su(u);
   }
+  toast('❌ Đã từ chối, hoàn tiền '+fmt(wd.amount||0)+'đ cho '+wd.userName);
   rAdmin();
 }
 function adminAddTask(){
@@ -3347,19 +3381,51 @@ function doWithdraw(){
   sendWdEmailAdmin(u,w);
 }
 function sendWdEmailAdmin(u,w){
-  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
+  // Dùng chung service + template OTP, chỉ đổi to_email -> ADMIN_EMAIL
   try{
-    var spd=w.speed==='fast'?'⚡ RÚT NHANH':'🏦 Rút thường MIỄN PHÍ';
-    var feeText=w.fee>0?'Phí: -'+w.fee.toLocaleString('vi-VN')+'₫':'Phí: Miễn phí';
-    emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
-      to_email:ADMIN_EMAIL,to_name:'Admin LinkBeta',
-      otp_code:'🆔 #'+w.id+'\n👤 '+w.userName+' ('+w.userEmail+')\n💰 '+w.amount.toLocaleString('vi-VN')+'₫ | '+feeText+' | Trả: '+w.net.toLocaleString('vi-VN')+'₫\n🏦 '+w.bankName+' | STK: '+w.accNum+' | '+w.accName+'\n'+spd+'\n🕐 '+w.date,
-      expire_mins:spd,app_name:'LinkBeta - Rút tiền!'
-    }).catch(function(){});
-  }catch(e){}
+    var spd = w.speed==='fast' ? '⚡ RÚT NHANH (5-30 phút)' : '🏦 Rút thường (1-24h) - MIỄN PHÍ';
+    var feeText = (w.fee||0)>0 ? 'Phí 10%: -'+(w.fee||0).toLocaleString('vi-VN')+'₫' : 'Phí: Miễn phí';
+    var msg = [
+      '━━━━━━━━━━━━━━━━━━━━',
+      '💰 YÊU CẦU RÚT TIỀN MỚI',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '🆔 Mã lệnh : #'+(w.id||''),
+      '👤 Thành viên: '+(w.userName||'')+' ('+( w.userEmail||'')+')',
+      '💵 Số rút   : '+(w.amount||0).toLocaleString('vi-VN')+'₫',
+      '💸 '+feeText,
+      '✅ Thực trả  : '+(w.net||w.amount||0).toLocaleString('vi-VN')+'₫',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '🏦 Ngân hàng: '+(w.bankName||''),
+      '🔢 Số TK    : '+(w.accNum||''),
+      '👤 Tên TK   : '+(w.accName||''),
+      '━━━━━━━━━━━━━━━━━━━━',
+      '⚡ Loại rút  : '+spd,
+      '🕐 Thời gian: '+(w.date||''),
+      '━━━━━━━━━━━━━━━━━━━━',
+      '👉 Vào Admin Panel để duyệt!'
+    ].join('\n');
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email   : ADMIN_EMAIL,
+      to_name    : 'Admin LinkBeta',
+      otp_code   : msg,
+      expire_mins: '⚠️ Cần duyệt sớm',
+      app_name   : '🔔 LinkBeta - Có lệnh rút tiền mới!'
+    }).then(function(){
+      console.log('Admin email sent OK');
+    }).catch(function(err){
+      console.error('Admin email error:', err);
+    });
+  } catch(e){
+    console.error('sendWdEmailAdmin error:', e);
+  }
 }
 
+
+
 </script>
+
 
 <!-- BANK MODAL -->
 <div class="modal-overlay" id="bank-modal" onclick="closeBankModal(event)">

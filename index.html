@@ -1635,6 +1635,119 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
   </div>
 </div>
 
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="task-modal" onclick="closeTaskModal(event)">
+  <div class="modal-sheet" style="max-height:90vh;overflow-y:auto;">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 16px 0;">
+      <div id="tm-icon" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#000;flex-shrink:0;">T</div>
+      <div style="flex:1;">
+        <div class="tm-name" id="tm-name">Nhiệm vụ</div>
+        <div id="tm-meta" style="font-size:11px;color:var(--text3);margin-top:2px;">Lv.0 · 10 Exp</div>
+      </div>
+      <div id="tm-hot-badge" style="display:none;background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;">🔥 HOT</div>
+      <button onclick="closeTaskModal()" style="background:var(--bg4);border:none;border-radius:50%;width:32px;height:32px;color:var(--text2);font-size:16px;cursor:pointer;flex-shrink:0;">✕</button>
+    </div>
+
+    <!-- Reward row -->
+    <div class="tm-reward-row" style="margin:14px 16px 0;">
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">Thưởng</div>
+        <div class="tm-reward-val" id="tm-reward">0đ</div>
+      </div>
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">Còn lại</div>
+        <div class="tm-reward-val" style="color:#10b981;" id="tm-remain">0</div>
+      </div>
+      <div class="tm-reward-box">
+        <div class="tm-reward-lbl">XP</div>
+        <div class="tm-reward-val" style="color:#8b5cf6;" id="tm-xp">+10</div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div style="margin:10px 16px 0;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:4px;">
+        <span id="tm-used">0 đã làm</span>
+        <span id="tm-total">100 tổng</span>
+      </div>
+      <div style="height:4px;background:var(--bg4);border-radius:4px;overflow:hidden;">
+        <div id="tm-bar-fill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:4px;transition:width .3s;"></div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div id="tm-note-box" style="display:none;margin:12px 16px 0;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:10px 12px;">
+      <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px;">📋 Hướng dẫn</div>
+      <div id="tm-note-text" style="font-size:12px;color:var(--text2);line-height:1.7;"></div>
+    </div>
+
+    <!-- STEP 1: Bắt đầu -->
+    <div id="tm-step1-section" style="padding:16px;">
+      <a id="tm-link-btn" href="#" target="_blank"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-weight:700;text-decoration:none;margin-bottom:12px;box-sizing:border-box;"
+        >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Truy cập link nhiệm vụ
+      </a>
+      <button id="tm-done-btn" onclick="startTaskTimer()"
+        style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:12px;color:#000;font-size:15px;font-weight:800;cursor:pointer;">
+        ✅ Tôi đã hoàn thành
+      </button>
+    </div>
+
+    <!-- STEP 2: Đếm ngược -->
+    <div id="tm-countdown-section" style="display:none;padding:16px;text-align:center;">
+      <div style="position:relative;width:100px;height:100px;margin:0 auto 12px;">
+        <svg width="100" height="100" style="transform:rotate(-90deg);">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg4)" stroke-width="8"/>
+          <circle id="tm-cd-circle" cx="50" cy="50" r="42" fill="none" stroke="var(--gold)" stroke-width="8"
+            stroke-dasharray="264" stroke-dashoffset="0" style="transition:stroke-dashoffset .9s linear;"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+          <div id="tm-cd-num" style="font-size:28px;font-weight:900;color:var(--gold);">30</div>
+          <div style="font-size:10px;color:var(--text3);">giây</div>
+        </div>
+      </div>
+      <div style="font-size:14px;color:var(--text2);">Đang xác nhận nhiệm vụ...</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px;">Còn <b id="tm-cd-wait">30</b> giây</div>
+    </div>
+
+    <!-- STEP 3: Nhận thưởng - Hana style -->
+    <div id="tm-claim-section" style="display:none;padding:16px;">
+      <div class="hana-claim-wrap">
+        <div class="hana-confetti">🎉</div>
+        <div class="hana-claim-title">Hoàn thành nhiệm vụ!</div>
+        <div class="hana-claim-sub">Bấm nút bên dưới để nhận thưởng</div>
+        <div class="hana-reward-badge">
+          +<span id="tm-claim-amount">0đ</span>
+        </div>
+        <button class="hana-claim-btn" onclick="claimTask()">
+          <span class="hana-btn-shine"></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Nhận thưởng ngay!
+        </button>
+        <div class="hana-claim-note">💸 Tiền vào tài khoản ngay lập tức</div>
+      </div>
+    </div>
+
+    <!-- Đã nhận -->
+    <div id="tm-claimed-msg" style="display:none;padding:20px 16px;text-align:center;">
+      <div style="font-size:40px;margin-bottom:10px;">✅</div>
+      <div style="font-size:16px;font-weight:800;color:#10b981;margin-bottom:6px;">Đã nhận thưởng!</div>
+      <div style="font-size:13px;color:var(--text3);">Tiền đã được cộng vào tài khoản</div>
+    </div>
+
+    <!-- Đã làm rồi -->
+    <div id="tm-already-msg" style="display:none;padding:20px 16px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:8px;">⏳</div>
+      <div style="font-size:14px;font-weight:700;color:var(--text);">Đã làm nhiệm vụ này hôm nay</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:6px;">Quay lại vào ngày mai để làm tiếp!</div>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1704,6 +1817,22 @@ function sd(k, v){
   }
 }
 function init(){
+  // Auto-login: đọc session đã lưu từ localStorage
+  try {
+    var savedEmail = localStorage.getItem('lb_session');
+    if(savedEmail){
+      var users = gd('lb_users',{});
+      var u = users[savedEmail] || null;
+      if(u && !u.banned){
+        CU = u;
+        u.loginHistory = u.loginHistory||[];
+        updateSB(u);
+        showPg('page-app');
+        navTo('dashboard');
+        return;
+      }
+    }
+  } catch(e){}
   if(!gd('lb_tasks',null)){sd('lb_tasks',[{id:1,name:'Uptolink 2 Step',reward:300,slots:300,usedSlots:0,level:0,xp:10,hot:true,active:true},{id:2,name:'Uptolink 3 Step',reward:350,slots:300,usedSlots:0,level:0,xp:10,hot:false,active:true}]);}
   if(!gd('lb_users',null)){sd('lb_users',{});}
   if(!gd('lb_pt',null)){sd('lb_pt',[]);}
@@ -1787,10 +1916,18 @@ function enterApp(u){
   u.loginHistory=u.loginHistory||[];
   u.loginHistory.push({date:new Date().toLocaleString('vi-VN')});
   if(u.loginHistory.length>10)u.loginHistory=u.loginHistory.slice(-10);
-  su(u);CU=u;updateSB(u);showPg('page-app');navTo('dashboard');
+  su(u);CU=u;
+  try{localStorage.setItem('lb_session',u.email);}catch(e){}
+  updateSB(u);showPg('page-app');navTo('dashboard');
 }
 
-function doLogout(){CU=null;closeSB();showPg('page-login');document.getElementById('li-email').value='';document.getElementById('li-pass').value='';}
+
+function doLogout(){
+  try{localStorage.removeItem('lb_session');}catch(e){}
+  CU=null;closeSB();showPg('page-login');
+  var e1=document.getElementById('li-email');if(e1)e1.value='';
+  var e2=document.getElementById('li-pass');if(e2)e2.value='';
+}
 
 function updateSB(u){
   var i=ini(u.name);
@@ -2017,6 +2154,28 @@ var _fpTimer=null;
 
 document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
 init();
+
+// ===== AUTO LOGIN =====
+(function(){
+  try{
+    var saved = localStorage.getItem('lb_session');
+    if(!saved) return;
+    function tryAuto(){
+      var u = gu(saved);
+      if(u && !u.banned){ enterApp(u); }
+      else { localStorage.removeItem('lb_session'); }
+    }
+    if(typeof _fbReady!=='undefined' && _fbReady && typeof _db!=='undefined' && _db){
+      _db.ref('lb_users').once('value').then(function(snap){
+        var v=snap.val();
+        if(v){_memCache['lb_users']=v;try{localStorage.setItem('lb_users',JSON.stringify(v));}catch(e){}}
+        tryAuto();
+      }).catch(function(){tryAuto();});
+    } else {
+      tryAuto();
+    }
+  }catch(e){}
+})();
 
 /* ===== EMAIL OTP SYSTEM ===== */
 var _otpCode='';
@@ -2574,6 +2733,28 @@ function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.c
 document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
 init();
 
+// ===== AUTO LOGIN =====
+(function(){
+  try{
+    var saved = localStorage.getItem('lb_session');
+    if(!saved) return;
+    function tryAuto(){
+      var u = gu(saved);
+      if(u && !u.banned){ enterApp(u); }
+      else { localStorage.removeItem('lb_session'); }
+    }
+    if(typeof _fbReady!=='undefined' && _fbReady && typeof _db!=='undefined' && _db){
+      _db.ref('lb_users').once('value').then(function(snap){
+        var v=snap.val();
+        if(v){_memCache['lb_users']=v;try{localStorage.setItem('lb_users',JSON.stringify(v));}catch(e){}}
+        tryAuto();
+      }).catch(function(){tryAuto();});
+    } else {
+      tryAuto();
+    }
+  }catch(e){}
+})();
+
 /* ===== EMAIL OTP SYSTEM ===== */
 var _otpCode='';
 var _otpTimer=null;
@@ -2812,10 +2993,11 @@ var _taskTimer=null;
 var _taskTimerSecs=30;
 
 function doTask(tid){
-  var u=fr();if(!u)return;
+  var u=fr();if(!u){toast('Vui lòng đăng nhập!');return;}
   var tasks=gd('lb_tasks',[]);
-  var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
-  if(!task)return;
+  var task=null;tasks.forEach(function(t){if(String(t.id)===String(tid))task=t;});
+  if(!task){toast('Không tìm thấy nhiệm vụ #'+tid);return;}
+  if(!task.active){toast('Nhiệm vụ đã bị tắt!');return;}
   if(task.usedSlots>=task.slots){toast('Het luot nhiệm vụ này!');return;}
   // Check daily limit 10 lần/ngày
   var dailyCount=getDailyCount(u.email,String(tid));
@@ -2827,7 +3009,9 @@ function doTask(tid){
   
   // Check already done today
   var pt=gd('lb_pt',[]);
-  var alreadyDone=pt.some(function(p){return p.userEmail===u.email&&String(p.taskId)===String(tid)&&(p.status==='approved'||p.status==='pending');});
+  // Chỉ block nếu đã làm hết DAILY_LIMIT lần hôm nay
+  var dailyCnt=getDailyCount(u.email,String(tid));
+  var alreadyDone = dailyCnt >= DAILY_LIMIT;
   
   // Fill modal info
   function se(id){return document.getElementById(id);}
@@ -2866,7 +3050,7 @@ function doTask(tid){
   
   // Open modal
   var m=document.getElementById('task-modal');
-  if(m)m.classList.add('show');
+  if(m){m.classList.add('show');m.style.display='flex';}
 }
 
 function startTaskTimer(){
@@ -2951,7 +3135,7 @@ function claimTask(){
 function closeTaskModal(e){
   if(!e||e.target===document.getElementById('task-modal')){
     var m=document.getElementById('task-modal');
-    if(m)m.classList.remove('show');
+    if(m){m.classList.remove('show');m.style.display='none';}
     _currentTaskId=null;
   }
 }

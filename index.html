@@ -617,6 +617,157 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 .fb-setup-title{font-size:14px;font-weight:800;color:#f5a623;margin-bottom:8px;}
 .fb-setup-step{font-size:12px;color:var(--text2);line-height:2;}
 .fb-code{background:#0f172a;border-radius:8px;padding:10px;font-family:monospace;font-size:11px;color:#60a5fa;margin:6px 0;line-height:1.6;}
+
+.wd-bal-card{background:linear-gradient(135deg,#0f2027,#1a3a2a);border-radius:18px;padding:24px;text-align:center;margin-bottom:14px;border:1px solid rgba(16,185,129,.2);}
+.wd-bal-lbl{font-size:12px;color:var(--text3);margin-bottom:6px;}
+.wd-bal-amt{font-size:36px;font-weight:900;color:#10b981;}
+.wd-bal-unit{font-size:16px;color:var(--text2);}
+.wd-bal-pending{font-size:12px;color:var(--text3);margin-top:6px;}
+.wd-section-lbl{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;}
+.wd-amount-wrap{position:relative;margin-bottom:10px;}
+.wd-currency{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;font-weight:800;color:var(--gold);}
+.wd-amt-inp{width:100%;background:var(--bg3);border:2px solid var(--border);border-radius:12px;padding:14px 14px 14px 36px;color:var(--text);font-size:20px;font-weight:800;box-sizing:border-box;outline:none;}
+.wd-amt-inp:focus{border-color:var(--gold);}
+.wd-quick-btns{display:flex;gap:6px;flex-wrap:wrap;}
+.wd-quick{flex:1;min-width:50px;padding:8px 4px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;}
+.wd-quick:active{background:rgba(245,166,35,.2);color:var(--gold);}
+.wd-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.wd-method{background:var(--bg3);border:2px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;}
+.wd-method.active{border-color:var(--gold);background:rgba(245,166,35,.08);}
+.wd-method-icon{font-size:24px;margin-bottom:4px;}
+.wd-method-name{font-size:12px;font-weight:800;color:var(--text);}
+.wd-method-sub{font-size:10px;color:var(--text3);}
+.wd-detail-form{display:flex;flex-direction:column;gap:10px;}
+.wd-inp{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;width:100%;box-sizing:border-box;}
+.wd-inp:focus{border-color:var(--gold);}
+.wd-save-chk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);cursor:pointer;}
+.wd-card-note{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--gold);}
+.wd-submit-btn{width:100%;margin-top:16px;padding:16px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(16,185,129,.3);}
+.wd-submit-btn:active{transform:scale(.98);}
+.wd-note{font-size:11px;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6;}
+.wd-hist-item{background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:8px;border-left:3px solid var(--border);}
+.wd-hist-item.pending{border-left-color:#f59e0b;}
+.wd-hist-item.paid{border-left-color:#10b981;}
+.wd-hist-item.cancelled{border-left-color:#ef4444;}
+.wd-hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.wd-hist-amt{font-size:18px;font-weight:900;color:var(--gold);}
+.wd-hist-status{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.wd-hist-meta{font-size:11px;color:var(--text3);}
+
+
+
+
+/* Money input */
+.wd-money-wrap{position:relative;margin-bottom:10px;}
+.wd-currency-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:20px;font-weight:900;color:var(--gold);}
+.wd-money-inp{width:100%;background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:16px 14px 16px 40px;color:var(--text);font-size:24px;font-weight:900;box-sizing:border-box;outline:none;letter-spacing:1px;}
+.wd-money-inp:focus{border-color:var(--gold);}
+.wd-money-inp::placeholder{color:var(--text3);font-weight:400;}
+/* Fee row */
+.wd-fee-row{background:var(--bg3);border-radius:12px;padding:12px 14px;margin-bottom:4px;display:flex;flex-direction:column;gap:7px;}
+.wd-fee-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text2);}
+/* Type */
+.wd-type-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
+.wd-type{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+.wd-type.active{border-color:var(--gold);background:rgba(245,166,35,.07);}
+.wd-type-icon{font-size:26px;margin-bottom:5px;}
+.wd-type-name{font-size:13px;font-weight:800;color:var(--text);}
+.wd-type-sub{font-size:10px;margin-top:3px;}
+/* Bank dropdown */
+.wd-bank-select{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;transition:all .2s;}
+.wd-bank-select:hover{border-color:var(--gold);}
+.wd-bank-sel-left{display:flex;align-items:center;gap:10px;}
+.wd-bank-sel-logo{width:36px;height:36px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--bg4);}
+.wd-bank-sel-logo img{width:100%;height:100%;object-fit:contain;}
+#wd-bank-sel-name{font-size:14px;font-weight:700;color:var(--text);}
+/* Dropdown */
+.wd-bank-drop{background:var(--bg2);border:1.5px solid var(--border);border-radius:14px;margin-top:6px;overflow:hidden;}
+.wd-bank-search-wrap{padding:10px 10px 6px;}
+.wd-bank-search{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;}
+.wd-bank-search:focus{border-color:var(--gold);}
+.wd-bank-list{max-height:260px;overflow-y:auto;padding:4px 6px 8px;}
+.wd-bank-item{display:flex;align-items:center;gap:12px;padding:10px 10px;border-radius:10px;cursor:pointer;transition:background .15s;}
+.wd-bank-item:hover,.wd-bank-item.active{background:rgba(245,166,35,.1);}
+.wd-bank-item.active .wd-bi-name{color:var(--gold);}
+.wd-bi-logo{width:38px;height:38px;border-radius:8px;object-fit:contain;background:var(--bg3);}
+.wd-bi-name{font-size:13px;font-weight:700;color:var(--text);}
+/* Fields */
+.wd-inp{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:10px;}
+.wd-inp:focus{border-color:var(--gold);}
+.wd-save-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);cursor:pointer;margin-bottom:14px;}
+.wd-btn{width:100%;padding:16px;background:linear-gradient(135deg,#f5a623,#c8820a);border:none;border-radius:14px;color:#000;font-size:16px;font-weight:900;cursor:pointer;}
+.wd-btn:active{transform:scale(.98);}
+.wd-note-txt{font-size:11px;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6;}
+/* History */
+.wd-hist-card{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:8px;border-left:4px solid var(--border);}
+.wd-hist-card.pending{border-left-color:#f59e0b;}
+.wd-hist-card.paid{border-left-color:#10b981;}
+.wd-hist-card.cancelled{border-left-color:#ef4444;}
+.wd-hist-id{font-size:10px;color:var(--text3);font-family:monospace;margin-bottom:5px;}
+.wd-hist-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.wd-hist-amt{font-size:17px;font-weight:900;}
+.wd-hist-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.wd-hist-detail{font-size:11px;color:var(--text3);line-height:1.8;}
+
+/* ===== WITHDRAW ===== */
+.wd-top-card{background:linear-gradient(135deg,#071a0e,#0d2137);border:1px solid rgba(16,185,129,.2);border-radius:18px;padding:22px;text-align:center;margin-bottom:14px;}
+.wd-top-lbl{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.wd-top-amt{font-size:36px;font-weight:900;color:#10b981;}
+.wd-top-sub{font-size:12px;color:var(--text3);margin-top:6px;}
+.wd-lbl{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;}
+.wd-fee-row{background:var(--bg3);border-radius:12px;padding:12px 14px;margin-bottom:4px;display:flex;flex-direction:column;gap:7px;}
+.wd-fee-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text2);}
+.wd-type{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+.wd-type.active{border-color:var(--gold);background:rgba(245,166,35,.07);}
+.wd-bank-select{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;transition:border .2s;margin-bottom:4px;}
+.wd-bank-select:active{border-color:var(--gold);}
+.wd-bi{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:pointer;transition:background .15s;}
+.wd-bi:active,.wd-bi-active{background:rgba(245,166,35,.1);}
+.wd-bi-img{width:38px;height:38px;border-radius:8px;object-fit:contain;background:var(--bg3);}
+.wd-bi-name{font-size:13px;font-weight:600;color:var(--text);}
+.wd-bi-name-active{color:var(--gold);font-weight:800;}
+.wd-inp{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;width:100%;}
+.wd-inp:focus{border-color:var(--gold);}
+.wd-btn{width:100%;margin-top:16px;padding:16px;background:linear-gradient(135deg,#f5a623,#c8820a);border:none;border-radius:14px;color:#000;font-size:16px;font-weight:900;cursor:pointer;}
+.wd-btn:active{transform:scale(.98);}
+.wd-hist-card{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:8px;border-left:4px solid var(--border);}
+.wd-hist-card.pending{border-left-color:#f59e0b;}
+.wd-hist-card.paid{border-left-color:#10b981;}
+.wd-hist-card.cancelled{border-left-color:#ef4444;}
+.wd-hist-id{font-size:10px;color:var(--text3);font-family:monospace;margin-bottom:5px;}
+.wd-hist-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.wd-hist-amt{font-size:17px;font-weight:900;}
+.wd-hist-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.wd-hist-detail{font-size:11px;color:var(--text3);line-height:1.8;}
+
+.wd-top-card{background:linear-gradient(135deg,#071a0e,#0d2137);border:1px solid rgba(16,185,129,.2);border-radius:18px;padding:22px;text-align:center;margin-bottom:14px;}
+.wd-top-lbl{font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.wd-top-amt{font-size:36px;font-weight:900;color:#10b981;}
+.wd-top-sub{font-size:12px;color:var(--text3);margin-top:6px;}
+.wd-lbl{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;}
+.wd-fee-row{background:var(--bg3);border-radius:12px;padding:12px 14px;margin-bottom:4px;display:flex;flex-direction:column;gap:7px;}
+.wd-fee-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text2);}
+.wd-type{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+.wd-type.active{border-color:var(--gold);background:rgba(245,166,35,.07);}
+.wd-bank-select{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;margin-bottom:4px;}
+.wd-bi{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:pointer;}
+.wd-bi:active,.wd-bi-active{background:rgba(245,166,35,.1);}
+.wd-bi-img{width:38px;height:38px;border-radius:8px;object-fit:contain;background:var(--bg3);}
+.wd-bi-name{font-size:13px;font-weight:600;color:var(--text);}
+.wd-bi-name-active{color:var(--gold);font-weight:800;}
+.wd-inp{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;width:100%;}
+.wd-inp:focus{border-color:var(--gold);}
+.wd-btn{width:100%;margin-top:16px;padding:16px;background:linear-gradient(135deg,#f5a623,#c8820a);border:none;border-radius:14px;color:#000;font-size:16px;font-weight:900;cursor:pointer;}
+.wd-hist-card{background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:8px;border-left:4px solid var(--border);}
+.wd-hist-card.pending{border-left-color:#f59e0b;}
+.wd-hist-card.paid{border-left-color:#10b981;}
+.wd-hist-card.cancelled{border-left-color:#ef4444;}
+.wd-hist-id{font-size:10px;color:var(--text3);font-family:monospace;margin-bottom:5px;}
+.wd-hist-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.wd-hist-amt{font-size:17px;font-weight:900;}
+.wd-hist-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.wd-hist-detail{font-size:11px;color:var(--text3);line-height:1.8;}
+
 </style>
 </head>
 <body>
@@ -944,24 +1095,85 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
 
     <!-- WITHDRAW -->
     <div class="content" id="sec-withdraw" style="display:none;">
-      <div class="balance-card">
-        <div class="bc-label">Số dư khả dụng</div>
-        <div><span class="bc-amt" id="wd-bal">0</span> <span class="bc-unit">VNĐ</span></div>
+
+      <div class="wd-top-card">
+        <div class="wd-top-lbl">SỐ DƯ KHẢ DỤNG</div>
+        <div class="wd-top-amt"><span id="wd-bal">0</span>₫</div>
+        <div class="wd-top-sub">Đang chờ: <b id="wd-pending-amt" style="color:#f59e0b;">0₫</b></div>
       </div>
+
       <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(46,204,113,0.15);">💰</div><h3>Tạo yêu cầu rút</h3><div class="badge-sm">Chốt T3-T5-T7</div></div>
-        <input class="wd-input" type="number" id="wd-amount" placeholder="Tối thiểu 10.000 VNĐ">
-        <div class="pay-methods">
-          <div class="pay-m sel" onclick="selPay(this)"><div class="pm-icon">💳</div><div><div class="pm-name">Thẻ cào</div><div class="pm-sub">Nhận ngay</div></div></div>
-          <div class="pay-m" onclick="selPay(this)"><div class="pm-icon">🏦</div><div><div class="pm-name">Ngân hàng</div><div class="pm-sub">Chuyển khoản</div></div></div>
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(16,185,129,.15);">💸</div>
+          <h3>Yêu cầu rút tiền</h3>
         </div>
-        <button class="btn-withdraw" onclick="doWithdraw()">⬇️ Gửi yêu cầu rút tiền</button>
+
+        <label class="wd-lbl">Số tiền rút</label>
+        <div style="position:relative;margin-bottom:10px;">
+          <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:20px;font-weight:900;color:var(--gold);">₫</span>
+          <input style="width:100%;background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:16px 14px 16px 42px;color:var(--text);font-size:22px;font-weight:900;box-sizing:border-box;outline:none;font-family:inherit;" type="text" id="wd-amount" placeholder="0" oninput="formatMoneyInput(this)" inputmode="numeric">
+        </div>
+        <input type="hidden" id="wd-amount-raw" value="0">
+
+        <div class="wd-fee-row" id="wd-fee-row" style="display:none;">
+          <div class="wd-fee-item"><span>Số tiền rút</span><b id="wd-show-gross">0₫</b></div>
+          <div class="wd-fee-item"><span>Phí</span><b id="wd-show-fee">Miễn phí</b></div>
+          <div class="wd-fee-item" style="border-top:1px solid var(--border);padding-top:8px;margin-top:2px;"><span>Thực nhận</span><b id="wd-show-net" style="color:#10b981;font-size:16px;">0₫</b></div>
+        </div>
+
+        <label class="wd-lbl" style="margin-top:14px;">Loại rút tiền</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div class="wd-type active" id="wt-slow" onclick="pickWdType(this,'slow')">
+            <div style="font-size:24px;margin-bottom:4px;">🏦</div>
+            <div style="font-size:13px;font-weight:800;">Rút thường</div>
+            <div style="font-size:10px;color:#10b981;font-weight:700;margin-top:3px;">Miễn phí · 1-24h</div>
+          </div>
+          <div class="wd-type" id="wt-fast" onclick="pickWdType(this,'fast')">
+            <div style="font-size:24px;margin-bottom:4px;">⚡</div>
+            <div style="font-size:13px;font-weight:800;">Rút nhanh</div>
+            <div style="font-size:10px;color:#f59e0b;font-weight:700;margin-top:3px;">Phí 10% · 5-30 phút</div>
+          </div>
+        </div>
+
+        <label class="wd-lbl">Ngân hàng / Ví điện tử</label>
+        <div class="wd-bank-select" onclick="toggleBankDrop()">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div id="wd-bank-sel-logo" style="width:34px;height:34px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;">🏦</div>
+            <span id="wd-bank-sel-name" style="font-size:14px;font-weight:700;color:var(--text2);">Chọn ngân hàng</span>
+          </div>
+          <svg id="wd-bank-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="transition:transform .2s;color:var(--text3);"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <input type="hidden" id="wd-bank" value="">
+
+        <div id="wd-bank-drop" style="display:none;background:var(--bg2);border:1.5px solid var(--border);border-radius:14px;margin-top:6px;overflow:hidden;">
+          <div style="padding:10px 10px 6px;">
+            <input id="wd-bank-search" style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;" placeholder="🔍 Tìm ngân hàng..." oninput="filterBankDrop(this.value)">
+          </div>
+          <div id="wd-bank-list" style="max-height:250px;overflow-y:auto;padding:4px 8px 8px;"></div>
+        </div>
+
+        <div id="wd-bank-fields" style="display:none;flex-direction:column;gap:10px;margin-top:12px;">
+          <input class="wd-inp" id="wd-acc-num" type="number" placeholder="Số tài khoản ngân hàng">
+          <input class="wd-inp" id="wd-acc-name" placeholder="Tên chủ tài khoản (IN HOA)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);cursor:pointer;">
+            <input type="checkbox" id="wd-save" checked>
+            <span>Lưu thông tin cho lần sau</span>
+          </label>
+        </div>
+
+        <button class="wd-btn" onclick="doWithdraw()">Gửi yêu cầu rút tiền</button>
+        <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6;">⚠️ Yêu cầu xử lý sau khi admin xác nhận chuyển khoản.</p>
       </div>
+
       <div class="card">
-        <div class="card-title"><div class="card-icon" style="background:rgba(52,152,219,0.15);">⏰</div><h3>Lịch sử rút tiền</h3></div>
-        <div id="wd-hist"></div>
+        <div class="card-title">
+          <div class="card-icon" style="background:rgba(52,152,219,.15);">📋</div>
+          <h3>Lịch sử rút tiền</h3>
+        </div>
+        <div id="wd-hist"><div style="text-align:center;padding:24px;color:var(--text3);">Chưa có lịch sử</div></div>
       </div>
     </div>
+
 
     <!-- HISTORY -->
     <div class="content" id="sec-history" style="display:none;">
@@ -1735,72 +1947,135 @@ function rTasks(){
 
 /* doTask moved below */
 
-function rWd(){
+function renderWdHist(){
   var u=fr();if(!u)return;
-  document.getElementById('wd-balance').textContent=fmt(u.balance);
-  document.getElementById('wd-total').textContent=fmt(u.totalWithdrawn)+'d';
-  document.getElementById('wd-pending').textContent=fmt(u.pendingWithdraw||0)+'d';
-  var myWd=gd('lb_wd',[]).filter(function(w){return w.userEmail===u.email;}).slice(-10).reverse();
-  var html='';
-  myWd.forEach(function(w){var sc=w.status==='pending'?'sp-pending':w.status==='approved'?'sp-approved':w.status==='paid'?'sp-paid':'sp-cancel';var st=w.status==='pending'?'Cho duyet':w.status==='paid'?'Da TT':'Huy';html+='<div class="withdraw-item"><div class="wi-icon" style="background:rgba(245,166,35,.1);">[W]</div><div class="wi-info"><div class="wi-name">Rut tien - '+w.method+'</div><div class="wi-time">'+w.date+'</div></div><div style="text-align:right;"><div class="wi-amount" style="color:var(--red);">-'+fmt(w.amount)+'d</div><div class="status-pill '+sc+'">'+st+'</div></div></div>';});
-  if(!html)html='<div class="empty-state"><p>Chua co lich su rut tien</p></div>';
-  document.getElementById('wd-history').innerHTML=html;
+  var filter=(document.getElementById('wd-status-filter')||{value:''}).value;
+  var wds=gd('lb_wd',[]).filter(function(w){return w.userEmail===u.email;});
+  if(filter)wds=wds.filter(function(w){return w.status===filter;});
+  wds=wds.slice().reverse();
+  var count=document.getElementById('wd-hist-count');
+  if(count)count.textContent='Tổng '+wds.length+' lệnh rút tiền';
+  var tbody=document.getElementById('wd-hist-tbody');
+  var empty=document.getElementById('wd-hist-empty');
+  if(!tbody)return;
+  if(!wds.length){
+    tbody.innerHTML='';
+    if(empty)empty.style.display='block';
+    return;
+  }
+  if(empty)empty.style.display='none';
+  var rows='';
+  wds.forEach(function(w,i){
+    var sc=w.status==='paid'?'wd-status-paid':w.status==='pending'?'wd-status-pending':'wd-status-cancelled';
+    var stxt=w.status==='paid'?'Thành công':w.status==='pending'?'Đang xử lý':'Từ chối';
+    var shortId=String(w.id).slice(-4);
+    rows+='<tr>'
+      +'<td style="font-weight:700;color:var(--text);">#'+shortId+'</td>'
+      +'<td>'+w.date+'</td>'
+      +'<td style="font-weight:800;color:var(--gold);">'+fmt(w.amount)+'đ</td>'
+      +'<td>'+w.method+'</td>'
+      +'<td><span class="wd-status-badge '+sc+'">'+stxt+'</span></td>'
+      +'</tr>';
+  });
+  tbody.innerHTML=rows;
+}
+function toggleWdForm(){
+  var f=document.getElementById('wd-form-toggle');
+  var btn=document.getElementById('wd-open-btn');
+  if(f){
+    var open=f.style.display==='none'||!f.style.display;
+    f.style.display=open?'block':'none';
+    if(btn)btn.textContent=open?'✕ Đóng form':'+ Tạo yêu cầu rút tiền mới';
+  }
 }
 
-function doWithdraw(){
-  var u=fr();if(!u)return;
-  var amount=parseInt(document.getElementById('wd-amount').value)||0;
-  if(amount<10000){toast('Rut toi thieu 10.000d!');return;}
-  if(amount>u.balance){toast('So du khong du!');return;}
-  var sel=document.querySelector('.pay-method.selected .pm-name');
-  var method=sel?sel.textContent:'Ngan hang';
-  // Lấy thông tin ngân hàng nếu có
-  var bankInfo=null;
-  var savedBank=u.bankInfo||null;
-  if(savedBank){bankInfo={bank:savedBank.bankName||'',acc:savedBank.accNum||'',name:savedBank.accName||''};}
-  var wid=String(Date.now());
-  var w={id:wid,userEmail:u.email,userName:u.name,amount:amount,method:method,bankInfo:bankInfo,date:new Date().toLocaleString('vi-VN'),status:'pending'};
-  var wds=gd('lb_wd',[]);wds.push(w);sd('lb_wd',wds);
-  u.balance-=amount;u.pendingWithdraw=(u.pendingWithdraw||0)+amount;
-  u.history=u.history||[];
-  u.history.push({type:'withdraw',name:'Rut tien - '+method,amount:-amount,date:w.date,status:'pending',wdId:wid});
-  su(u);CU=u;
-  document.getElementById('wd-amount').value='';
-  updateSB(u);rWd();
-  toast('Da gui yeu cau rut '+fmt(amount)+'d! Admin se xu ly som!');
-  // Gửi email thông báo cho Admin
-  sendWithdrawEmailToAdmin(u, w);
-}
 
-function sendWithdrawEmailToAdmin(u, w){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== FORGOT PASSWORD SYSTEM ===== */
+var _fpEmail='';
+var _fpOTP='';
+var _fpTimer=null;
+
+
+
+
+
+
+
+document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
+init();
+
+/* ===== EMAIL OTP SYSTEM ===== */
+var _otpCode='';
+var _otpTimer=null;
+
+/* ===== EMAILJS CONFIG - ĐIỀN VÀO ĐÂY ===== */
+var EMAILJS_PUBLIC_KEY  = 'n3o4qJ1mB7B3KjkHx';   // Lấy từ Account > API Keys
+var EMAILJS_SERVICE_ID  = 'service_85dj3ez';   // Lấy từ Email Services
+var EMAILJS_TEMPLATE_ID = 'template_t3xyvpb';  // Lấy từ Email Templates
+var ADMIN_TEMPLATE_ID = 'YOUR_ADMIN_TEMPLATE_ID'; // Template riêng cho thông báo admin (tùy chọn)
+/* ========================================= */
+
+
+
+var _pendingFillCode='';
+
+
+
+
+
+
+
+/* ===== TASK MODAL ===== */
+var _currentTaskId=null;
+
+var _taskTimer=null;
+var _taskTimerSecs=30;
+
+
+
+
+
+
+
+// Add shake animation
+var shakeStyle=document.createElement('style');
+shakeStyle.textContent='@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}';
+document.head.appendChild(shakeStyle);
+
+
+function sendWdEmailToMember(u, w){
+  // Gửi email xác nhận cho member
   if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
   try{
     emailjs.init(EMAILJS_PUBLIC_KEY);
-    var bankDetail=w.bankInfo?('\nNH: '+w.bankInfo.bank+' | STK: '+w.bankInfo.acc+' | Tên: '+w.bankInfo.name):'';
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email: ADMIN_EMAIL,
-      to_name: 'Admin LinkBeta',
-      otp_code: '⚠️ YÊU CẦU RÚT TIỀN',
-      expire_mins: '---',
-      app_name: 'LinkBeta',
-      // Dùng otp_code field để gửi nội dung
-      subject_override: '[LinkBeta] Yeu cau rut tien moi!'
-    }).catch(function(){});
-    // Thử gửi qua template khác nếu có ADMIN_TEMPLATE_ID
-    if(typeof ADMIN_TEMPLATE_ID !== 'undefined' && ADMIN_TEMPLATE_ID && ADMIN_TEMPLATE_ID!=='YOUR_ADMIN_TEMPLATE_ID'){
-      emailjs.send(EMAILJS_SERVICE_ID, ADMIN_TEMPLATE_ID, {
-        to_email: ADMIN_EMAIL,
-        to_name: 'Admin',
-        member_name: u.name,
-        member_email: u.email,
-        amount: fmt(w.amount)+'d',
-        method: w.method,
-        bank_detail: bankDetail,
-        request_date: w.date,
-        app_name: 'LinkBeta'
-      }).catch(function(){});
+    var bankDetail='';
+    if(w.bankInfo){
+      if(w.bankInfo.type==='momo')bankDetail='MoMo: '+w.bankInfo.phone;
+      else if(w.bankInfo.type==='card')bankDetail='Thẻ cào '+w.bankInfo.cardType;
+      else bankDetail=w.bankInfo.bankName+' | STK: '+w.bankInfo.accNum+' | Tên: '+w.bankInfo.accName;
     }
-  }catch(e){console.log('Email admin error:',e);}
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: u.email,
+      to_name: u.name,
+      otp_code: '💸 '+fmt(w.amount)+'đ',
+      expire_mins: bankDetail||w.method,
+      app_name: 'LinkBeta - Yêu cầu rút tiền #'+String(w.id).slice(-4)
+    }).catch(function(){});
+  }catch(e){}
 }
 
 function rRank(){
@@ -2538,7 +2813,6 @@ var _taskTimerSecs=30;
 
 function doTask(tid){
   var u=fr();if(!u)return;
-  if(!u.emailVerified){showVerifyPrompt();return;}
   var tasks=gd('lb_tasks',[]);
   var task=null;tasks.forEach(function(t){if(t.id===tid)task=t;});
   if(!task)return;
@@ -2736,146 +3010,210 @@ function showVerifyPrompt(){
 var shakeStyle=document.createElement('style');
 shakeStyle.textContent='@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}';
 document.head.appendChild(shakeStyle);
+
+/* =========== WITHDRAW COMPLETE =========== */
+
+
+
+
+
+
+
+
+
+/* =========== WITHDRAW =========== */
+
+/* ===== WITHDRAW v3 ===== */
+var _wdType = 'slow';
+var _wdBankName = '';
+var BANK_LIST = [
+  {n:'Vietcombank',c:'VCB'},{n:'Techcombank',c:'TCB'},{n:'BIDV',c:'BIDV'},
+  {n:'Agribank',c:'AGR'},{n:'VietinBank',c:'ICB'},{n:'MBBank',c:'MB'},
+  {n:'VPBank',c:'VPB'},{n:'ACB',c:'ACB'},{n:'TPBank',c:'TPB'},
+  {n:'Sacombank',c:'STB'},{n:'MSB',c:'MSB'},{n:'OCB',c:'OCB'},
+  {n:'VIB',c:'VIB'},{n:'SHB',c:'SHB'},{n:'HDBank',c:'HDB'},
+  {n:'Eximbank',c:'EIB'},{n:'SeABank',c:'SEAB'},{n:'BacABank',c:'BAB'},
+  {n:'NamABank',c:'NAB'},{n:'KienlongBank',c:'KLB'},
+  {n:'MoMo',c:'MOMO'},{n:'ZaloPay',c:'ZALOPAY'},{n:'VNPay',c:'VNPAY'}
+];
+var WALLET_LOGO = {
+  MOMO:'https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png',
+  ZALOPAY:'https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ZaloPay-Square.png',
+  VNPAY:'https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png'
+};
+function getBankLogo(c){return WALLET_LOGO[c]||('https://api.vietqr.io/img/'+c+'.png');}
+
+function formatMoneyInput(el){
+  var raw=el.value.replace(/\D/g,'');
+  var num=parseInt(raw)||0;
+  var h=document.getElementById('wd-amount-raw');if(h)h.value=num;
+  el.value=num>0?num.toLocaleString('vi-VN'):'';
+  calcWdFee();
+}
+function pickWdType(el,type){
+  _wdType=type;
+  document.querySelectorAll('.wd-type').forEach(function(e){e.classList.remove('active');});
+  el.classList.add('active');
+  calcWdFee();
+}
+function calcWdFee(){
+  var amt=parseInt((document.getElementById('wd-amount-raw')||{value:0}).value)||0;
+  var fr=document.getElementById('wd-fee-row');
+  if(amt>=10000){
+    var fee=_wdType==='fast'?Math.round(amt*0.1):0;
+    var net=amt-fee;
+    var g=document.getElementById('wd-show-gross');if(g)g.textContent=amt.toLocaleString('vi-VN')+'₫';
+    var f=document.getElementById('wd-show-fee');if(f){f.textContent=fee>0?('-'+fee.toLocaleString('vi-VN')+'₫'):'Miễn phí';f.style.color=fee>0?'#ef4444':'#10b981';}
+    var n=document.getElementById('wd-show-net');if(n)n.textContent=net.toLocaleString('vi-VN')+'₫';
+    if(fr)fr.style.display='flex';
+  }else{if(fr)fr.style.display='none';}
+}
+function toggleBankDrop(){
+  var drop=document.getElementById('wd-bank-drop');
+  var arrow=document.getElementById('wd-bank-arrow');
+  if(!drop)return;
+  var open=drop.style.display==='block';
+  drop.style.display=open?'none':'block';
+  if(arrow)arrow.style.transform=open?'':'rotate(180deg)';
+  if(!open){renderBankDrop('');var si=document.getElementById('wd-bank-search');if(si){si.value='';setTimeout(function(){si.focus();},100);}}
+}
+function renderBankDrop(q){
+  var list=document.getElementById('wd-bank-list');if(!list)return;
+  var f=BANK_LIST.filter(function(b){return!q||b.n.toLowerCase().indexOf(q.toLowerCase())>=0;});
+  list.innerHTML=f.map(function(b){
+    var logo=getBankLogo(b.c);
+    var active=b.n===_wdBankName;
+    return '<div class="wd-bi'+(active?' wd-bi-active':'')+'" onclick="selectBankItem(\''+b.n+'\',\''+b.c+'\')">'
+      +'<img src="'+logo+'" class="wd-bi-img" onerror="this.style.opacity=0">'
+      +'<span class="wd-bi-name'+(active?' wd-bi-name-active':'')+'">'+b.n+'</span>'
+      +'</div>';
+  }).join('')||'<div style="text-align:center;padding:16px;color:var(--text3);">Không tìm thấy</div>';
+}
+function filterBankDrop(q){renderBankDrop(q);}
+function selectBankItem(name,code){
+  _wdBankName=name;
+  var logo=getBankLogo(code);
+  document.getElementById('wd-bank').value=name;
+  var nm=document.getElementById('wd-bank-sel-name');if(nm)nm.textContent=name;
+  var lg=document.getElementById('wd-bank-sel-logo');
+  if(lg)lg.innerHTML='<img src="'+logo+'" style="width:28px;height:28px;object-fit:contain;border-radius:6px;">';
+  var drop=document.getElementById('wd-bank-drop');if(drop)drop.style.display='none';
+  var arrow=document.getElementById('wd-bank-arrow');if(arrow)arrow.style.transform='';
+  var fields=document.getElementById('wd-bank-fields');if(fields)fields.style.display='flex';
+  var isW=(name==='MoMo'||name==='ZaloPay'||name==='VNPay');
+  var ae=document.getElementById('wd-acc-num');if(ae)ae.placeholder=isW?'Số điện thoại đăng ký '+name:'Số tài khoản ngân hàng';
+  var ne=document.getElementById('wd-acc-name');if(ne)ne.placeholder=isW?'Tên tài khoản '+name:'Tên chủ tài khoản (IN HOA)';
+}
+function loadSavedBank(){
+  var u=fr();if(!u||!u.bankInfo)return;
+  var b=u.bankInfo;
+  if(b.bankName){var found=BANK_LIST.filter(function(x){return x.n===b.bankName;})[0];if(found)selectBankItem(found.n,found.c);}
+  var e1=document.getElementById('wd-acc-num');if(e1&&b.accNum)e1.value=b.accNum;
+  var e2=document.getElementById('wd-acc-name');if(e2&&b.accName)e2.value=b.accName;
+}
+function rWd(){
+  var u=fr();if(!u)return;
+  var b=document.getElementById('wd-bal');if(b)b.textContent=(u.balance||0).toLocaleString('vi-VN');
+  var p=document.getElementById('wd-pending-amt');if(p)p.textContent=(u.pendingWithdraw||0).toLocaleString('vi-VN')+'₫';
+  loadSavedBank();
+  var wds=gd('lb_wd',[]).filter(function(w){return w.userEmail===u.email;}).reverse();
+  var h='';
+  wds.forEach(function(w){
+    var sc=w.status==='paid'?'#10b981':w.status==='cancelled'?'#ef4444':'#f59e0b';
+    var st=w.status==='paid'?'✅ Hoàn thành':w.status==='cancelled'?'❌ Từ chối':'⏳ Chờ duyệt';
+    var spd=w.speed==='fast'?'⚡ Rút nhanh':'🏦 Rút thường';
+    var feeShow=(w.fee||0)>0?('Phí: '+(w.fee).toLocaleString('vi-VN')+'₫ | '):'Miễn phí | ';
+    h+='<div class="wd-hist-card '+w.status+'">'
+      +'<div class="wd-hist-id">🆔 #'+w.id+'</div>'
+      +'<div class="wd-hist-row"><span class="wd-hist-amt" style="color:'+sc+';">-'+(w.amount||0).toLocaleString('vi-VN')+'₫</span>'
+      +'<span class="wd-hist-badge" style="background:'+sc+'22;color:'+sc+';">'+st+'</span></div>'
+      +'<div class="wd-hist-detail">'+feeShow+'💰 Thực nhận: <b style="color:#10b981;">'+(w.net||0).toLocaleString('vi-VN')+'₫</b><br>'
+      +'🏦 '+w.bankName+' | '+w.accNum+' | '+w.accName+'<br>'+spd+' · '+w.date+'</div></div>';
+  });
+  var hEl=document.getElementById('wd-hist');
+  if(hEl)hEl.innerHTML=h||'<div style="text-align:center;padding:24px;color:var(--text3);">Chưa có lịch sử rút tiền</div>';
+}
+function doWithdraw(){
+  var u=fr();if(!u)return;
+  var amount=parseInt((document.getElementById('wd-amount-raw')||{value:0}).value)||0;
+  if(amount<10000){toast('Rút tối thiểu 10.000₫!');return;}
+  if(amount>u.balance){toast('Số dư không đủ!');return;}
+  var bank=(document.getElementById('wd-bank')||{value:''}).value;
+  var accNum=(document.getElementById('wd-acc-num')||{value:''}).value.trim();
+  var accName=(document.getElementById('wd-acc-name')||{value:''}).value.trim().toUpperCase();
+  if(!bank){toast('Vui lòng chọn ngân hàng!');return;}
+  if(!accNum){toast('Vui lòng nhập số tài khoản!');return;}
+  if(!accName){toast('Vui lòng nhập tên chủ tài khoản!');return;}
+  var fee=_wdType==='fast'?Math.round(amount*0.1):0;
+  var net=amount-fee;
+  var wid='WD'+Date.now().toString().slice(-8)+Math.floor(Math.random()*100);
+  var w={id:wid,userEmail:u.email,userName:u.name,amount:amount,fee:fee,net:net,speed:_wdType,bankName:bank,accNum:accNum,accName:accName,date:new Date().toLocaleString('vi-VN'),status:'pending'};
+  var wds=gd('lb_wd',[]);wds.push(w);sd('lb_wd',wds);
+  u.balance-=amount;u.pendingWithdraw=(u.pendingWithdraw||0)+amount;
+  u.history=u.history||[];
+  u.history.push({type:'withdraw',name:'Rút #'+wid,amount:-amount,date:w.date,status:'pending',wdId:wid});
+  var sc=document.getElementById('wd-save');
+  if(sc&&sc.checked)u.bankInfo={bankName:bank,accNum:accNum,accName:accName};
+  su(u);CU=u;
+  var ae=document.getElementById('wd-amount');if(ae)ae.value='';
+  var re=document.getElementById('wd-amount-raw');if(re)re.value='0';
+  var fe=document.getElementById('wd-fee-row');if(fe)fe.style.display='none';
+  updateSB(u);rWd();
+  toast('✅ Gửi #'+wid+'! Thực nhận: '+net.toLocaleString('vi-VN')+'₫');
+  sendWdEmailAdmin(u,w);
+}
+function sendWdEmailAdmin(u,w){
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
+  try{
+    var spd=w.speed==='fast'?'⚡ RÚT NHANH':'🏦 Rút thường MIỄN PHÍ';
+    var feeText=w.fee>0?'Phí: -'+w.fee.toLocaleString('vi-VN')+'₫':'Phí: Miễn phí';
+    emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+      to_email:ADMIN_EMAIL,to_name:'Admin LinkBeta',
+      otp_code:'🆔 #'+w.id+'\n👤 '+w.userName+' ('+w.userEmail+')\n💰 '+w.amount.toLocaleString('vi-VN')+'₫ | '+feeText+' | Trả: '+w.net.toLocaleString('vi-VN')+'₫\n🏦 '+w.bankName+' | STK: '+w.accNum+' | '+w.accName+'\n'+spd+'\n🕐 '+w.date,
+      expire_mins:spd,app_name:'LinkBeta - Rút tiền!'
+    }).catch(function(){});
+  }catch(e){}
+}
+
 </script>
 
 <!-- BANK MODAL -->
 <div class="modal-overlay" id="bank-modal" onclick="closeBankModal(event)">
   <div class="modal-sheet">
     <div class="modal-hd">
-      <div class="modal-hd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" width="18" height="18"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M2 12h20M6 7V5a6 6 0 0 1 12 0v2"/></svg></div>
-      <h3>Thêm tài khoản ngân hàng</h3>
+      <div class="modal-hd-icon">🏦</div>
+      <div>
+        <div class="modal-hd-title">Thêm tài khoản ngân hàng</div>
+        <div class="modal-hd-sub">Lưu thông tin để rút tiền nhanh hơn</div>
+      </div>
       <button class="modal-close" onclick="closeBankModal()">✕</button>
     </div>
-    <div class="modal-lbl">Tên ngân hàng *</div>
-    <select class="bank-select" id="modal-bank-name">
-      <option value="">Chọn ngân hàng</option>
-      <optgroup label="Ví điện tử"><option>MoMo</option><option>ZaloPay</option><option>ViettelMoney</option><option>VNPay</option><option>ShopeePay</option><option>Cake by VPBank</option><option>Timo</option></optgroup>
-      <optgroup label="Ngân hàng"><option>Vietcombank (VCB)</option><option>MB Bank</option><option>Techcombank (TCB)</option><option>ACB</option><option>BIDV</option><option>Agribank</option><option>VPBank</option><option>TPBank</option><option>Sacombank</option><option>SHB</option><option>HDBank</option><option>OCB</option><option>VIB</option><option>MSB</option><option>SeABank</option><option>ABBank</option><option>Bac A Bank</option><option>BaoViet Bank</option><option>BVBank</option><option>Eximbank</option><option>LienVietPostBank</option><option>NamABank</option><option>NCB</option><option>OceanBank</option><option>PGBank</option><option>PVcomBank</option><option>Saigonbank</option><option>SCB</option><option>VietABank</option><option>VietBank</option><option>GPBank</option><option>KienLongBank</option></optgroup>
-    </select>
-    <div class="modal-lbl">Số tài khoản *</div>
-    <input class="modal-inp" type="text" id="modal-bank-num" placeholder="Nhập số tài khoản">
-    <div class="modal-lbl">Tên chủ tài khoản *</div>
-    <input class="modal-inp" type="text" id="modal-bank-owner" placeholder="VD: NGUYEN VAN A (in hoa không dấu)">
-    <button class="acc-btn-gold" onclick="saveBank()">⊕ Thêm tài khoản</button>
-  </div>
-</div>
-
-<!-- TASK DO MODAL -->
-<div class="modal-overlay" id="task-modal" onclick="closeTaskModal(event)">
-  <div class="modal-sheet" style="border-radius:24px 24px 0 0;">
-    <div class="tm-drag-bar"></div>
-    <div class="tm-header">
-      <div class="tm-icon" id="tm-icon">U</div>
-      <div style="flex:1;">
-        <div class="tm-name" id="tm-name">Tên nhiệm vụ</div>
-        <div class="tm-meta" id="tm-meta">Lv.0 · 10 Exp</div>
+    <div class="modal-body">
+      <div class="mf-group">
+        <label class="mf-label">Tên ngân hàng *</label>
+        <select class="mf-input" id="mb-bank-name">
+          <option value="">Chọn ngân hàng</option>
+          <option>Vietcombank</option><option>Techcombank</option><option>BIDV</option>
+          <option>Agribank</option><option>VietinBank</option><option>MBBank</option>
+          <option>VPBank</option><option>ACB</option><option>TPBank</option>
+          <option>Sacombank</option><option>MSB</option><option>OCB</option>
+          <option>VIB</option><option>SHB</option><option>HDBank</option>
+          <option>Eximbank</option><option>MoMo</option><option>ZaloPay</option>
+          <option>Khác</option>
+        </select>
       </div>
-      <div class="tm-hot-badge" id="tm-hot-badge" style="display:none;">HOT</div>
-      <button class="modal-close" onclick="closeTaskModal()">✕</button>
-    </div>
-    <!-- Reward row -->
-    <div class="tm-reward-row">
-      <div class="tm-reward-box">
-        <div class="tm-reward-lbl">Phần thưởng</div>
-        <div class="tm-reward-val" id="tm-reward">0đ</div>
+      <div class="mf-group">
+        <label class="mf-label">Số tài khoản *</label>
+        <input class="mf-input" id="mb-acc-num" type="number" placeholder="Nhập số tài khoản">
       </div>
-      <div class="tm-reward-box">
-        <div class="tm-reward-lbl">Còn lại</div>
-        <div class="tm-reward-val" id="tm-remain" style="color:var(--text);">0 lượt</div>
+      <div class="mf-group">
+        <label class="mf-label">Tên chủ tài khoản *</label>
+        <input class="mf-input" id="mb-acc-name" placeholder="IN HOA đúng như trong sổ tài khoản">
       </div>
-      <div class="tm-reward-box">
-        <div class="tm-reward-lbl">Kinh nghiệm</div>
-        <div class="tm-reward-val" style="color:#a78bfa;" id="tm-xp">+10 Exp</div>
-      </div>
-    </div>
-    <!-- Progress bar -->
-    <div class="tm-bar"><div class="tm-bar-fill" id="tm-bar-fill" style="width:0%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:14px;">
-      <span id="tm-used">0 đã làm</span>
-      <span id="tm-total">0 tổng</span>
-    </div>
-    <!-- Note -->
-    <div class="tm-note-box" id="tm-note-box" style="display:none;">
-      <div class="tm-note-title">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Hướng dẫn thực hiện
-      </div>
-      <div class="tm-note-text" id="tm-note-text"></div>
-    </div>
-    <!-- Steps -->
-    <div class="tm-steps">
-      <div class="tm-step">
-        <div class="tm-step-num">1</div>
-        <div class="tm-step-txt">Bấm <b>Truy cập link</b> bên dưới — link sẽ mở trong tab mới</div>
-      </div>
-      <div class="tm-step">
-        <div class="tm-step-num">2</div>
-        <div class="tm-step-txt">Chờ đủ thời gian / hoàn thành yêu cầu trang web</div>
-      </div>
-      <div class="tm-step">
-        <div class="tm-step-num">3</div>
-        <div class="tm-step-txt">Quay lại đây và bấm <b>Đã hoàn thành</b> để gửi duyệt</div>
-      </div>
-    </div>
-    <!-- Buttons -->
-    <!-- Bước 1: Nút truy cập link -->
-    <div id="tm-step1-section">
-      <a class="tm-btn-link" id="tm-link-btn" href="#" target="_blank" rel="noopener" onclick="startTaskTimer()">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Truy cập link nhiệm vụ
-      </a>
-      <div style="text-align:center;font-size:12px;color:var(--text3);margin-top:8px;">Bấm vào link trên để bắt đầu</div>
-    </div>
-
-    <!-- Bước 2: Countdown sau khi bấm link -->
-    <div id="tm-countdown-section" style="display:none;">
-      <div class="tm-countdown-box">
-        <div class="tm-cd-ring">
-          <svg class="tm-cd-svg" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg4)" stroke-width="8"/>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="var(--gold)" stroke-width="8"
-              stroke-dasharray="264" stroke-dashoffset="0" id="tm-cd-circle"
-              stroke-linecap="round" transform="rotate(-90 50 50)"/>
-          </svg>
-          <div class="tm-cd-text" id="tm-cd-num">30</div>
-        </div>
-        <div class="tm-cd-label">Đang xử lý nhiệm vụ...</div>
-        <div class="tm-cd-sub">Vui lòng chờ <span id="tm-cd-wait">30</span> giây</div>
-      </div>
-      <button class="tm-btn-done" id="tm-done-btn" disabled style="opacity:.4;cursor:not-allowed;">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Vui lòng chờ...
-      </button>
-    </div>
-
-    <!-- Bước 3: Nút nhận thưởng - Kiểu Hana -->
-    <div id="tm-claim-section" style="display:none;">
-      <div class="hana-claim-wrap">
-        <div class="hana-confetti">🎉</div>
-        <div class="hana-claim-title">Hoàn thành nhiệm vụ!</div>
-        <div class="hana-claim-sub">Bấm nút bên dưới để nhận thưởng</div>
-        <div class="hana-reward-badge">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          +<span id="tm-claim-amount">0đ</span>
-        </div>
-        <button class="hana-claim-btn" id="tm-claim-btn" onclick="claimTask()">
-          <span class="hana-btn-shine"></span>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Nhận thưởng ngay!
-        </button>
-        <div class="hana-claim-note">💸 Tiền vào tài khoản ngay lập tức</div>
-      </div>
-    </div>
-
-    <!-- Đã nhận -->
-    <div id="tm-claimed-msg" style="display:none;text-align:center;padding:14px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);border-radius:12px;font-size:14px;font-weight:700;color:#10b981;">
-      ✓ Đã nhận thưởng thành công!
-    </div>
-    <!-- Đã gửi chờ duyệt (fallback) -->
-    <div id="tm-already-msg" style="display:none;text-align:center;padding:10px;background:rgba(245,166,35,.1);border-radius:10px;font-size:13px;color:var(--gold);">
-      ⏳ Bạn đã làm nhiệm vụ này rồi
+      <button class="mf-btn" onclick="saveBank()">💾 Lưu tài khoản</button>
     </div>
   </div>
 </div>
+
 </body>
 </html>

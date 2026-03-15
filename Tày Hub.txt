@@ -418,31 +418,6 @@ local Character = Player.Character or Player.CharacterAdded:Wait()
 local Humanoid = Character:WaitForChild("Humanoid")
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
--- EXPLOIT CHECK
-local executor = (getexecutorname and getexecutorname()) or (identifyexecutor and identifyexecutor())
-if executor then
-    if
-        string.find(executor, "Bunni") or
-        string.find(executor, "FluxusZ") or
-        string.find(executor, "Delta") or
-        string.find(executor, "Arceus") or
-        string.find(executor, "Xeno") or
-        string.find(executor, "Swift") or
-        string.find(executor, "Awp") or
-        string.find(executor, "Volcano") or
-        string.find(executor, "Argon") or
-        string.find(executor, "Macsploit") or
-        string.find(executor, "Potassium") or
-        string.find(executor, "CodeX") or
-        string.find(executor, "Velocity") or
-        string.find(executor, "Romix") or
-        string.find(executor, "Neutron")
-    then
-        print("ok")
-    else
-        game.Players.LocalPlayer:Kick("Please use Delta Exploit or PC use volcano or Exploit paid!")
-    end
-end
 
 -- ALIASES
 local ply = Players
@@ -457,7 +432,7 @@ local Root = HumanoidRootPart
 -- ==========================================
 -- LOAD UI LIBRARY (HDanh Hub)
 -- ==========================================
-Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/longhihilonghihi-hub/Aihoicailoncacchobuoiwisibchcj/refs/heads/main/Ditmemayluccailoncacymafluc"))()
+Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Animehub/refs/heads/main/ui_BananaHub_final_lua.txt"))()
 
 Window = Library:CreateWindow({
     Title = "Tày Hub",
@@ -2119,14 +2094,14 @@ function UpdateFlowerChams()
                         v40.TextYAlignment = "Top"
                         v40.BackgroundTransparency = 1
                         v40.TextStrokeTransparency = 0.5
-                        v40.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                        v40.TextColor3 = Color3.fromRGB(255, 0, 0)
                         if vu38.Name == "Flower1" then
                             v40.Text = "Blue Flower" .. " \n" .. vu16((game:GetService("Players").LocalPlayer.Character.Head.Position - vu38.Position).Magnitude / 3) .. " Distance"
                             v40.TextColor3 = Color3.fromRGB(0, 0, 255)
                         end
                         if vu38.Name == "Flower2" then
                             v40.Text = "Red Flower" .. " \n" .. vu16((game:GetService("Players").LocalPlayer.Character.Head.Position - vu38.Position).Magnitude / 3) .. " Distance"
-                            v40.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                            v40.TextColor3 = Color3.fromRGB(255, 0, 0)
                         end
                     end
                 elseif vu38:FindFirstChild("NameEsp" .. Number) then
@@ -2164,7 +2139,7 @@ function UpdateRealFruitChams()
                     v46.TextYAlignment = "Top"
                     v46.BackgroundTransparency = 1
                     v46.TextStrokeTransparency = 0.5
-                    v46.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                    v46.TextColor3 = Color3.fromRGB(255, 0, 0)
                     v46.Text = v44.Name .. " \n" .. vu16((game:GetService("Players").LocalPlayer.Character.Head.Position - v44.Handle.Position).Magnitude / 3) .. " Distance"
                 end
             elseif v44.Handle:FindFirstChild("NameEsp" .. Number) then
@@ -2453,14 +2428,14 @@ function UpdateFlowerChams()
                         v91.TextYAlignment = "Top"
                         v91.BackgroundTransparency = 1
                         v91.TextStrokeTransparency = 0.5
-                        v91.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                        v91.TextColor3 = Color3.fromRGB(255, 0, 0)
                         if vu89.Name == "Flower1" then
                             v91.Text = "Blue Flower" .. " \n" .. vu67((game:GetService("Players").LocalPlayer.Character.Head.Position - vu89.Position).Magnitude / 3) .. " Distance"
                             v91.TextColor3 = Color3.fromRGB(0, 0, 255)
                         end
                         if vu89.Name == "Flower2" then
                             v91.Text = "Red Flower" .. " \n" .. vu67((game:GetService("Players").LocalPlayer.Character.Head.Position - vu89.Position).Magnitude / 3) .. " Distance"
-                            v91.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                            v91.TextColor3 = Color3.fromRGB(255, 0, 0)
                         end
                     end
                 elseif vu89:FindFirstChild("NameEsp" .. Number) then
@@ -2498,7 +2473,7 @@ function UpdateRealFruitChams()
                     v97.TextYAlignment = "Top"
                     v97.BackgroundTransparency = 1
                     v97.TextStrokeTransparency = 0.5
-                    v97.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                    v97.TextColor3 = Color3.fromRGB(255, 0, 0)
                     v97.Text = v95.Name .. " \n" .. vu67((game:GetService("Players").LocalPlayer.Character.Head.Position - v95.Handle.Position).Magnitude / 3) .. " Distance"
                 end
             elseif v95.Handle:FindFirstChild("NameEsp" .. Number) then
@@ -3273,10 +3248,10 @@ task.defer(function()
 end)
 Tabs.Info:AddSection("Thông Tin")
 Tabs.Info:AddButton({
-    ["Title"] = "LongHiHi Script | Community",
+    ["Title"] = "Tày Hub Script | Community",
     ["Description"] = "Discord",
     ["Callback"] = function()
-        setclipboard(tostring("https://discord.gg/yt2v62GYX"))
+        setclipboard(tostring("https://discord.gg/6udCyRdh6B"))
     end
 })
 Tabs.Info:AddButton({
@@ -3287,7 +3262,7 @@ Tabs.Info:AddButton({
     end
 })
 Tabs.Info:AddButton({
-    ["Title"] = "LongHiHi✅ ",
+    ["Title"] = "VTD ",
     ["Description"] = "Tiktok",
     ["Callback"] = function()
         setclipboard(tostring("www.tiktok.com/@longhihi_script"))
@@ -8531,18 +8506,6 @@ spawn(function()
         end)
     end
 end)
-Setting:AddToggle({
-	Name = "Bring Mobs",
-	Description = "",
-	-- 1. Carrega o estado salvo ou inicia como true
-	Default = GetSetting("BringMobs_Save", true),
-	Callback = function(I)
-		_B = I
-        -- 2. Salva
-        _G.SaveData["BringMobs_Save"] = I
-        SaveSettings()
-	end,
-})
 Tabs.Setting:AddToggle("ToggleAutoKen", {
     ["Title"] = "Bật Haki Quan Sât",
     ["Default"] = false
@@ -8648,44 +8611,73 @@ Tabs.Setting:AddToggle("ToggleBringMob", {
     _G.BringMob = p856
 end)
 _G.BringMob = true
--- [SetValue skipped - Library không cần]
-spawn(function()
-    while wait() do
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local function GetRandomEnemies(amount)
+    local enemies = game:GetService("Workspace").Enemies:GetChildren()
+    local validEnemies = {}
+    
+    for _, mob in ipairs(enemies) do
+        if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 and mob:FindFirstChild("HumanoidRootPart") then
+            if mob.Name ~= "Factory Staff" and (not MonFarm or mob.Name == MonFarm) then
+                table.insert(validEnemies, mob)
+            end
+        end
+    end
+    
+    for i = #validEnemies, 2, -1 do
+        local j = math.random(1, i)
+        validEnemies[i], validEnemies[j] = validEnemies[j], validEnemies[i]
+    end
+    
+    local result = {}
+    for i = 1, math.min(amount, #validEnemies) do
+        table.insert(result, validEnemies[i])
+    end
+    
+    return result
+end
+
+task.spawn(function()
+    while task.wait() do 
+        if not _G.BringMob then continue end
+        
         pcall(function()
-            local v857, v858, v859 = pairs(game:GetService("Workspace").Enemies:GetChildren())
-            while true do
-                local v860
-                v859, v860 = v857(v858, v859)
-                if v859 == nil then
-                    break
+            local targets = GetRandomEnemies(4)
+            
+            local targetPos = typeof(FarmPos) == "CFrame" and FarmPos.Position or FarmPos.Position
+            local targetCFrame = typeof(FarmPos) == "CFrame" and FarmPos or FarmPos.CFrame
+            
+            for _, mob in ipairs(targets) do
+                local hrp = mob.HumanoidRootPart
+                local hum = mob.Humanoid
+                
+                local dist = (hrp.Position - targetPos).Magnitude
+                
+                hrp.Size = Vector3.new(60, 60, 60)
+                hrp.Transparency = 1
+                hrp.CanCollide = false
+                if mob:FindFirstChild("Head") then 
+                    mob.Head.CanCollide = false 
                 end
-                if _G.BringMob and (bringmob and (v860.Name == MonFarm and (v860:FindFirstChild("Humanoid") and v860.Humanoid.Health > 0))) then
-                    if v860.Name ~= "Factory Staff" then
-                        if v860.Name == MonFarm and (v860.HumanoidRootPart.Position - FarmPos.Position).Magnitude <= 1000000000 then
-                            v860.HumanoidRootPart.CFrame = FarmPos
-                            v860.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                            v860.HumanoidRootPart.Transparency = 1
-                            v860.Humanoid.JumpPower = 0
-                            v860.Humanoid.WalkSpeed = 0
-                            if v860.Humanoid:FindFirstChild("Animator") then
-                                v860.Humanoid.Animator:Destroy()
-                            end
-                            v860.HumanoidRootPart.CanCollide = false
-                            v860.Head.CanCollide = false
-                            v860.Humanoid:ChangeState(11)
-                            v860.Humanoid:ChangeState(14)
-                            sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-                        end
-                    elseif (v860.HumanoidRootPart.Position - FarmPos.Position).Magnitude <= 1000000000 then
-                        v860.Head.CanCollide = false
-                        v860.HumanoidRootPart.CanCollide = false
-                        v860.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                        v860.HumanoidRootPart.CFrame = FarmPos
-                        if v860.Humanoid:FindFirstChild("Animator") then
-                            v860.Humanoid.Animator:Destroy()
-                        end
-                        sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
-                    end
+                
+                hum.JumpPower = 0
+                hum.WalkSpeed = 0
+                if hum:FindFirstChild("Animator") then 
+                    hum.Animator:Destroy() 
+                end
+                
+                hum:ChangeState(11)
+                hum:ChangeState(14)
+                
+                pcall(function() sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge) end)
+
+                if dist <= 50 then
+                    hrp.CFrame = targetCFrame
+                else
+                    hrp.CFrame = CFrame.lookAt(hrp.Position, targetPos) * CFrame.new(0, 0, -15)
                 end
             end
         end)
@@ -9974,7 +9966,7 @@ function UpdateRealFruitEsp()
                     v976.TextYAlignment = "Top"
                     v976.BackgroundTransparency = 1
                     v976.TextStrokeTransparency = 0.5
-                    v976.TextColor3 = TextColor3 = Color3.fromRGB(255,180,50)
+                    v976.TextColor3 = Color3.fromRGB(255, 0, 0)
                     v976.Text = v974.Name .. " \n" .. vu896((game:GetService("Players").LocalPlayer.Character.Head.Position - v974.Handle.Position).Magnitude / 3) .. " Distance"
                 end
             elseif v974.Handle:FindFirstChild("NameEsp" .. Number) then
@@ -12213,4 +12205,4 @@ Tabs.Misc:AddButton({
 })
 
 -- ===============================================================
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/notify"))()

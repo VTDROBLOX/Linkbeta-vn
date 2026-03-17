@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+  <!-- hCaptcha SDK -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <!-- Firebase SDK -->
@@ -12,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold:#F5A623; --gold2:#FFD166; --gold3:#C47D0E;
+  --gold:#F5A623; --gold2:#FFD166; --gold3:#C47D0E; --gold-dark:#C47D0E;
   --bg:#0E0E10; --bg2:#161618; --bg3:#1E1E22; --bg4:#26262C;
   --text:#F0F0F0; --text2:#A0A0A8; --text3:#505058;
   --green:#2ECC71; --red:#E74C3C; --blue:#3498DB; --purple:#9B59B6; --orange:#E67E22;
@@ -318,7 +320,73 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .ir-lbl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
 .ir-val{font-size:13px;font-weight:600;margin-top:1px;}
 
-/* TOAST */
+/* ===== TASK GATE PAGE ===== */
+.tg-bg{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg);background-image:radial-gradient(ellipse at 20% 15%,rgba(245,166,35,0.07) 0%,transparent 55%),radial-gradient(ellipse at 80% 85%,rgba(196,125,14,0.05) 0%,transparent 50%);}
+.tg-logo{text-align:center;margin-bottom:22px;animation:fadeUp .5s ease;}
+.tg-logo-box{width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 8px 28px rgba(245,166,35,.35);margin-bottom:10px;animation:glow 2.5s ease-in-out infinite;}
+.tg-logo h2{font-size:22px;font-weight:900;}.tg-logo h2 span{color:var(--gold);}
+.tg-logo p{font-size:12px;color:var(--text2);margin-top:3px;}
+.tg-card{width:100%;max-width:400px;background:rgba(17,17,20,.98);border:1px solid rgba(245,166,35,.12);border-radius:20px;padding:22px;box-shadow:0 16px 64px rgba(0,0,0,.7);}
+.tg-steps{display:flex;align-items:flex-start;justify-content:center;margin-bottom:20px;}
+.tg-step{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.tg-step-c{width:30px;height:30px;border-radius:50%;background:var(--bg3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text2);transition:all .4s;}
+.tg-step.active .tg-step-c{background:linear-gradient(135deg,var(--gold),var(--gold3));border-color:var(--gold);color:#000;box-shadow:0 0 14px rgba(245,166,35,.4);}
+.tg-step.done .tg-step-c{background:var(--green);border-color:var(--green);color:#fff;}
+.tg-step-lbl{font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.tg-step.active .tg-step-lbl{color:var(--gold);}.tg-step.done .tg-step-lbl{color:var(--green);}
+.tg-line{width:34px;height:2px;background:var(--border);margin-top:14px;transition:background .4s;}
+.tg-line.done{background:var(--green);}
+.tg-task-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.tg-task-icon{width:44px;height:44px;flex-shrink:0;border-radius:12px;background:rgba(245,166,35,.12);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.tg-task-name{font-size:14px;font-weight:800;margin-bottom:3px;}
+.tg-task-reward{font-size:13px;color:var(--gold);font-weight:700;}
+.tg-notice{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.18);border-radius:10px;padding:11px 13px;font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:16px;display:flex;gap:9px;align-items:flex-start;}
+.tg-sec{display:none;}.tg-sec.on{display:block;animation:fadeUp .3s ease;}
+.tg-btn{width:100%;padding:14px;border:none;border-radius:11px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;}
+.tg-btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;box-shadow:0 4px 18px rgba(245,166,35,.3);}
+.tg-btn-gold:hover{transform:translateY(-1px);}.tg-btn-gold:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.tg-btn-green{background:linear-gradient(135deg,#2ECC71,#27AE60);color:#fff;box-shadow:0 4px 18px rgba(46,204,113,.3);}
+.tg-btn-green:hover{transform:translateY(-1px);}.tg-btn-green:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.tg-status{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:9px;padding:9px 13px;margin-bottom:14px;font-size:12px;color:var(--text2);}
+.tg-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:tgblink 1.2s ease-in-out infinite;}
+.tg-dot.green{background:var(--green);animation:none;}
+@keyframes tgblink{0%,100%{opacity:1;}50%{opacity:.15;}}
+.tg-cd-wrap{display:flex;flex-direction:column;align-items:center;margin:16px 0 20px;}
+.tg-ring-wrap{position:relative;width:106px;height:106px;margin-bottom:11px;}
+.tg-ring-svg{transform:rotate(-90deg);}
+.tg-ring-bg{fill:none;stroke:var(--bg3);stroke-width:9;}
+.tg-ring-fg{fill:none;stroke:var(--gold);stroke-width:9;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s;}
+.tg-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.tg-ring-num{font-size:26px;font-weight:900;color:var(--gold);line-height:1;}
+.tg-ring-sub{font-size:10px;color:var(--text2);font-weight:600;margin-top:2px;text-transform:uppercase;}
+.tg-cd-msg{font-size:12px;color:var(--text2);text-align:center;line-height:1.6;}
+.tg-verify-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;}
+.tg-verify-title{font-size:13px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:7px;color:var(--gold);}
+.tg-verify-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);}
+.tg-verify-item:last-child{border-bottom:none;}
+.tg-v-icon{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.tg-v-check{margin-left:auto;font-size:15px;}
+.tg-v-spin{margin-left:auto;width:14px;height:14px;border:2px solid rgba(245,166,35,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;}
+.tg-suc-icon{width:68px;height:68px;background:rgba(46,204,113,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:30px;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);}
+.tg-suc-title{font-size:19px;font-weight:900;text-align:center;margin-bottom:5px;}
+.tg-suc-sub{font-size:12px;color:var(--text2);text-align:center;margin-bottom:16px;line-height:1.6;}
+.tg-reward-box{background:linear-gradient(135deg,rgba(245,166,35,.13),rgba(196,125,14,.07));border:1px solid rgba(245,166,35,.22);border-radius:11px;padding:12px;text-align:center;margin-bottom:16px;}
+.tg-reward-amt{font-size:26px;font-weight:900;color:var(--gold);}
+.tg-reward-lbl{font-size:10px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+.tg-redir-bar{display:flex;align-items:center;gap:9px;background:var(--bg3);border-radius:9px;padding:9px 13px;margin-bottom:14px;font-size:12px;color:var(--text2);}
+.tg-redir-prog{flex:1;height:4px;background:var(--bg4);border-radius:4px;overflow:hidden;}
+.tg-redir-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));border-radius:4px;width:0%;transition:width .1s linear;}
+.tg-alert{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25);border-radius:9px;padding:9px 12px;font-size:12px;color:#ff7070;margin-bottom:12px;display:none;}
+.tg-alert.on{display:block;}
+.tg-footer{text-align:center;margin-top:14px;font-size:11px;color:var(--text3);}
+.tg-footer a{color:var(--gold);text-decoration:none;font-weight:700;}
+
+
+.captcha-wrap{display:flex;justify-content:center;margin:12px 0 4px;}
+.captcha-err{display:none;font-size:12px;color:var(--red);text-align:center;margin-bottom:8px;}
+.captcha-err.show{display:block;}
+
+
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:12px 20px;font-size:13px;font-weight:700;opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
@@ -807,6 +875,10 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
       <div class="fg-forgot-row">
         <a class="forgot-link" onclick="showPg('page-forgot')">Quên mật khẩu?</a>
       </div>
+      <div class="captcha-wrap">
+        <div class="h-captcha" data-sitekey="18b67248-731c-41e8-8c4a-b26c244cc032" id="captcha-login"></div>
+      </div>
+      <div class="captcha-err" id="captcha-login-err">⚠ Vui lòng xác minh bạn không phải robot!</div>
       <button class="btn-main" onclick="doLogin()">Đăng Nhập →</button>
       <div class="auth-sw">Chưa có tài khoản? <a onclick="showPg('page-register')">Đăng ký ngay</a></div>
     </div>
@@ -834,6 +906,10 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
         </div>
       </div>
       <div class="fg"><label>Mã Giới Thiệu (tuỳ chọn)</label><input type="text" id="rg-ref" placeholder="Nhập mã nếu có"></div>
+      <div class="captcha-wrap">
+        <div class="h-captcha" data-sitekey="18b67248-731c-41e8-8c4a-b26c244cc032" id="captcha-register"></div>
+      </div>
+      <div class="captcha-err" id="captcha-register-err">⚠ Vui lòng xác minh bạn không phải robot!</div>
       <button class="btn-main" onclick="doRegister()">Đăng Ký →</button>
       <div class="auth-sw">Đã có tài khoản? <a onclick="showPg('page-login')">Đăng nhập</a></div>
     </div>
@@ -918,6 +994,118 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
       <button class="btn-main" onclick="showPg('page-login')">Đăng nhập ngay →</button>
     </div>
 
+  </div>
+</div>
+
+<!-- TASK GATE PAGE -->
+<div class="page" id="page-taskgate">
+  <div class="tg-bg">
+    <div class="tg-logo">
+      <div class="tg-logo-box">🔗</div>
+      <h2>Link<span>Beta</span></h2>
+      <p>Hệ thống xác nhận nhiệm vụ</p>
+    </div>
+    <div class="tg-card">
+      <!-- STEPS -->
+      <div class="tg-steps">
+        <div class="tg-step active" id="tg-st1"><div class="tg-step-c">1</div><div class="tg-step-lbl">Xem link</div></div>
+        <div class="tg-line" id="tg-ln1"></div>
+        <div class="tg-step" id="tg-st2"><div class="tg-step-c">2</div><div class="tg-step-lbl">Chờ</div></div>
+        <div class="tg-line" id="tg-ln2"></div>
+        <div class="tg-step" id="tg-st3"><div class="tg-step-c">3</div><div class="tg-step-lbl">Quét</div></div>
+        <div class="tg-line" id="tg-ln3"></div>
+        <div class="tg-step" id="tg-st4"><div class="tg-step-c">4</div><div class="tg-step-lbl">Nhận</div></div>
+      </div>
+      <!-- TASK INFO -->
+      <div class="tg-task-box">
+        <div class="tg-task-icon" id="tg-icon">🌐</div>
+        <div>
+          <div class="tg-task-name" id="tg-name">Đang tải...</div>
+          <div class="tg-task-reward" id="tg-reward">+0đ phần thưởng</div>
+        </div>
+      </div>
+      <!-- BƯỚC 1 -->
+      <div class="tg-sec on" id="tg-sec1">
+        <div class="tg-notice">
+          <span>⚠️</span>
+          <span>Bấm nút bên dưới để mở link nhiệm vụ. Sau khi xem xong hãy <b style="color:var(--text);">quay lại trang này</b> để nhận thưởng.</span>
+        </div>
+        <div class="tg-alert" id="tg-a1"></div>
+        <button class="tg-btn tg-btn-gold" id="tg-btn1" onclick="tgOpenLink()">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Mở link nhiệm vụ
+        </button>
+      </div>
+      <!-- BƯỚC 2: ĐẾM NGƯỢC -->
+      <div class="tg-sec" id="tg-sec2">
+        <div class="tg-status">
+          <div class="tg-dot" id="tg-dot2"></div>
+          <span id="tg-txt2">Đang xác minh bạn đã xem link...</span>
+        </div>
+        <div class="tg-cd-wrap">
+          <div class="tg-ring-wrap">
+            <svg class="tg-ring-svg" width="106" height="106" viewBox="0 0 106 106">
+              <circle class="tg-ring-bg" cx="53" cy="53" r="45"/>
+              <circle class="tg-ring-fg" id="tg-ring" cx="53" cy="53" r="45"/>
+            </svg>
+            <div class="tg-ring-center">
+              <div class="tg-ring-num" id="tg-cdn">30</div>
+              <div class="tg-ring-sub">giây</div>
+            </div>
+          </div>
+          <div class="tg-cd-msg">Vui lòng <b style="color:var(--text);">không đóng trang này</b><br>trong khi đang đếm ngược</div>
+        </div>
+      </div>
+      <!-- BƯỚC 3: QUÉT -->
+      <div class="tg-sec" id="tg-sec3">
+        <div class="tg-status">
+          <div class="tg-dot"></div>
+          <span>Đang quét và xác minh nhiệm vụ...</span>
+        </div>
+        <div class="tg-verify-box">
+          <div class="tg-verify-title">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Đang kiểm tra điều kiện
+          </div>
+          <div class="tg-verify-item"><div class="tg-v-icon" style="background:rgba(59,130,246,.15);">🔗</div><span>Đã truy cập link nhiệm vụ</span><div class="tg-v-check" id="tg-vc1"><div class="tg-v-spin"></div></div></div>
+          <div class="tg-verify-item"><div class="tg-v-icon" style="background:rgba(245,166,35,.15);">⏱️</div><span>Đã xem đủ thời gian quy định</span><div class="tg-v-check" id="tg-vc2"><div class="tg-v-spin"></div></div></div>
+          <div class="tg-verify-item"><div class="tg-v-icon" style="background:rgba(46,204,113,.15);">👤</div><span>Xác nhận không phải bot</span><div class="tg-v-check" id="tg-vc3"><div class="tg-v-spin"></div></div></div>
+          <div class="tg-verify-item"><div class="tg-v-icon" style="background:rgba(155,89,182,.15);">💰</div><span>Ghi nhận phần thưởng vào tài khoản</span><div class="tg-v-check" id="tg-vc4"><div class="tg-v-spin"></div></div></div>
+        </div>
+      </div>
+      <!-- BƯỚC 4: XÁC NHẬN -->
+      <div class="tg-sec" id="tg-sec4">
+        <div class="tg-notice" style="background:rgba(46,204,113,.07);border-color:rgba(46,204,113,.2);">
+          <span>✅</span>
+          <span>Tất cả điều kiện <b style="color:var(--text);">đã được xác minh</b>. Bấm nút để xác nhận nhận thưởng.</span>
+        </div>
+        <div class="tg-alert" id="tg-a4"></div>
+        <button class="tg-btn tg-btn-green" id="tg-btn4" onclick="tgClaim()">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Xác nhận nhận thưởng!
+        </button>
+      </div>
+      <!-- BƯỚC 5: THÀNH CÔNG -->
+      <div class="tg-sec" id="tg-sec5">
+        <div class="tg-suc-icon">🎉</div>
+        <div class="tg-suc-title">Hoàn thành nhiệm vụ!</div>
+        <div class="tg-suc-sub">Phần thưởng đã được cộng vào tài khoản.<br>Đang chuyển bạn về trang chủ...</div>
+        <div class="tg-reward-box">
+          <div class="tg-reward-amt" id="tg-r-amt">+0đ</div>
+          <div class="tg-reward-lbl">Đã cộng vào tài khoản LinkBeta</div>
+        </div>
+        <div class="tg-redir-bar">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Chuyển về trang chủ sau <b id="tg-rsec">3</b>s</span>
+          <div class="tg-redir-prog"><div class="tg-redir-fill" id="tg-rfill"></div></div>
+        </div>
+        <button class="tg-btn tg-btn-gold" onclick="tgGoHome()">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Về trang chủ ngay
+        </button>
+      </div>
+    </div>
+    <div class="tg-footer">Bảo vệ bởi <a href="#">LinkBeta</a> · Không chia sẻ link xác nhận này</div>
   </div>
 </div>
 
@@ -1162,7 +1350,7 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
         </div>
 
         <div id="wd-bank-fields" style="display:none;flex-direction:column;gap:10px;margin-top:12px;">
-          <input class="wd-inp" id="wd-acc-num" type="number" placeholder="Số tài khoản ngân hàng">
+          <input class="wd-inp" id="wd-acc-num" type="text" inputmode="numeric" placeholder="Số tài khoản ngân hàng">
           <input class="wd-inp" id="wd-acc-name" placeholder="Tên chủ tài khoản (IN HOA)">
           <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);cursor:pointer;">
             <input type="checkbox" id="wd-save" checked>
@@ -1851,12 +2039,39 @@ function showErr(id,msg,inp){
   if(inp){var i=document.getElementById(inp);if(i){i.classList.add('input-error','shake');i.focus();setTimeout(function(){i.classList.remove('shake');},400);setTimeout(function(){i.classList.remove('input-error');},3500);}}
 }
 
+function getCaptchaToken(widgetId){
+  try{
+    var boxes=document.querySelectorAll('[name="h-captcha-response"]');
+    if(boxes&&boxes.length>0){
+      var loginPage=document.getElementById('page-login');
+      var regPage=document.getElementById('page-register');
+      if(widgetId==='login'&&loginPage){
+        var box=loginPage.querySelector('[name="h-captcha-response"]');
+        return box?box.value:'';
+      }
+      if(widgetId==='register'&&regPage){
+        var box2=regPage.querySelector('[name="h-captcha-response"]');
+        return box2?box2.value:'';
+      }
+    }
+    return '';
+  }catch(e){return '';}
+}
 function doLogin(){
   var email=document.getElementById('li-email').value.trim().toLowerCase();
   var pass=document.getElementById('li-pass').value;
   if(!email){showErr('login-err','Vui long nhap email','li-email');return;}
   if(!validEmail(email)){showErr('login-err','Email khong hop le','li-email');return;}
   if(!pass){showErr('login-err','Vui long nhap mat khau','li-pass');return;}
+  // Kiểm tra captcha
+  var capToken=getCaptchaToken('login');
+  var capErr=document.getElementById('captcha-login-err');
+  if(!capToken){
+    if(capErr)capErr.classList.add('show');
+    setTimeout(function(){if(capErr)capErr.classList.remove('show');},3500);
+    return;
+  }
+  if(capErr)capErr.classList.remove('show');
   // Loading state
   var loginBtn=document.querySelector('#page-login .btn-main');
   if(loginBtn){loginBtn.textContent='Đang kiểm tra...';loginBtn.disabled=true;}
@@ -1890,6 +2105,15 @@ function doRegister(){
   if(!name){showErr('reg-err','Vui long nhap ho ten','rg-name');return;}
   if(!validEmail(email)){showErr('reg-err','Email khong hop le','rg-email');return;}
   if(pass.length<6){showErr('reg-err','Mat khau it nhat 6 ky tu','rg-pass');return;}
+  // Kiểm tra captcha
+  var capToken=getCaptchaToken('register');
+  var capErr=document.getElementById('captcha-register-err');
+  if(!capToken){
+    if(capErr)capErr.classList.add('show');
+    setTimeout(function(){if(capErr)capErr.classList.remove('show');},3500);
+    return;
+  }
+  if(capErr)capErr.classList.remove('show');
   // Fetch Firebase mới nhất để check email trùng
   if(_fbReady && _db){
     _db.ref('lb_users').once('value').then(function(snap){
@@ -1907,11 +2131,20 @@ function doRegister(){
   _doRegisterFinish(email,name,pass,ref);
 }
 function _doRegisterFinish(email,name,pass,ref){
-  var u={email:email,name:name,password:pass,role:email===ADMIN_EMAIL?'admin':'member',balance:0,totalWithdrawn:0,pendingWithdraw:0,tasksCompleted:0,xp:0,refs:0,refEarned:0,streak:1,joinedAt:new Date().toLocaleDateString('vi-VN'),history:[]};
+  // Fix 1: Luôn tạo role=member, không bao giờ tự gán admin qua đăng ký
+  var u={email:email,name:name,password:pass,role:'member',balance:0,totalWithdrawn:0,pendingWithdraw:0,tasksCompleted:0,xp:0,refs:0,refEarned:0,streak:1,joinedAt:new Date().toLocaleDateString('vi-VN'),history:[]};
   su(u);toast('Dang ky thanh cong! Chao mung '+name);enterApp(u);
 }
 
 function enterApp(u){
+  // Fix 6: Kiểm tra ban ngay khi vào app
+  if(u.banned){
+    try{localStorage.removeItem('lb_session');}catch(e){}
+    CU=null;
+    showPg('page-login');
+    toast('⛔ Tài khoản của bạn đã bị khóa!');
+    return;
+  }
   u.loginHistory=u.loginHistory||[];
   u.loginHistory.push({date:new Date().toLocaleString('vi-VN')});
   if(u.loginHistory.length>10)u.loginHistory=u.loginHistory.slice(-10);
@@ -1940,11 +2173,24 @@ function updateSB(u){
   var ab=sel('tb-admin-btn');if(ab)ab.style.display=u.role==='admin'?'flex':'none';
 }
 
-function showPage(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.getElementById(id).classList.add('active');}
-function showPg(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.getElementById(id).classList.add('active');}
+
+function showPage(id){showPg(id);}/* alias */
+function showPg(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  // Reset captcha khi chuyển trang
+  try{if(typeof hcaptcha!=='undefined'){hcaptcha.reset();}}catch(e){}
+}
+
+// Helper: kiểm tra admin, dùng ở mọi hàm admin
+function isAdmin(){return CU&&CU.role==='admin'&&gu(CU.email)&&gu(CU.email).role==='admin';}
 
 function navTo(sec){
   closeSB();
+  // Fix 6: Kiểm tra ban khi điều hướng
+  if(CU){var fresh=gu(CU.email);if(fresh&&fresh.banned){doLogout();toast('⛔ Tài khoản đã bị khóa!');return;}}
+  // Fix 7: Chặn vào trang admin qua console nếu không phải admin
+  if(sec==='admin'&&!isAdmin()){toast('⛔ Không có quyền truy cập!');return;}
   document.querySelectorAll('[id^="sec-"]').forEach(function(s){s.style.display='none';});
   var el=document.getElementById('sec-'+sec);if(el)el.style.display='block';
   var T={dashboard:'Tong Quan',tasks:'Nhiem Vu',withdraw:'Rut Tien',ranking:'Xep Hang',referral:'Gioi Thieu',rules:'Quy Dinh',support:'Ho Tro',account:'Tai Khoan',admin:'Quan Tri'};
@@ -2405,46 +2651,53 @@ function rAdmin(){
 }
 
 function aAT(pid){
+  // Fix 2: Kiểm tra quyền admin
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   pid=String(pid);
   var pt=gd('lb_pt',[]);var e=null;
-  pt.forEach(function(p){if(String(p.id)===pid){p.status='approved';e=p;}});
+  // Fix 3: Chỉ duyệt nếu còn đang pending
+  pt.forEach(function(p){if(String(p.id)===pid&&p.status==='pending'){p.status='approved';e=p;}});
+  if(!e){toast('Đã duyệt rồi hoặc không tìm thấy!');return;}
   sd('lb_pt',pt);
-  if(e){
-    var u=gu(e.userEmail);
-    if(u){
-      u.balance=(u.balance||0)+Number(e.amount);
-      u.xp=(u.xp||0)+Number(e.xp||10);
-      u.tasksCompleted=(u.tasksCompleted||0)+1;
-      u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='approved';return h;});
-      su(u);
-    }
-    var tasks=gd('lb_tasks',[]);
-    tasks.forEach(function(t){if(String(t.id)===String(e.taskId))t.usedSlots=(t.usedSlots||0)+1;});
-    sd('lb_tasks',tasks);
-    toast('Da duyet nhiem vu cho '+e.userName+' (+'+fmt(e.amount)+'d)');
-  } else {
-    toast('Loi: Khong tim thay nhiem vu (id='+pid+')');
+  var u=gu(e.userEmail);
+  if(u){
+    u.balance=(u.balance||0)+Number(e.amount);
+    u.xp=(u.xp||0)+Number(e.xp||10);
+    u.tasksCompleted=(u.tasksCompleted||0)+1;
+    u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='approved';return h;});
+    su(u);
   }
+  // Fix 4: KHÔNG tăng usedSlots ở đây vì claimTask() đã tăng rồi
+  toast('✅ Đã duyệt nhiệm vụ cho '+e.userName+' (+'+fmt(e.amount)+'đ)');
   rAdmin();
 }
 function aRT(pid){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   pid=String(pid);
   var pt=gd('lb_pt',[]);var e=null;
-  pt.forEach(function(p){if(String(p.id)===pid){p.status='rejected';e=p;}});
+  pt.forEach(function(p){if(String(p.id)===pid&&p.status==='pending'){p.status='rejected';e=p;}});
+  if(!e){toast('Không tìm thấy hoặc đã xử lý!');return;}
   sd('lb_pt',pt);
-  if(e){var u=gu(e.userEmail);if(u){u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='rejected';return h;});su(u);}}
-  toast('Da tu choi nhiem vu');rAdmin();
+  var u=gu(e.userEmail);if(u){u.history=(u.history||[]).map(function(h){if(String(h.pendingId)===pid)h.status='rejected';return h;});su(u);}
+  toast('Đã từ chối nhiệm vụ');rAdmin();
 }
 function aAW(wid){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   wid=String(wid);
   var wds=gd('lb_wd',[]);var wd=null;
   wds.forEach(function(w){if(String(w.id)===wid)wd=w;});
   if(!wd){toast('Không tìm thấy lệnh rút!');return;}
+  // Fix 3: Chặn duyệt lại lệnh đã xử lý
+  if(wd.status!=='pending'){toast('Lệnh này đã được xử lý rồi!');return;}
   var netAmt=wd.net||wd.amount||0;
   if(!confirm('✅ Xác nhận đã chuyển '+fmt(netAmt)+'đ\ncho '+wd.userName+' ('+wd.userEmail+')?'))return;
+  // Fix 10: Kiểm tra số dư user trước khi duyệt
+  var u=gu(wd.userEmail);
+  if(u&&u.pendingWithdraw<Number(wd.amount)){
+    if(!confirm('⚠️ Số tiền chờ của user không khớp. Vẫn tiếp tục?'))return;
+  }
   wds.forEach(function(w){if(String(w.id)===wid)w.status='paid';});
   sd('lb_wd',wds);
-  var u=gu(wd.userEmail);
   if(u){
     u.totalWithdrawn=(u.totalWithdrawn||0)+Number(wd.amount);
     u.pendingWithdraw=Math.max(0,(u.pendingWithdraw||0)-Number(wd.amount));
@@ -2455,10 +2708,12 @@ function aAW(wid){
   rAdmin();
 }
 function aRW(wid){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   wid=String(wid);
   var wds=gd('lb_wd',[]);var wd=null;
   wds.forEach(function(w){if(String(w.id)===wid)wd=w;});
   if(!wd){toast('Không tìm thấy!');return;}
+  if(wd.status!=='pending'){toast('Lệnh này đã được xử lý rồi!');return;}
   if(!confirm('❌ Từ chối và hoàn '+fmt(wd.amount||0)+'đ cho '+wd.userName+'?'))return;
   wds.forEach(function(w){if(String(w.id)===wid)w.status='cancelled';});
   sd('lb_wd',wds);
@@ -2473,6 +2728,7 @@ function aRW(wid){
   rAdmin();
 }
 function adminAddTask(){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   var name=document.getElementById('new-task-name').value.trim();
   var reward=parseInt(document.getElementById('new-task-reward').value)||0;
   var slots=parseInt(document.getElementById('new-task-slots').value)||100;
@@ -2509,33 +2765,45 @@ function adminAddTask(){
   var tabs=document.querySelectorAll('.adm-tab');
   if(tabs[2])switchAdminTab(tabs[2],'at-manage-tasks');
 }
-function aTog(tid){var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Da thay doi trang thai');rAdmin();}
-function aDel(tid){sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.id!==tid;}));toast('Da xoa nhiem vu');rAdmin();}
+function aTog(tid){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Đã thay đổi trạng thái');rAdmin();
+}
+function aDel(tid){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.id!==tid;}));toast('Đã xóa nhiệm vụ');rAdmin();
+}
 
 function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
 
 function adminAddMoney(email){
-  var amt=parseInt(prompt('Cong bao nhieu tien cho '+email+' (d)?'));
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  var amt=parseInt(prompt('Cộng bao nhiêu tiền cho '+email+' (đ)?'));
   if(!amt||amt<=0)return;
   var u=gu(email);if(!u)return;
   u.balance=(u.balance||0)+amt;
   u.history=u.history||[];
-  u.history.push({type:'admin',name:'Admin cong tien',amount:amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
-  su(u);toast('Da cong '+fmt(amt)+'d cho '+u.name);rAdmin();
+  u.history.push({type:'admin',name:'Admin cộng tiền',amount:amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+  su(u);toast('Đã cộng '+fmt(amt)+'đ cho '+u.name);rAdmin();
 }
 function adminMinusMoney(email){
-  var amt=parseInt(prompt('Tru bao nhieu tien cua '+email+' (d)?'));
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  var amt=parseInt(prompt('Trừ bao nhiêu tiền của '+email+' (đ)?'));
   if(!amt||amt<=0)return;
   var u=gu(email);if(!u)return;
   u.balance=Math.max(0,(u.balance||0)-amt);
   u.history=u.history||[];
-  u.history.push({type:'admin',name:'Admin tru tien',amount:-amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
-  su(u);toast('Da tru '+fmt(amt)+'d cua '+u.name);rAdmin();
+  u.history.push({type:'admin',name:'Admin trừ tiền',amount:-amt,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+  su(u);toast('Đã trừ '+fmt(amt)+'đ của '+u.name);rAdmin();
 }
 function adminBan(email){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
   var u=gu(email);if(!u)return;
   u.banned=!u.banned;su(u);
-  toast((u.banned?'Da ban':'Da bo ban')+' '+u.name);rAdmin();
+  toast((u.banned?'Đã ban':'Đã bỏ ban')+' '+u.name);
+  // Fix 6: Nếu user đang online thì kick ngay
+  if(u.banned&&CU&&CU.email===email){doLogout();}
+  rAdmin();
 }
 function saveConfig(){
   var cfg={
@@ -2555,14 +2823,26 @@ function loadConfig(){
   s('cfg-notice',cfg.notice||'');
 }
 function adminExport(){
-  var data={users:gd('lb_users',{}),tasks:gd('lb_tasks',[]),withdrawals:gd('lb_wd',[]),date:new Date().toLocaleString('vi-VN')};
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  // Fix 5: Xóa password trước khi export
+  var rawUsers=gd('lb_users',{});
+  var safeUsers={};
+  Object.keys(rawUsers).forEach(function(k){
+    var u=Object.assign({},rawUsers[k]);
+    delete u.password;
+    delete u.pendingOTP;
+    delete u.resetOTP;
+    safeUsers[k]=u;
+  });
+  var data={users:safeUsers,tasks:gd('lb_tasks',[]),withdrawals:gd('lb_wd',[]),date:new Date().toLocaleString('vi-VN')};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='linkbeta_export_'+Date.now()+'.json';a.click();
-  toast('Da xuat du lieu!');
+  toast('Đã xuất dữ liệu (không bao gồm mật khẩu)!');
 }
 function adminResetTasks(){
-  if(!confirm('Reset slot tat ca nhiem vu ve 0?'))return;
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  if(!confirm('Reset slot tất cả nhiệm vụ về 0?'))return;
   var tasks=gd('lb_tasks',[]);
   tasks.forEach(function(t){t.usedSlots=0;});
   sd('lb_tasks',tasks);toast('Da reset slot nhiem vu!');rAdmin();
@@ -2574,7 +2854,8 @@ function adminClearDaily(){
   toast('Da xoa '+keys.length+' gioi han ngay!');
 }
 function adminClearAll(){
-  if(!confirm('XOA TAT CA DU LIEU? Khong the phuc hoi!'))return;
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  if(!confirm('XÓA TẤT CẢ DỮ LIỆU? Không thể phục hồi!'))return;
   if(!confirm('Ban chac chan muon xoa het?'))return;
   localStorage.clear();location.reload();
 }
@@ -2764,40 +3045,16 @@ function doResetPassword(){
   toast('Da dat lai mat khau thanh cong!');
 }
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2800);}
-document.addEventListener('click',function(e){if(e.target.classList.contains('filter-tab')){e.target.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});e.target.classList.add('active');}});
-init();
-
-// ===== AUTO LOGIN =====
-(function(){
-  try{
-    var saved = localStorage.getItem('lb_session');
-    if(!saved) return;
-    function tryAuto(){
-      var u = gu(saved);
-      if(u && !u.banned){ enterApp(u); }
-      else { localStorage.removeItem('lb_session'); }
-    }
-    if(typeof _fbReady!=='undefined' && _fbReady && typeof _db!=='undefined' && _db){
-      _db.ref('lb_users').once('value').then(function(snap){
-        var v=snap.val();
-        if(v){_memCache['lb_users']=v;try{localStorage.setItem('lb_users',JSON.stringify(v));}catch(e){}}
-        tryAuto();
-      }).catch(function(){tryAuto();});
-    } else {
-      tryAuto();
-    }
-  }catch(e){}
-})();
 
 /* ===== EMAIL OTP SYSTEM ===== */
 var _otpCode='';
 var _otpTimer=null;
 
 /* ===== EMAILJS CONFIG - ĐIỀN VÀO ĐÂY ===== */
-var EMAILJS_PUBLIC_KEY  = 'n3o4qJ1mB7B3KjkHx';   // Lấy từ Account > API Keys
-var EMAILJS_SERVICE_ID  = 'service_85dj3ez';   // Lấy từ Email Services
-var EMAILJS_TEMPLATE_ID = 'template_t3xyvpb';  // Lấy từ Email Templates
-var ADMIN_TEMPLATE_ID = 'YOUR_ADMIN_TEMPLATE_ID'; // Template riêng cho thông báo admin (tùy chọn)
+var EMAILJS_PUBLIC_KEY  = 'n3o4qJ1mB7B3KjkHx';
+var EMAILJS_SERVICE_ID  = 'service_85dj3ez';
+var EMAILJS_TEMPLATE_ID = 'template_t3xyvpb';
+var ADMIN_TEMPLATE_ID = 'YOUR_ADMIN_TEMPLATE_ID';
 /* ========================================= */
 
 function sendOTP(){
@@ -3020,89 +3277,215 @@ function updateEmailVerifyUI(u){
   }
 }
 
-/* ===== TASK MODAL ===== */
-var _currentTaskId=null;
-
-var _taskTimer=null;
-var _taskTimerSecs=30;
+/* ===== TASK GATE LOGIC ===== */
+var _tg={task:null,startTime:0,linkOpen:false,timer:null,claimed:false};
 
 function doTask(tid){
-  var u=fr();if(!u){toast('Vui lòng đăng nhập!');return;}
+  var u=fr();
+  if(!u){toast('Vui lòng đăng nhập!');return;}
   var tasks=gd('lb_tasks',[]);
   var task=null;tasks.forEach(function(t){if(String(t.id)===String(tid))task=t;});
-  if(!task){toast('Không tìm thấy nhiệm vụ #'+tid);return;}
+  if(!task){toast('Không tìm thấy nhiệm vụ!');return;}
   if(!task.active){toast('Nhiệm vụ đã bị tắt!');return;}
-  if(task.usedSlots>=task.slots){toast('Het luot nhiệm vụ này!');return;}
-  // Check daily limit 10 lần/ngày
+  if(task.usedSlots>=task.slots){toast('Hết lượt nhiệm vụ này!');return;}
   var dailyCount=getDailyCount(u.email,String(tid));
-  if(dailyCount>=DAILY_LIMIT){
-    toast('Ban da lam nhiem vu nay '+DAILY_LIMIT+' lan hom nay! Thu lai ngay mai.');
-    return;
+  if(dailyCount>=DAILY_LIMIT){toast('Bạn đã làm đủ '+DAILY_LIMIT+' lần hôm nay!');return;}
+
+  // Reset gate state
+  _tg={task:task,startTime:0,linkOpen:false,timer:null,claimed:false};
+
+  // Fill task info
+  var tgName=document.getElementById('tg-name');
+  var tgReward=document.getElementById('tg-reward');
+  var tgIcon=document.getElementById('tg-icon');
+  var tgAmt=document.getElementById('tg-r-amt');
+  var tgCdn=document.getElementById('tg-cdn');
+  if(tgName)tgName.textContent=task.name;
+  if(tgReward)tgReward.textContent='+'+fmt(task.reward)+'đ phần thưởng';
+  if(tgIcon)tgIcon.textContent=task.name[0]||'🌐';
+  if(tgAmt)tgAmt.textContent='+'+fmt(task.reward)+'đ';
+  if(tgCdn)tgCdn.textContent=task.waitSecs||30;
+
+  // Reset ring
+  var ring=document.getElementById('tg-ring');
+  if(ring){ring.style.strokeDasharray='283';ring.style.strokeDashoffset='0';ring.style.stroke='var(--gold)';}
+
+  // Reset alert
+  tgAlert('tg-a1','');
+
+  // Check đã làm hôm nay chưa
+  var dk='lb_gate_'+String(tid)+'_'+tgToday();
+  if(sessionStorage.getItem(dk)==='1'){
+    tgAlert('tg-a1','⚠️ Bạn đã hoàn thành nhiệm vụ này hôm nay rồi!');
+    var b=document.getElementById('tg-btn1');
+    if(b){b.disabled=true;b.innerHTML='Đã hoàn thành hôm nay';}
+  } else {
+    var b2=document.getElementById('tg-btn1');
+    if(b2){b2.disabled=false;b2.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Mở link nhiệm vụ';}
   }
-  _currentTaskId=tid;
-  
-  // Check already done today
-  var pt=gd('lb_pt',[]);
-  // Chỉ block nếu đã làm hết DAILY_LIMIT lần hôm nay
-  var dailyCnt=getDailyCount(u.email,String(tid));
-  var alreadyDone = dailyCnt >= DAILY_LIMIT;
-  
-  // Fill modal info
-  function se(id){return document.getElementById(id);}
-  if(se('tm-name'))se('tm-name').textContent=task.name;
-  if(se('tm-icon'))se('tm-icon').textContent=task.name[0];
-  if(se('tm-meta'))se('tm-meta').textContent='Lv.'+task.level+' · '+(task.xp||10)+' Exp';
-  var hb=se('tm-hot-badge');if(hb)hb.style.display=task.hot?'flex':'none';
-  if(se('tm-reward'))se('tm-reward').textContent=fmt(task.reward)+'đ';
-  if(se('tm-remain'))se('tm-remain').textContent=(task.slots-task.usedSlots)+' lượt';
-  if(se('tm-xp'))se('tm-xp').textContent='+'+(task.xp||10)+' Exp';
-  if(se('tm-used'))se('tm-used').textContent=task.usedSlots+' đã làm';
-  if(se('tm-total'))se('tm-total').textContent=task.slots+' tổng';
-  var pct=Math.min(100,(task.usedSlots/task.slots)*100);
-  if(se('tm-bar-fill'))se('tm-bar-fill').style.width=pct+'%';
-  if(se('tm-claim-amount'))se('tm-claim-amount').textContent=fmt(task.reward)+'đ';
-  
-  // Note
-  var nb=se('tm-note-box');var nt=se('tm-note-text');
-  if(task.note&&task.note.trim()){if(nb)nb.style.display='block';if(nt)nt.textContent=task.note;}
-  else{if(nb)nb.style.display='none';}
-  
-  // Link
-  var lb=se('tm-link-btn');
-  if(lb){
-    lb.href=task.url&&task.url.trim()?task.url:'#';
-    lb.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Truy cập link nhiệm vụ';
-  }
-  
-  // Reset sections
-  if(se('tm-step1-section'))se('tm-step1-section').style.display=alreadyDone?'none':'block';
-  if(se('tm-countdown-section'))se('tm-countdown-section').style.display='none';
-  if(se('tm-claim-section'))se('tm-claim-section').style.display='none';
-  if(se('tm-claimed-msg'))se('tm-claimed-msg').style.display='none';
-  if(se('tm-already-msg'))se('tm-already-msg').style.display=alreadyDone?'block':'none';
-  clearInterval(_taskTimer);
-  
-  // Open modal
-  var m=document.getElementById('task-modal');
-  if(m){m.classList.add('show');m.style.display='flex';}
+
+  // Chuyển sang trang gate
+  tgGoSec(1);
+  showPg('page-taskgate');
 }
 
+function tgOpenLink(){
+  if(!_tg.task){return;}
+  var url=_tg.task.url&&_tg.task.url.trim()?_tg.task.url:'';
+  if(!url){tgAlert('tg-a1','⚠️ Nhiệm vụ này chưa có link!');return;}
+  window.open(url,'_blank','noopener,noreferrer');
+  _tg.linkOpen=true;
+  _tg.startTime=Date.now();
+  tgGoSec(2);
+  tgStartCD();
+}
+
+function tgStartCD(){
+  var total=(_tg.task&&_tg.task.waitSecs)||30;
+  var secs=total;
+  var circ=283;
+  var ring=document.getElementById('tg-ring');
+  if(ring){ring.style.strokeDasharray=circ;ring.style.strokeDashoffset=0;}
+  clearInterval(_tg.timer);
+  _tg.timer=setInterval(function(){
+    secs--;
+    var cdEl=document.getElementById('tg-cdn');
+    if(cdEl)cdEl.textContent=secs>0?secs:0;
+    if(ring)ring.style.strokeDashoffset=circ-circ*(Math.max(0,secs)/total);
+    if(secs<=5&&ring)ring.style.stroke='#2ECC71';
+    if(secs<=0){
+      clearInterval(_tg.timer);
+      var dot=document.getElementById('tg-dot2');
+      var txt=document.getElementById('tg-txt2');
+      if(dot){dot.classList.remove('tg-dot');dot.classList.add('tg-dot','green');}
+      if(txt){txt.textContent='Xác minh xong! Đang kiểm tra...';txt.style.color='var(--green)';txt.style.fontWeight='700';}
+      setTimeout(tgStartVerify,700);
+    }
+  },1000);
+}
+
+function tgStartVerify(){
+  tgGoSec(3);
+  // Reset spinners
+  ['tg-vc1','tg-vc2','tg-vc3','tg-vc4'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.innerHTML='<div class="tg-v-spin"></div>';
+  });
+  setTimeout(function(){_tg.linkOpen?tgTick('tg-vc1'):tgCross('tg-vc1');},800);
+  setTimeout(function(){
+    (Date.now()-_tg.startTime>=(_tg.task.waitSecs||30)*1000)?tgTick('tg-vc2'):tgCross('tg-vc2');
+  },1700);
+  setTimeout(function(){tgTick('tg-vc3');},2600);
+  setTimeout(function(){
+    tgTick('tg-vc4');
+    setTimeout(function(){tgGoSec(4);},700);
+  },3500);
+}
+
+function tgClaim(){
+  if(_tg.claimed){tgAlert('tg-a4','Bạn đã nhận thưởng rồi!');return;}
+  // Chống bypass thời gian
+  if(_tg.startTime>0&&(Date.now()-_tg.startTime)<((_tg.task.waitSecs||30)*1000)){
+    tgAlert('tg-a4','⏳ Chưa đủ thời gian xác minh!');return;
+  }
+  _tg.claimed=true;
+  var btn=document.getElementById('tg-btn4');
+  if(btn){btn.disabled=true;btn.innerHTML='Đang xử lý...';}
+
+  // Đánh dấu đã làm hôm nay
+  var dk='lb_gate_'+String(_tg.task.id)+'_'+tgToday();
+  sessionStorage.setItem(dk,'1');
+
+  // Cộng tiền vào tài khoản
+  var u=fr();
+  if(u){
+    u.balance=(u.balance||0)+Number(_tg.task.reward);
+    u.xp=(u.xp||0)+Number(_tg.task.xp||10);
+    u.tasksCompleted=(u.tasksCompleted||0)+1;
+    u.history=u.history||[];
+    u.history.push({type:'task',name:_tg.task.name,amount:_tg.task.reward,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+    su(u);CU=u;
+    // Tăng usedSlots
+    var tasks=gd('lb_tasks',[]);
+    tasks.forEach(function(t){if(String(t.id)===String(_tg.task.id))t.usedSlots=(t.usedSlots||0)+1;});
+    sd('lb_tasks',tasks);
+    // Tăng daily count
+    incDailyCount(u.email,String(_tg.task.id));
+    // Lưu lb_pt
+    var pt=gd('lb_pt',[]);
+    pt.push({id:String(Date.now()),userEmail:u.email,userName:u.name,taskId:String(_tg.task.id),taskName:_tg.task.name,amount:_tg.task.reward,xp:_tg.task.xp||10,date:new Date().toLocaleString('vi-VN'),status:'approved'});
+    sd('lb_pt',pt);
+    updateSB(u);
+  }
+
+  setTimeout(function(){tgGoSec(5);tgStartRedirect();},600);
+}
+
+function tgStartRedirect(){
+  var sec=3;
+  var fill=document.getElementById('tg-rfill');
+  var secEl=document.getElementById('tg-rsec');
+  var t=setInterval(function(){
+    sec--;
+    if(secEl)secEl.textContent=sec;
+    if(fill)fill.style.width=(((3-sec)/3)*100)+'%';
+    if(sec<=0){clearInterval(t);tgGoHome();}
+  },1000);
+}
+
+function tgGoHome(){
+  showPg('page-app');
+  navTo('tasks');
+  rTasks();
+}
+
+function tgGoSec(n){
+  [1,2,3,4,5].forEach(function(i){
+    var s=document.getElementById('tg-sec'+i);
+    if(s)s.classList.toggle('on',i===n);
+  });
+  var stepIdx={1:0,2:1,3:2,4:3,5:3}[n]||0;
+  ['tg-st1','tg-st2','tg-st3','tg-st4'].forEach(function(id,i){
+    var s=document.getElementById(id);if(!s)return;
+    s.classList.remove('active','done');
+    if(i<stepIdx)s.classList.add('done');
+    else if(i===stepIdx)s.classList.add('active');
+  });
+  ['tg-ln1','tg-ln2','tg-ln3'].forEach(function(id,i){
+    var l=document.getElementById(id);
+    if(l)l.classList.toggle('done',i<stepIdx);
+  });
+}
+
+function tgToday(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function tgTick(id){var el=document.getElementById(id);if(el)el.innerHTML='<span style="color:var(--green);font-size:16px;font-weight:700;">✓</span>';}
+function tgCross(id){var el=document.getElementById(id);if(el)el.innerHTML='<span style="color:var(--red);font-size:16px;">✗</span>';}
+function tgAlert(id,msg){
+  var el=document.getElementById(id);if(!el)return;
+  if(!msg){el.classList.remove('on');el.textContent='';return;}
+  el.textContent=msg;el.classList.add('on');
+  setTimeout(function(){el.classList.remove('on');},4000);
+}
+/* ===== END TASK GATE ===== */
+
 function startTaskTimer(){
-  // Đếm ngược 30 giây sau khi bấm link
   var task=null;var tasks=gd('lb_tasks',[]);
   tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))task=t;});
   var waitSecs=task&&task.waitSecs?task.waitSecs:30;
-  
+
+  // Fix 6: ghi thời điểm bắt đầu để chống bypass inspect
+  _taskStartTime=Date.now();
+
   setTimeout(function(){
     function se(id){return document.getElementById(id);}
     if(se('tm-step1-section'))se('tm-step1-section').style.display='none';
     if(se('tm-countdown-section'))se('tm-countdown-section').style.display='block';
-    
+
     var total=waitSecs;
     var secs=total;
     var circumference=264;
     clearInterval(_taskTimer);
-    
+
     _taskTimer=setInterval(function(){
       secs--;
       var cdNum=se('tm-cd-num');var cdWait=se('tm-cd-wait');var cdCircle=se('tm-cd-circle');
@@ -3114,7 +3497,6 @@ function startTaskTimer(){
       }
       if(secs<=0){
         clearInterval(_taskTimer);
-        // Show claim button
         if(se('tm-countdown-section'))se('tm-countdown-section').style.display='none';
         if(se('tm-claim-section'))se('tm-claim-section').style.display='block';
       }
@@ -3123,14 +3505,42 @@ function startTaskTimer(){
 }
 
 function claimTask(){
-  if(!_currentTaskId)return;
-  var u=fr();if(!u)return;
+  // Fix 5: Kiểm tra login
+  var u=fr();
+  if(!u){toast('Vui lòng đăng nhập!');return;}
+
+  if(!_currentTaskId){toast('Lỗi: không tìm thấy nhiệm vụ!');return;}
+
+  // Fix 6: Kiểm tra thời gian thực - chống bypass countdown
   var tasks=gd('lb_tasks',[]);var task=null;
   tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))task=t;});
-  if(!task){toast('Loi nhiem vu!');return;}
-  if(task.usedSlots>=task.slots){toast('Het luot!');return;}
-  
-  // Cộng tiền ngay
+  if(!task){toast('Lỗi nhiệm vụ!');return;}
+
+  var waitSecs=task&&task.waitSecs?task.waitSecs:30;
+  if(_taskStartTime>0 && (Date.now()-_taskStartTime)<(waitSecs*1000)){
+    toast('⏳ Chưa đủ thời gian! Hãy chờ đếm ngược xong.');
+    return;
+  }
+
+  if(task.usedSlots>=task.slots){toast('Hết lượt!');return;}
+
+  // Fix 3: Chống spam click - dùng sessionKey
+  var sessionKey='task_session_'+_currentTaskId+'_'+getTodayKey();
+  if(sessionStorage.getItem(sessionKey)==='done'){
+    toast('Bạn đã nhận thưởng nhiệm vụ này rồi!');return;
+  }
+  // Đánh dấu đang xử lý
+  sessionStorage.setItem(sessionKey,'claiming');
+
+  // Fix 3: Kiểm tra daily limit lần cuối
+  var dailyCount=getDailyCount(u.email,String(_currentTaskId));
+  if(dailyCount>=DAILY_LIMIT){
+    toast('Đã hết lượt hôm nay!');
+    sessionStorage.removeItem(sessionKey);
+    return;
+  }
+
+  // Cộng tiền
   u.balance=(u.balance||0)+Number(task.reward);
   u.xp=(u.xp||0)+Number(task.xp||10);
   u.tasksCompleted=(u.tasksCompleted||0)+1;
@@ -3138,32 +3548,36 @@ function claimTask(){
   u.history=u.history||[];
   u.history.push({type:'task',name:task.name,amount:task.reward,date:now,status:'approved'});
   su(u);CU=u;
-  
-  // Lưu vào lb_pt để không làm lại
+
+  // Lưu vào lb_pt
   var pt=gd('lb_pt',[]);
-  // Remove old approved entry for this task to allow re-doing
   pt=pt.filter(function(p){return !(p.userEmail===u.email&&String(p.taskId)===String(task.id)&&p.status==='approved');});
   pt.push({id:String(Date.now()),userEmail:u.email,userName:u.name,taskId:String(task.id),taskName:task.name,amount:task.reward,xp:task.xp||10,date:now,status:'approved'});
   sd('lb_pt',pt);
-  // Increment daily count
   incDailyCount(u.email,String(task.id));
-  
-  // Update task usedSlots
+
+  // Cập nhật usedSlots
   tasks.forEach(function(t){if(String(t.id)===String(_currentTaskId))t.usedSlots=(t.usedSlots||0)+1;});
   sd('lb_tasks',tasks);
-  
-  // Update sidebar balance
   updateSB(u);
-  
+
+  // Đánh dấu đã nhận - chống spam
+  sessionStorage.setItem(sessionKey,'done');
+  _taskStartTime=0;
+
   // Show success
   function se(id){return document.getElementById(id);}
   if(se('tm-claim-section'))se('tm-claim-section').style.display='none';
   if(se('tm-claimed-msg'))se('tm-claimed-msg').style.display='block';
-  
-  toast('Da nhan +'+fmt(task.reward)+'d vao tai khoan!');
+
+  toast('✅ Nhận +'+fmt(task.reward)+'đ thành công!');
   rTasks();
-  
-  setTimeout(function(){closeTaskModal();},2000);
+
+  // Fix 2: Đóng modal rồi reload lại trang nhiệm vụ (không redirect ra ngoài vì đây là SPA)
+  setTimeout(function(){
+    closeTaskModal();
+    navTo('tasks'); // quay về trang nhiệm vụ
+  },2000);
 }
 
 function closeTaskModal(e){

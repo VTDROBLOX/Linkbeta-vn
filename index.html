@@ -2004,6 +2004,19 @@ function sd(k, v){
   }
 }
 function init(){
+  // ── Kiểm tra return từ link nhiệm vụ (done=1&token=xxx) ──
+  try{
+    var params=new URLSearchParams(window.location.search);
+    var done=params.get('done');
+    var returnToken=params.get('token');
+    var savedToken=sessionStorage.getItem('tg_token');
+    if(done==='1'&&returnToken&&savedToken&&returnToken===savedToken){
+      sessionStorage.setItem('tg_verified','true');
+      // Xóa params khỏi URL cho sạch
+      window.history.replaceState({},'',window.location.pathname);
+    }
+  }catch(e){}
+
   // Auto-login: đọc session đã lưu từ localStorage
   try {
     var savedEmail = localStorage.getItem('lb_session');
@@ -2015,7 +2028,13 @@ function init(){
         u.loginHistory = u.loginHistory||[];
         updateSB(u);
         showPg('page-app');
-        navTo('dashboard');
+        // Nếu vừa quay về từ link nhiệm vụ → mở lại trang taskgate
+        if(sessionStorage.getItem('tg_verified')==='true'&&sessionStorage.getItem('tg_pending_task')){
+          var tid=sessionStorage.getItem('tg_pending_task');
+          setTimeout(function(){tgResumeAfterReturn(tid);},300);
+        } else {
+          navTo('dashboard');
+        }
         return;
       }
     }
@@ -3333,11 +3352,62 @@ function tgOpenLink(){
   if(!_tg.task){return;}
   var url=_tg.task.url&&_tg.task.url.trim()?_tg.task.url:'';
   if(!url){tgAlert('tg-a1','⚠️ Nhiệm vụ này chưa có link!');return;}
-  window.open(url,'_blank','noopener,noreferrer');
-  _tg.linkOpen=true;
+
+  // Tạo token ngẫu nhiên để xác thực khi quay lại
+  var token=Math.random().toString(36).substring(2)+Date.now().toString(36);
+  sessionStorage.setItem('tg_token',token);
+  sessionStorage.setItem('tg_pending_task',String(_tg.task.id));
+  sessionStorage.removeItem('tg_verified'); // reset xác thực cũ
+  sessionStorage.removeItem('tg_went_out');
+
+  _tg.linkOpen=false; // chưa verified — phải quay lại mới được
   _tg.startTime=Date.now();
+  _tg.token=token;
+
+  // Tạo return URL kèm token
+  var returnUrl=window.location.href.split('?')[0]+'?done=1&token='+token;
+
+  // Mở link nhiệm vụ kèm return URL
+  // Nếu link hỗ trợ ?return= thì user sẽ được redirect về tự động
+  var finalUrl=url+(url.indexOf('?')>=0?'&':'?')+'return='+encodeURIComponent(returnUrl);
+  window.location.href=finalUrl; // chuyển hẳn (không open tab mới) để detect visibilitychange
+
   tgGoSec(2);
   tgStartCD();
+}
+
+// Khi user quay lại sau khi đi qua link (resume từ init)
+function tgResumeAfterReturn(tid){
+  var tasks=gd('lb_tasks',[]);
+  var task=null;
+  tasks.forEach(function(t){if(String(t.id)===String(tid))task=t;});
+  if(!task){navTo('tasks');return;}
+
+  _tg.task=task;
+  _tg.startTime=Date.now()-((task.waitSecs||30)*1000)-1; // đã đủ thời gian
+  _tg.linkOpen=true;
+  _tg.claimed=false;
+
+  // Fill UI
+  var el=function(id){return document.getElementById(id);};
+  if(el('tg-name'))el('tg-name').textContent=task.name;
+  if(el('tg-reward'))el('tg-reward').textContent='+'+fmt(task.reward)+'đ phần thưởng';
+  if(el('tg-icon'))el('tg-icon').textContent=task.name[0]||'🌐';
+  if(el('tg-r-amt'))el('tg-r-amt').textContent='+'+fmt(task.reward)+'đ';
+  if(el('tg-btn4'))el('tg-btn4').disabled=false;
+  if(el('tg-btn4'))el('tg-btn4').innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Xác nhận nhận thưởng!';
+
+  // Chạy verify ngay
+  tgGoSec(3);
+  ['tg-vc1','tg-vc2','tg-vc3','tg-vc4'].forEach(function(id){
+    var e=document.getElementById(id);if(e)e.innerHTML='<div class="tg-v-spin"></div>';
+  });
+  setTimeout(function(){tgTick('tg-vc1');},600);
+  setTimeout(function(){tgTick('tg-vc2');},1200);
+  setTimeout(function(){tgTick('tg-vc3');},1800);
+  setTimeout(function(){tgTick('tg-vc4');setTimeout(function(){tgGoSec(4);},600);},2400);
+
+  showPg('page-taskgate');
 }
 
 function tgStartCD(){
@@ -3357,37 +3427,68 @@ function tgStartCD(){
       clearInterval(_tg.timer);
       var dot=document.getElementById('tg-dot2');
       var txt=document.getElementById('tg-txt2');
-      if(dot){dot.classList.remove('tg-dot');dot.classList.add('tg-dot','green');}
+      if(dot){dot.classList.add('green');}
       if(txt){txt.textContent='Xác minh xong! Đang kiểm tra...';txt.style.color='var(--green)';txt.style.fontWeight='700';}
       setTimeout(tgStartVerify,700);
     }
   },1000);
 }
 
+// Theo dõi user có thực sự rời trang không
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='hidden'){
+    sessionStorage.setItem('tg_went_out','true');
+  }
+});
+
 function tgStartVerify(){
   tgGoSec(3);
-  // Reset spinners
   ['tg-vc1','tg-vc2','tg-vc3','tg-vc4'].forEach(function(id){
     var el=document.getElementById(id);
     if(el)el.innerHTML='<div class="tg-v-spin"></div>';
   });
-  setTimeout(function(){_tg.linkOpen?tgTick('tg-vc1'):tgCross('tg-vc1');},800);
+
+  // Check 1: đã rời khỏi trang (visibilitychange)
+  setTimeout(function(){
+    sessionStorage.getItem('tg_went_out')==='true'?tgTick('tg-vc1'):tgCross('tg-vc1');
+  },800);
+
+  // Check 2: đủ thời gian
   setTimeout(function(){
     (Date.now()-_tg.startTime>=(_tg.task.waitSecs||30)*1000)?tgTick('tg-vc2'):tgCross('tg-vc2');
   },1700);
+
+  // Check 3: không bot
   setTimeout(function(){tgTick('tg-vc3');},2600);
+
+  // Check 4: token hợp lệ HOẶC đã went_out
   setTimeout(function(){
-    tgTick('tg-vc4');
+    var verified=sessionStorage.getItem('tg_verified')==='true';
+    var wentOut=sessionStorage.getItem('tg_went_out')==='true';
+    (verified||wentOut)?tgTick('tg-vc4'):tgCross('tg-vc4');
     setTimeout(function(){tgGoSec(4);},700);
   },3500);
 }
 
 function tgClaim(){
   if(_tg.claimed){tgAlert('tg-a4','Bạn đã nhận thưởng rồi!');return;}
-  // Chống bypass thời gian
-  if(_tg.startTime>0&&(Date.now()-_tg.startTime)<((_tg.task.waitSecs||30)*1000)){
-    tgAlert('tg-a4','⏳ Chưa đủ thời gian xác minh!');return;
+
+  // ── Kiểm tra bảo mật đầy đủ ──
+  var verified=sessionStorage.getItem('tg_verified')==='true';
+  var wentOut=sessionStorage.getItem('tg_went_out')==='true';
+  var tokenMatch=(sessionStorage.getItem('tg_token')===_tg.token);
+
+  if(!wentOut){
+    tgAlert('tg-a4','❌ Bạn chưa thực sự mở link nhiệm vụ!');return;
   }
+  if(!verified&&!tokenMatch){
+    // Nếu chưa có token return nhưng đã rời trang → cho phép (đủ thời gian)
+    var elapsed=Date.now()-_tg.startTime;
+    if(elapsed<(_tg.task.waitSecs||30)*1000){
+      tgAlert('tg-a4','⏳ Chưa đủ thời gian xem link!');return;
+    }
+  }
+
   _tg.claimed=true;
   var btn=document.getElementById('tg-btn4');
   if(btn){btn.disabled=true;btn.innerHTML='Đang xử lý...';}
@@ -3396,7 +3497,13 @@ function tgClaim(){
   var dk='lb_gate_'+String(_tg.task.id)+'_'+tgToday();
   sessionStorage.setItem(dk,'1');
 
-  // Cộng tiền vào tài khoản
+  // Reset các token bảo mật
+  sessionStorage.removeItem('tg_verified');
+  sessionStorage.removeItem('tg_token');
+  sessionStorage.removeItem('tg_pending_task');
+  sessionStorage.removeItem('tg_went_out');
+
+  // Cộng tiền
   var u=fr();
   if(u){
     u.balance=(u.balance||0)+Number(_tg.task.reward);
@@ -3405,13 +3512,10 @@ function tgClaim(){
     u.history=u.history||[];
     u.history.push({type:'task',name:_tg.task.name,amount:_tg.task.reward,date:new Date().toLocaleString('vi-VN'),status:'approved'});
     su(u);CU=u;
-    // Tăng usedSlots
     var tasks=gd('lb_tasks',[]);
     tasks.forEach(function(t){if(String(t.id)===String(_tg.task.id))t.usedSlots=(t.usedSlots||0)+1;});
     sd('lb_tasks',tasks);
-    // Tăng daily count
     incDailyCount(u.email,String(_tg.task.id));
-    // Lưu lb_pt
     var pt=gd('lb_pt',[]);
     pt.push({id:String(Date.now()),userEmail:u.email,userName:u.name,taskId:String(_tg.task.id),taskName:_tg.task.name,amount:_tg.task.reward,xp:_tg.task.xp||10,date:new Date().toLocaleString('vi-VN'),status:'approved'});
     sd('lb_pt',pt);

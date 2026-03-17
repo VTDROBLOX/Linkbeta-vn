@@ -2010,10 +2010,30 @@ function init(){
     var done=params.get('done');
     var returnToken=params.get('token');
     var savedToken=sessionStorage.getItem('tg_token');
+
     if(done==='1'&&returnToken&&savedToken&&returnToken===savedToken){
-      sessionStorage.setItem('tg_verified','true');
-      // Xóa params khỏi URL cho sạch
-      window.history.replaceState({},'',window.location.pathname);
+      // Kiểm tra token đã dùng chưa qua Firebase
+      if(_fbReady&&_db){
+        _db.ref('lb_used_tokens/'+returnToken).once('value').then(function(snap){
+          if(snap.val()){
+            // Token đã dùng rồi → không xác thực
+            sessionStorage.removeItem('tg_token');
+            sessionStorage.removeItem('tg_pending_task');
+            alert('⛔ Token này đã được sử dụng rồi! Không thể nhận thưởng lần 2.');
+          } else {
+            // Token hợp lệ, chưa dùng
+            sessionStorage.setItem('tg_verified','true');
+          }
+          window.history.replaceState({},'',window.location.pathname);
+        }).catch(function(){
+          // Nếu Firebase lỗi → vẫn cho qua (offline fallback)
+          sessionStorage.setItem('tg_verified','true');
+          window.history.replaceState({},'',window.location.pathname);
+        });
+      } else {
+        sessionStorage.setItem('tg_verified','true');
+        window.history.replaceState({},'',window.location.pathname);
+      }
     }
   }catch(e){}
 
@@ -3296,8 +3316,15 @@ function updateEmailVerifyUI(u){
   }
 }
 
+// =====================================================
+// CẤU HÌNH WEB TRUNG GIAN
+// Sau khi upload verify.html lên domain riêng, đổi dòng này:
+var VERIFY_DOMAIN = ''; // VD: 'https://verify.linkbeta.online'
+// Nếu để trống → dùng verify.html cùng domain (Vercel)
+// =====================================================
+
 /* ===== TASK GATE LOGIC ===== */
-var _tg={task:null,startTime:0,linkOpen:false,timer:null,claimed:false};
+var _tg={task:null,startTime:0,linkOpen:false,timer:null,claimed:false,token:''};
 
 function doTask(tid){
   var u=fr();
@@ -3309,43 +3336,33 @@ function doTask(tid){
   if(task.usedSlots>=task.slots){toast('Hết lượt nhiệm vụ này!');return;}
   var dailyCount=getDailyCount(u.email,String(tid));
   if(dailyCount>=DAILY_LIMIT){toast('Bạn đã làm đủ '+DAILY_LIMIT+' lần hôm nay!');return;}
+  if(!task.url||!task.url.trim()){toast('Nhiệm vụ này chưa có link!');return;}
 
-  // Reset gate state
-  _tg={task:task,startTime:0,linkOpen:false,timer:null,claimed:false};
+  // Tạo token bảo mật
+  var token=Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2);
+  sessionStorage.setItem('tg_token',token);
+  sessionStorage.setItem('tg_pending_task',String(tid));
+  sessionStorage.removeItem('tg_verified');
+  sessionStorage.removeItem('tg_went_out');
 
-  // Fill task info
-  var tgName=document.getElementById('tg-name');
-  var tgReward=document.getElementById('tg-reward');
-  var tgIcon=document.getElementById('tg-icon');
-  var tgAmt=document.getElementById('tg-r-amt');
-  var tgCdn=document.getElementById('tg-cdn');
-  if(tgName)tgName.textContent=task.name;
-  if(tgReward)tgReward.textContent='+'+fmt(task.reward)+'đ phần thưởng';
-  if(tgIcon)tgIcon.textContent=task.name[0]||'🌐';
-  if(tgAmt)tgAmt.textContent='+'+fmt(task.reward)+'đ';
-  if(tgCdn)tgCdn.textContent=task.waitSecs||30;
+  _tg={task:task,startTime:Date.now(),linkOpen:false,timer:null,claimed:false,token:token};
 
-  // Reset ring
-  var ring=document.getElementById('tg-ring');
-  if(ring){ring.style.strokeDasharray='283';ring.style.strokeDashoffset='0';ring.style.stroke='var(--gold)';}
+  // Tạo return URL kèm token
+  var returnUrl=window.location.origin+window.location.pathname+'?done=1&token='+encodeURIComponent(token);
 
-  // Reset alert
-  tgAlert('tg-a1','');
+  // URL trang verify trung gian
+  var verifyBase=VERIFY_DOMAIN?VERIFY_DOMAIN+'/':window.location.origin+window.location.pathname.replace('index.html','')+'verify.html';
+  var verifyUrl=verifyBase
+    +'?url='+encodeURIComponent(task.url)
+    +'&token='+encodeURIComponent(token)
+    +'&name='+encodeURIComponent(task.name)
+    +'&reward='+task.reward
+    +'&wait='+(task.waitSecs||15)
+    +'&icon='+encodeURIComponent(task.name[0]||'🌐')
+    +'&return='+encodeURIComponent(returnUrl);
 
-  // Check đã làm hôm nay chưa
-  var dk='lb_gate_'+String(tid)+'_'+tgToday();
-  if(sessionStorage.getItem(dk)==='1'){
-    tgAlert('tg-a1','⚠️ Bạn đã hoàn thành nhiệm vụ này hôm nay rồi!');
-    var b=document.getElementById('tg-btn1');
-    if(b){b.disabled=true;b.innerHTML='Đã hoàn thành hôm nay';}
-  } else {
-    var b2=document.getElementById('tg-btn1');
-    if(b2){b2.disabled=false;b2.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Mở link nhiệm vụ';}
-  }
-
-  // Chuyển sang trang gate
-  tgGoSec(1);
-  showPg('page-taskgate');
+  // Chuyển hướng sang trang verify
+  window.location.href=verifyUrl;
 }
 
 function tgOpenLink(){
@@ -3478,11 +3495,10 @@ function tgClaim(){
   var wentOut=sessionStorage.getItem('tg_went_out')==='true';
   var tokenMatch=(sessionStorage.getItem('tg_token')===_tg.token);
 
-  if(!wentOut){
+  if(!wentOut&&!verified){
     tgAlert('tg-a4','❌ Bạn chưa thực sự mở link nhiệm vụ!');return;
   }
   if(!verified&&!tokenMatch){
-    // Nếu chưa có token return nhưng đã rời trang → cho phép (đủ thời gian)
     var elapsed=Date.now()-_tg.startTime;
     if(elapsed<(_tg.task.waitSecs||30)*1000){
       tgAlert('tg-a4','⏳ Chưa đủ thời gian xem link!');return;
@@ -3493,11 +3509,27 @@ function tgClaim(){
   var btn=document.getElementById('tg-btn4');
   if(btn){btn.disabled=true;btn.innerHTML='Đang xử lý...';}
 
+  // ── ĐỐT TOKEN: Lưu vào Firebase để không dùng lại được ──
+  var usedToken=sessionStorage.getItem('tg_token')||_tg.token;
+  if(usedToken&&_fbReady&&_db){
+    var u2=fr();
+    _db.ref('lb_used_tokens/'+usedToken).set({
+      usedAt:Date.now(),
+      userEmail:u2?u2.email:'unknown',
+      taskId:String(_tg.task.id),
+      taskName:_tg.task.name
+    });
+    // Tự xóa sau 48h để không tốn Firebase
+    setTimeout(function(){
+      _db.ref('lb_used_tokens/'+usedToken).remove().catch(function(){});
+    },48*60*60*1000);
+  }
+
   // Đánh dấu đã làm hôm nay
   var dk='lb_gate_'+String(_tg.task.id)+'_'+tgToday();
   sessionStorage.setItem(dk,'1');
 
-  // Reset các token bảo mật
+  // Reset token bảo mật
   sessionStorage.removeItem('tg_verified');
   sessionStorage.removeItem('tg_token');
   sessionStorage.removeItem('tg_pending_task');

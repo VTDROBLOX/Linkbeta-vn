@@ -948,12 +948,12 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
       <p class="fp-desc">Mã 6 số đã gửi đến<br><b id="fp-email-show" style="color:var(--gold);">—</b></p>
       <div id="fp-err-2" class="err-box"></div>
       <div class="otp-boxes" style="margin:16px 0;">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,0)" onkeydown="fpOtpKey(event,0)">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,1)" onkeydown="fpOtpKey(event,1)">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,2)" onkeydown="fpOtpKey(event,2)">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,3)" onkeydown="fpOtpKey(event,3)">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,4)" onkeydown="fpOtpKey(event,4)">
-        <input class="otp-box" maxlength="1" type="tel" oninput="fpOtp(this,5)" onkeydown="fpOtpKey(event,5)">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" oninput="fpOtp(this,0)" onkeydown="fpOtpKey(event,0)" onclick="this.select()">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="fpOtp(this,1)" onkeydown="fpOtpKey(event,1)" onclick="this.select()">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="fpOtp(this,2)" onkeydown="fpOtpKey(event,2)" onclick="this.select()">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="fpOtp(this,3)" onkeydown="fpOtpKey(event,3)" onclick="this.select()">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="fpOtp(this,4)" onkeydown="fpOtpKey(event,4)" onclick="this.select()">
+        <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="fpOtp(this,5)" onkeydown="fpOtpKey(event,5)" onclick="this.select()">
       </div>
       <div style="text-align:center;margin-bottom:14px;font-size:12px;color:var(--text2);">
         Không nhận được? <a id="fp-resend-btn" onclick="sendForgotOTP()" style="color:var(--gold);font-weight:700;cursor:pointer;">Gửi lại</a>
@@ -1552,12 +1552,12 @@ body,input,button,select,textarea{font-family:'Segoe UI','SF Pro Display',-apple
           <div id="ev-otp-section" style="display:none;margin-top:16px;">
             <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;">Nhập mã xác thực 6 số</div>
             <div class="otp-boxes" id="otp-boxes">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,0)" onkeydown="otpKey(event,0)">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,1)" onkeydown="otpKey(event,1)">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,2)" onkeydown="otpKey(event,2)">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,3)" onkeydown="otpKey(event,3)">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,4)" onkeydown="otpKey(event,4)">
-              <input class="otp-box" maxlength="1" type="tel" oninput="otpInput(this,5)" onkeydown="otpKey(event,5)">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" oninput="otpInput(this,0)" onkeydown="otpKey(event,0)" onclick="this.select()">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,1)" onkeydown="otpKey(event,1)" onclick="this.select()">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,2)" onkeydown="otpKey(event,2)" onclick="this.select()">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,3)" onkeydown="otpKey(event,3)" onclick="this.select()">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,4)" onkeydown="otpKey(event,4)" onclick="this.select()">
+              <input class="otp-box" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]" oninput="otpInput(this,5)" onkeydown="otpKey(event,5)" onclick="this.select()">
             </div>
             <button class="ev-confirm-btn" onclick="verifyOTP()">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
@@ -3178,26 +3178,40 @@ function startFpCountdown(){
 }
 
 function fpOtp(el,idx){
-  el.value=el.value.replace(/[^0-9]/g,'');
-  el.classList.toggle('filled',el.value.length>0);
-  if(el.value.length===1&&idx<5){
+  var val=el.value.replace(/[^0-9]/g,'');
+  // Paste 6 số cùng lúc
+  if(val.length>1){
     var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
-    if(boxes[idx+1])boxes[idx+1].focus();
+    for(var i=0;i<6;i++){if(boxes[i]){boxes[i].value=val[i]||'';boxes[i].classList.toggle('filled',!!val[i]);}}
+    var last=Math.min(val.length-1,5);
+    if(boxes[last])boxes[last].focus();
+    if(val.length>=6)verifyForgotOTP(val.slice(0,6));
+    return;
   }
-  // Auto verify
-  var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
-  var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+  el.value=val;
+  el.classList.toggle('filled',val.length>0);
+  if(val.length===1&&idx<5){
+    var b=document.querySelectorAll('#fp-card-2 .otp-box');
+    if(b[idx+1]){b[idx+1].focus();b[idx+1].select();}
+  }
+  var allB=document.querySelectorAll('#fp-card-2 .otp-box');
+  var code=Array.from(allB).map(function(b){return b.value;}).join('');
   if(code.length===6)verifyForgotOTP(code);
 }
 
 function fpOtpKey(e,idx){
+  var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
   if(e.key==='Backspace'){
-    var boxes=document.querySelectorAll('#fp-card-2 .otp-box');
     if(!boxes[idx].value&&idx>0){
-      boxes[idx-1].focus();
-      boxes[idx-1].value='';
-      boxes[idx-1].classList.remove('filled');
+      boxes[idx-1].focus();boxes[idx-1].value='';boxes[idx-1].classList.remove('filled');
     }
+  }
+  if(e.key>='0'&&e.key<='9'){
+    e.preventDefault();
+    boxes[idx].value=e.key;boxes[idx].classList.add('filled');
+    if(idx<5){boxes[idx+1].focus();boxes[idx+1].select();}
+    var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+    if(code.length===6)verifyForgotOTP(code);
   }
 }
 

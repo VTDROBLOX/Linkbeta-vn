@@ -2859,25 +2859,44 @@ function adminAddTask(){
   var hotEl=document.getElementById('new-task-hot');var hot=hotEl?hotEl.value==='1':false;
   var level=parseInt((document.getElementById('new-task-level')||{value:0}).value)||0;
   var xp=parseInt((document.getElementById('new-task-xp')||{value:10}).value)||10;
-  if(!name){toast('Nhap ten nhiem vu!');return;}
-  if(reward<=0){toast('Nhap so tien thuong!');return;}
-  var tasks=gd('lb_tasks',[]);
-  // Edit mode
-  if(window._editingTaskId){
-    tasks=tasks.map(function(t){
-      if(t.id===window._editingTaskId){
-        return {id:t.id,name:name,reward:reward,slots:slots,usedSlots:t.usedSlots||0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:t.active};
-      }
-      return t;
-    });
-    sd('lb_tasks',tasks);
-    window._editingTaskId=null;
-    toast('Da cap nhat nhiem vu: '+name);
-  } else {
-    var maxId=tasks.reduce(function(m,t){return Math.max(m,t.id);},0);
-    tasks.push({id:maxId+1,name:name,reward:reward,slots:slots,usedSlots:0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:true});
-    sd('lb_tasks',tasks);
-    toast('Da them nhiem vu: '+name);
+  if(!name){toast('Nhập tên nhiệm vụ!');return;}
+  if(reward<=0){toast('Nhập số tiền thưởng!');return;}
+
+  try{
+    // Fix: đảm bảo tasks luôn là array hợp lệ
+    var tasks=gd('lb_tasks',[]);
+    if(!Array.isArray(tasks))tasks=[];
+
+    // Edit mode
+    if(window._editingTaskId){
+      tasks=tasks.map(function(t){
+        if(t.id===window._editingTaskId){
+          return {id:t.id,name:name,reward:reward,slots:slots,usedSlots:t.usedSlots||0,url:url,note:note,waitSecs:waitSecs,level:level,xp:xp,hot:hot,active:t.active};
+        }
+        return t;
+      });
+      sd('lb_tasks',tasks);
+      window._editingTaskId=null;
+      toast('✅ Đã cập nhật nhiệm vụ: '+name);
+    } else {
+      // Fix: tính maxId an toàn, ép kiểu số, tránh NaN
+      var maxId=0;
+      tasks.forEach(function(t){
+        var id=parseInt(t.id);
+        if(!isNaN(id)&&id>maxId)maxId=id;
+      });
+      tasks.push({
+        id:maxId+1,name:name,reward:reward,slots:slots,
+        usedSlots:0,url:url,note:note,waitSecs:waitSecs,
+        level:level,xp:xp,hot:hot,active:true
+      });
+      sd('lb_tasks',tasks);
+      toast('✅ Đã thêm nhiệm vụ: '+name);
+    }
+  }catch(e){
+    console.error('adminAddTask error:',e);
+    toast('❌ Lỗi khi lưu nhiệm vụ! Xem console.');
+    return;
   }
   ['new-task-name','new-task-reward','new-task-slots','new-task-url','new-task-note','new-task-waitsecs','new-task-level','new-task-xp'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   if(hotEl)hotEl.value='0';
@@ -2888,11 +2907,22 @@ function adminAddTask(){
 }
 function aTog(tid){
   if(!isAdmin()){toast('⛔ Không có quyền!');return;}
-  var tasks=gd('lb_tasks',[]);tasks.forEach(function(t){if(t.id===tid)t.active=!t.active;});sd('lb_tasks',tasks);toast('Đã thay đổi trạng thái');rAdmin();
+  try{
+    var tasks=gd('lb_tasks',[]);
+    if(!Array.isArray(tasks))tasks=[];
+    tasks.forEach(function(t){if(String(t.id)===String(tid))t.active=!t.active;});
+    sd('lb_tasks',tasks);toast('✅ Đã thay đổi trạng thái');rAdmin();
+  }catch(e){console.error(e);toast('❌ Lỗi!');}
 }
 function aDel(tid){
   if(!isAdmin()){toast('⛔ Không có quyền!');return;}
-  sd('lb_tasks',gd('lb_tasks',[]).filter(function(t){return t.id!==tid;}));toast('Đã xóa nhiệm vụ');rAdmin();
+  if(!confirm('Xóa nhiệm vụ này?'))return;
+  try{
+    var tasks=gd('lb_tasks',[]);
+    if(!Array.isArray(tasks))tasks=[];
+    sd('lb_tasks',tasks.filter(function(t){return String(t.id)!==String(tid);}));
+    toast('✅ Đã xóa nhiệm vụ');rAdmin();
+  }catch(e){console.error(e);toast('❌ Lỗi!');}
 }
 
 function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}

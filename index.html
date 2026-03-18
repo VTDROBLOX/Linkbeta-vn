@@ -2179,10 +2179,12 @@ function enterApp(u){
   // Fix 6: Kiểm tra ban ngay khi vào app
   if(u.banned){
     try{localStorage.removeItem('lb_session');}catch(e){}
-    CU=null;
-    showPg('page-login');
-    toast('⛔ Tài khoản của bạn đã bị khóa!');
-    return;
+    CU=null;showPg('page-login');
+    toast('⛔ Tài khoản của bạn đã bị khóa!');return;
+  }
+  // Auto set admin cho email admin
+  if(u.email===ADMIN_EMAIL&&u.role!=='admin'){
+    u.role='admin';su(u);
   }
   u.loginHistory=u.loginHistory||[];
   u.loginHistory.push({date:new Date().toLocaleString('vi-VN')});
@@ -2634,59 +2636,139 @@ function changePassword(){
 
 function rAdmin(){
   var u=fr();if(!u||u.role!=='admin'){navTo('dashboard');return;}
-  var users=gd('lb_users',{});var uArr=Object.values(users).filter(function(x){return x.role!=='admin';});
+  var users=gd('lb_users',{});
+  var uArr=Object.values(users).filter(function(x){return x.role!=='admin';});
   var pt=gd('lb_pt',[]).filter(function(p){return p.status==='pending';});
-  var wds=gd('lb_wd',[]);var wPend=wds.filter(function(w){return w.status==='pending';});
-  var paid=wds.filter(function(w){return w.status==='paid';});var totPaid=paid.reduce(function(s,w){return s+w.amount;},0);
-  document.getElementById('adm-members').textContent=uArr.length;document.getElementById('adm-tasks-pending').textContent=pt.length;
-  document.getElementById('adm-wd-pending').textContent=wPend.length;document.getElementById('adm-total-paid').textContent=fmt(totPaid)+'d';
-  document.getElementById('adm-member-count').textContent=uArr.length+' nguoi';
-  var mH='';uArr.sort(function(a,b){return(b.balance+b.totalWithdrawn)-(a.balance+a.totalWithdrawn);}).forEach(function(x){var it=ini(x.name);mH+='<div class="member-item"><div class="mi-avatar">'+it+'</div><div class="mi-info"><div class="mi-name">'+x.name+'</div><div class="mi-email">'+x.email+'</div></div><div style="text-align:right;"><div class="mi-balance">'+fmt(x.balance)+'d</div><div style="font-size:11px;color:var(--text2);">'+(x.tasksCompleted||0)+' nhiem vu</div></div></div>';});
-  if(!mH)mH='<div class="empty-state"><p>Chua co thanh vien</p></div>';document.getElementById('admin-member-list').innerHTML=mH;
-  var ptH='';pt.forEach(function(p){ptH+='<div class="task-pending-item"><div style="flex:1;"><div class="tpi-name">'+p.taskName+'</div><div class="tpi-user">'+p.userName+' &middot; '+p.date+'</div></div><div class="tpi-amount">+'+fmt(p.amount)+'d</div><button class="btn-approve" onclick="aAT('+p.id+')">Duyet</button><button class="btn-reject" onclick="aRT('+p.id+')">Tu choi</button></div>';});
-  if(!ptH)ptH='<div class="empty-state"><p>Khong co nhiem vu cho duyet</p></div>';document.getElementById('admin-task-pending-list').innerHTML=ptH;
-  // Render WD pending
-  var wH='';
-  wPend.forEach(function(w){
-    var spd=w.speed==='fast'?'⚡ Rút nhanh':'🏦 Rút thường';
-    var feeShow=(w.fee||0)>0?'Phí: '+fmt(w.fee||0)+'đ | ':'Miễn phí | ';
-    wH+='<div class="adm-wd-card">'
-      +'<div class="adm-wd-top"><div>'
-      +'<div class="adm-wd-id">🆔 #'+(w.id||'?')+'</div>'
-      +'<div class="adm-wd-user">👤 '+(w.userName||'?')+' <span style="color:var(--text3);font-size:11px;font-weight:400;">('+( w.userEmail||'')+')</span></div>'
-      +'</div><div class="adm-wd-amt">'+fmt(w.amount||0)+'đ</div></div>'
-      +'<div class="adm-wd-info">'
-      +'🏦 '+(w.bankName||w.method||'?')+' | STK: '+(w.accNum||'?')+' | '+(w.accName||'?')+'<br>'
-      +feeShow+'💰 <b style="color:#10b981;">Thực trả: '+fmt(w.net||(w.amount||0))+'đ</b><br>'
-      +spd+' · '+(w.date||'')
+  var wds=gd('lb_wd',[]);
+  var wPend=wds.filter(function(w){return w.status==='pending';});
+  var paid=wds.filter(function(w){return w.status==='paid';});
+  var totPaid=paid.reduce(function(s,w){return s+w.amount;},0);
+  var totBal=uArr.reduce(function(s,x){return s+(x.balance||0);},0);
+  var totTasks=uArr.reduce(function(s,x){return s+(x.tasksCompleted||0);},0);
+
+  // Stats
+  var s=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+  s('adm-members',uArr.length);
+  s('adm-tasks-pending',pt.length);
+  s('adm-wd-pending',wPend.length);
+  s('adm-pending-wd',wPend.length);
+  s('adm-total-paid',fmt(totPaid)+'đ');
+  s('adm-total-balance',fmt(totBal)+'đ');
+  s('adm-total-tasks',totTasks);
+  s('adm-member-count',uArr.length+' người');
+  // Tab badges
+  var bw=document.getElementById('adm-badge-wd');if(bw)bw.textContent=wPend.length;
+  var bm=document.getElementById('adm-badge-mem');if(bm)bm.textContent=uArr.length;
+
+  // ── THÀNH VIÊN ──
+  var mH='';
+  uArr.sort(function(a,b){return(b.balance+b.totalWithdrawn)-(a.balance+a.totalWithdrawn);})
+  .forEach(function(x){
+    var it=ini(x.name);
+    var banColor=x.banned?'color:#ef4444;':'';
+    mH+='<div class="adm-member-card">'
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">'
+      +'<div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(245,166,35,.3),rgba(196,125,14,.2));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">'+it+'</div>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:14px;font-weight:800;'+banColor+'">'+x.name+(x.banned?' 🚫':'')+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+x.email+'</div>'
       +'</div>'
-      +'<div class="adm-wd-btns">'
-      +'<button class="adm-btn-approve" onclick="aAW(\''+(w.id||'')+'\')">✅ Duyệt - Đã chuyển</button>'
-      +'<button class="adm-btn-reject" onclick="aRW(\''+(w.id||'')+'\')">❌ Từ chối</button>'
+      +'<div style="text-align:right;flex-shrink:0;">'
+      +'<div style="font-size:15px;font-weight:900;color:var(--gold);">'+fmt(x.balance)+'đ</div>'
+      +'<div style="font-size:10px;color:var(--text2);">'+fmt(x.totalWithdrawn||0)+'đ đã rút</div>'
+      +'</div></div>'
+      +'<div style="background:var(--bg4);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.8;">'
+      +'📅 Tham gia: '+(x.joinedAt||'—')+' &nbsp;|&nbsp; '
+      +'✅ NV: '+(x.tasksCompleted||0)+' &nbsp;|&nbsp; '
+      +'⭐ XP: '+(x.xp||0)
+      +(x.emailVerified?' &nbsp;|&nbsp; 📧 Đã xác thực':' &nbsp;|&nbsp; 📧 Chưa xác thực')
+      +'</div>'
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
+      +'<button style="flex:1;min-width:70px;padding:8px 4px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:8px;color:#10b981;font-size:11px;font-weight:700;cursor:pointer;" onclick="adminAddMoney(\''+x.email+'\')">➕ Cộng</button>'
+      +'<button style="flex:1;min-width:70px;padding:8px 4px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;" onclick="adminMinusMoney(\''+x.email+'\')">➖ Trừ</button>'
+      +'<button style="flex:1;min-width:70px;padding:8px 4px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);border-radius:8px;color:var(--gold);font-size:11px;font-weight:700;cursor:pointer;" onclick="adminSetRole(\''+x.email+'\')">'+(x.role==='admin'?'👑 Admin':'👤 Member')+'</button>'
+      +'<button style="flex:1;min-width:70px;padding:8px 4px;background:'+(x.banned?'rgba(16,185,129,.15)':'rgba(107,114,128,.15)')+';border:1px solid '+(x.banned?'rgba(16,185,129,.3)':'rgba(107,114,128,.3)')+';border-radius:8px;color:'+(x.banned?'#10b981':'#9ca3af')+';font-size:11px;font-weight:700;cursor:pointer;" onclick="adminBan(\''+x.email+'\')">'+(x.banned?'🔓 Bỏ ban':'🔒 Ban')+'</button>'
       +'</div></div>';
   });
-  if(!wH)wH='<div class="adm-empty">Không có lệnh rút nào chờ duyệt</div>';
-  document.getElementById('admin-wd-pending-list').innerHTML=wH;
-  // WD history
-  var wHistArr=wds.filter(function(w){return w.status==='paid'||w.status==='cancelled';}).reverse().slice(0,30);
+  if(!mH)mH='<div class="adm-empty">Chưa có thành viên nào</div>';
+  var ml=document.getElementById('admin-member-list');if(ml)ml.innerHTML=mH;
+
+  // ── RÚT TIỀN CHỜ DUYỆT ──
+  var wH='';
+  wPend.forEach(function(w){
+    var spd=w.speed==='fast'?'⚡ Rút nhanh (5-30p)':'🏦 Rút thường (1-24h)';
+    var fee=(w.fee||0)>0?'Phí: -'+fmt(w.fee)+'đ':'Miễn phí';
+    // Lấy thêm thông tin user
+    var uInfo=gu(w.userEmail)||{};
+    wH+='<div style="background:var(--bg3);border:1px solid rgba(245,166,35,.15);border-radius:14px;padding:16px;margin-bottom:12px;">'
+      // Header
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">'
+      +'<div>'
+      +'<div style="font-size:10px;font-family:monospace;color:var(--gold);margin-bottom:3px;">🆔 #'+(w.id||'?')+'</div>'
+      +'<div style="font-size:14px;font-weight:800;">👤 '+(w.userName||'?')+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);">'+(w.userEmail||'')+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;">'
+      +'<div style="font-size:22px;font-weight:900;color:#f59e0b;">'+fmt(w.amount||0)+'đ</div>'
+      +'<div style="font-size:10px;color:var(--text2);">'+spd+'</div>'
+      +'</div></div>'
+      // Thông tin ngân hàng
+      +'<div style="background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:10px;font-size:12px;line-height:2;color:var(--text2);">'
+      +'🏦 <b style="color:var(--text);">'+(w.bankName||'?')+'</b><br>'
+      +'🔢 STK: <b style="color:var(--text);font-size:13px;letter-spacing:1px;">'+(w.accNum||'?')+'</b><br>'
+      +'👤 Tên TK: <b style="color:var(--text);">'+(w.accName||'?')+'</b><br>'
+      +fee+' &nbsp;·&nbsp; 💰 Thực trả: <b style="color:#10b981;font-size:13px;">'+fmt(w.net||(w.amount||0))+'đ</b><br>'
+      +'🕐 '+(w.date||'')
+      +'</div>'
+      // Thông tin thêm về user
+      +'<div style="background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.1);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:var(--text2);line-height:1.8;">'
+      +'💼 Số dư hiện tại: <b style="color:var(--gold);">'+fmt(uInfo.balance||0)+'đ</b> &nbsp;|&nbsp; '
+      +'📊 Đã rút tổng: <b>'+fmt(uInfo.totalWithdrawn||0)+'đ</b> &nbsp;|&nbsp; '
+      +'✅ NV đã làm: <b>'+(uInfo.tasksCompleted||0)+'</b>'
+      +'</div>'
+      // Nút duyệt/từ chối
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
+      +'<button style="padding:13px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;" onclick="aAW(\''+(w.id||'')+'\')">✅ Duyệt - Đã chuyển khoản</button>'
+      +'<button style="padding:13px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;" onclick="aRW(\''+(w.id||'')+'\')">❌ Từ chối & Hoàn tiền</button>'
+      +'</div></div>';
+  });
+  if(!wH)wH='<div class="adm-empty">✅ Không có lệnh rút nào chờ duyệt</div>';
+  var wEl=document.getElementById('admin-wd-pending-list');if(wEl)wEl.innerHTML=wH;
+
+  // ── LỊCH SỬ RÚT TIỀN ──
+  var wHistArr=wds.filter(function(w){return w.status==='paid'||w.status==='cancelled';}).slice().reverse().slice(0,30);
   var wHistH='';
   wHistArr.forEach(function(w){
     var sc=w.status==='paid'?'#10b981':'#ef4444';
-    var st=w.status==='paid'?'✅ Hoàn thành':'❌ Từ chối';
-    wHistH+='<div class="adm-wd-hist">'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;">'
+    var st=w.status==='paid'?'✅ Đã chuyển':'❌ Từ chối';
+    wHistH+='<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:8px;border-left:3px solid '+sc+';">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
       +'<span style="font-size:10px;font-family:monospace;color:var(--text3);">#'+(w.id||'')+'</span>'
       +'<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:'+sc+'22;color:'+sc+';">'+st+'</span>'
       +'</div>'
-      +'<div style="font-size:13px;font-weight:800;color:'+sc+';">'+fmt(w.amount||0)+'đ → <span style="color:#10b981;">Đã trả: '+fmt(w.net||0)+'đ</span></div>'
-      +'<div style="font-size:11px;color:var(--text3);">'+(w.userName||'?')+' · '+(w.bankName||w.method||'?')+' · '+(w.date||'')+'</div>'
+      +'<div style="font-size:14px;font-weight:800;color:'+sc+';">'+fmt(w.amount||0)+'đ</div>'
+      +'<div style="font-size:11px;color:var(--text3);margin-top:3px;">'+(w.userName||'?')+' · '+(w.bankName||'?')+' · '+(w.date||'')+'</div>'
       +'</div>';
   });
   if(!wHistH)wHistH='<div class="adm-empty">Chưa có lịch sử</div>';
   var whEl=document.getElementById('admin-wd-history-list');if(whEl)whEl.innerHTML=wHistH;
+
+  // ── NHIỆM VỤ ──
   var tasks=gd('lb_tasks',[]);var tkH='';
-  tasks.forEach(function(t){tkH+='<div class="task-manage-item"><div class="tmi-info"><div class="tmi-name">'+t.name+'</div><div class="tmi-meta">Lv.'+t.level+' &middot; '+t.xp+' XP &middot; '+t.usedSlots+'/'+t.slots+' luot &middot; '+(t.active?'Bat':'Tat')+'</div></div><div class="tmi-reward">'+t.reward+'d</div><button class="btn-approve" onclick="aTog('+t.id+')">'+(t.active?'Tat':'Bat')+'</button><button class="btn-del" onclick="aDel('+t.id+')">Xoa</button></div>';});
-  if(!tkH)tkH='<div class="empty-state"><p>Chua co nhiem vu</p></div>';document.getElementById('admin-task-list').innerHTML=tkH;
+  tasks.forEach(function(t){
+    tkH+='<div style="background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;">'
+      +'<div style="flex:1;">'
+      +'<div style="font-size:14px;font-weight:800;">'+t.name+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-top:3px;">Lv.'+t.level+' · '+t.xp+' XP · '+t.usedSlots+'/'+t.slots+' lượt · '+(t.active?'<span style="color:#10b981;">Đang bật</span>':'<span style="color:#ef4444;">Đã tắt</span>')+'</div>'
+      +'</div>'
+      +'<div style="font-size:15px;font-weight:900;color:var(--gold);flex-shrink:0;">'+t.reward+'đ</div>'
+      +'<button style="padding:7px 12px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:8px;color:var(--gold);font-size:11px;font-weight:700;cursor:pointer;" onclick="aEdit('+t.id+')">✏️</button>'
+      +'<button style="padding:7px 12px;background:'+(t.active?'rgba(239,68,68,.1)':'rgba(16,185,129,.1)')+';border:1px solid '+(t.active?'rgba(239,68,68,.3)':'rgba(16,185,129,.3)')+';border-radius:8px;color:'+(t.active?'#ef4444':'#10b981')+';font-size:11px;font-weight:700;cursor:pointer;" onclick="aTog('+t.id+')">'+(t.active?'Tắt':'Bật')+'</button>'
+      +'<button style="padding:7px 12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;" onclick="aDel('+t.id+')">🗑</button>'
+      +'</div>';
+  });
+  if(!tkH)tkH='<div class="adm-empty">Chưa có nhiệm vụ nào</div>';
+  var tEl=document.getElementById('admin-task-list');if(tEl)tEl.innerHTML=tkH;
 }
 
 function aAT(pid){
@@ -2912,7 +2994,41 @@ function aEdit(tid){
   window._editingTaskId=tid;
   toast('Dang sua nhiem vu - Bam "Them" de luu lai');
 }
-function switchAdminTab(el,id){['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks','at-add-task','at-settings'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';document.querySelectorAll('.adm-tab').forEach(function(t){t.classList.remove('active');});if(el)el.classList.add('active');}
+function adminSetRole(email){
+  if(!isAdmin()){toast('⛔ Không có quyền!');return;}
+  var u=gu(email);if(!u)return;
+  if(email===ADMIN_EMAIL){toast('⚠️ Không thể thay đổi role của admin chính!');return;}
+  u.role=u.role==='admin'?'member':'admin';
+  su(u);toast((u.role==='admin'?'✅ Đã set Admin':'✅ Đã set Member')+' cho '+u.name);rAdmin();
+}
+function filterAdminMembers(){
+  var q=(document.getElementById('adm-member-search')||{value:''}).value.toLowerCase();
+  if(!q){rAdmin();return;}
+  var users=gd('lb_users',{});
+  var uArr=Object.values(users).filter(function(x){
+    return x.role!=='admin'&&(x.name.toLowerCase().indexOf(q)>=0||x.email.toLowerCase().indexOf(q)>=0);
+  });
+  var mH='';
+  uArr.forEach(function(x){
+    var it=ini(x.name);
+    mH+='<div class="adm-member-card">'
+      +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">'
+      +'<div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(245,166,35,.3),rgba(196,125,14,.2));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;">'+it+'</div>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:14px;font-weight:800;">'+(x.banned?'🚫 ':'')+x.name+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);">'+x.email+'</div>'
+      +'</div>'
+      +'<div style="font-size:15px;font-weight:900;color:var(--gold);">'+fmt(x.balance)+'đ</div>'
+      +'</div>'
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap;">'
+      +'<button style="flex:1;padding:8px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:8px;color:#10b981;font-size:11px;font-weight:700;cursor:pointer;" onclick="adminAddMoney(\''+x.email+'\')">➕ Cộng</button>'
+      +'<button style="flex:1;padding:8px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;" onclick="adminMinusMoney(\''+x.email+'\')">➖ Trừ</button>'
+      +'<button style="flex:1;padding:8px;background:rgba(107,114,128,.15);border:1px solid rgba(107,114,128,.3);border-radius:8px;color:#9ca3af;font-size:11px;font-weight:700;cursor:pointer;" onclick="adminBan(\''+x.email+'\')">'+(x.banned?'🔓 Bỏ ban':'🔒 Ban')+'</button>'
+      +'</div></div>';
+  });
+  if(!mH)mH='<div class="adm-empty">Không tìm thấy thành viên</div>';
+  var ml=document.getElementById('admin-member-list');if(ml)ml.innerHTML=mH;
+}
 function selectPay(el){el.closest('.pay-methods').querySelectorAll('.pay-method').forEach(function(p){p.classList.remove('selected');});el.classList.add('selected');}
 function togglePw(id,btn){
   var inp=document.getElementById(id);
@@ -3250,54 +3366,85 @@ function startOTPCountdown(){
 }
 
 function otpInput(el,idx){
-  el.value=el.value.replace(/[^0-9]/g,'');
-  el.classList.toggle('filled',el.value.length>0);
-  if(el.value.length===1&&idx<5){
-    var next=document.querySelectorAll('.otp-box')[idx+1];
-    if(next)next.focus();
+  // Lấy chỉ ký tự cuối cùng (mobile thường paste cả chuỗi)
+  var val=el.value.replace(/[^0-9]/g,'');
+  // Nếu paste cả 6 số → điền tất cả các ô
+  if(val.length>1){
+    var boxes=document.querySelectorAll('.otp-box');
+    for(var i=0;i<6;i++){
+      if(boxes[i]){
+        boxes[i].value=val[i]||'';
+        boxes[i].classList.toggle('filled',!!val[i]);
+      }
+    }
+    // Focus ô cuối hoặc ô sau cùng có số
+    var lastIdx=Math.min(val.length-1,5);
+    if(boxes[lastIdx])boxes[lastIdx].focus();
+    // Auto verify
+    if(val.length>=6){var code=val.slice(0,6);verifyOTPCode(code);return;}
+    return;
   }
-  // Auto verify when all 6 filled
-  var boxes=document.querySelectorAll('.otp-box');
-  var code=Array.from(boxes).map(function(b){return b.value;}).join('');
-  if(code.length===6)verifyOTP();
+  el.value=val;
+  el.classList.toggle('filled',val.length>0);
+  // Tự nhảy sang ô tiếp theo
+  if(val.length===1&&idx<5){
+    var boxes2=document.querySelectorAll('.otp-box');
+    if(boxes2[idx+1]){
+      boxes2[idx+1].focus();
+      boxes2[idx+1].select();
+    }
+  }
+  // Auto verify khi đủ 6 số
+  var allBoxes=document.querySelectorAll('.otp-box');
+  var code=Array.from(allBoxes).map(function(b){return b.value;}).join('');
+  if(code.length===6)verifyOTPCode(code);
 }
 
 function otpKey(e,idx){
+  var boxes=document.querySelectorAll('.otp-box');
   if(e.key==='Backspace'){
-    var boxes=document.querySelectorAll('.otp-box');
     if(!boxes[idx].value&&idx>0){
       boxes[idx-1].focus();
       boxes[idx-1].value='';
       boxes[idx-1].classList.remove('filled');
     }
   }
+  // Nhấn số → ghi đè ô hiện tại rồi nhảy tiếp
+  if(e.key>='0'&&e.key<='9'){
+    e.preventDefault();
+    boxes[idx].value=e.key;
+    boxes[idx].classList.add('filled');
+    if(idx<5){boxes[idx+1].focus();boxes[idx+1].select();}
+    var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+    if(code.length===6)verifyOTPCode(code);
+  }
+}
+
+function verifyOTPCode(code){
+  if(!code||code.length<6)return;
+  var u=fr();if(!u)return;
+  if(!u.pendingOTP){toast('Chưa gửi mã OTP!');return;}
+  if(Date.now()>u.otpExpiry){toast('Mã OTP đã hết hạn! Gửi lại.');return;}
+  if(code===u.pendingOTP){
+    u.emailVerified=true;u.pendingOTP=null;u.otpExpiry=null;
+    su(u);CU=u;clearInterval(_otpTimer);
+    updateEmailVerifyUI(u);
+    toast('✅ Xác thực email thành công!');
+    var p=document.getElementById('otp-demo-popup');if(p)p.remove();
+  } else {
+    var ob=document.getElementById('otp-boxes');
+    if(ob){ob.style.animation='shake .4s ease';setTimeout(function(){ob.style.animation='';},400);}
+    toast('❌ Mã OTP không đúng!');
+    var boxes=document.querySelectorAll('.otp-box');
+    boxes.forEach(function(b){b.value='';b.classList.remove('filled');});
+    if(boxes[0])boxes[0].focus();
+  }
 }
 
 function verifyOTP(){
   var boxes=document.querySelectorAll('.otp-box');
-  var entered=Array.from(boxes).map(function(b){return b.value;}).join('');
-  if(entered.length<6){toast('Nhap du 6 so!');return;}
-  var u=fr();
-  if(!u.pendingOTP){toast('Chua gui ma OTP!');return;}
-  if(Date.now()>u.otpExpiry){toast('Ma OTP da het han! Gui lai.');return;}
-  if(entered===u.pendingOTP){
-    u.emailVerified=true;
-    u.pendingOTP=null;
-    u.otpExpiry=null;
-    su(u);CU=u;
-    clearInterval(_otpTimer);
-    updateEmailVerifyUI(u);
-    toast('Xac thuc email thanh cong!');
-    // Remove demo popup if still open
-    var p=document.getElementById('otp-demo-popup');if(p)p.remove();
-  } else {
-    // Shake boxes
-    var ob=document.getElementById('otp-boxes');
-    if(ob){ob.style.animation='shake .4s ease';setTimeout(function(){ob.style.animation='';},400);}
-    toast('Ma OTP khong dung!');
-    boxes.forEach(function(b){b.value='';b.classList.remove('filled');});
-    boxes[0].focus();
-  }
+  var code=Array.from(boxes).map(function(b){return b.value;}).join('');
+  verifyOTPCode(code);
 }
 
 function updateEmailVerifyUI(u){

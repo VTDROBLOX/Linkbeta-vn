@@ -2925,6 +2925,17 @@ function aDel(tid){
   }catch(e){console.error(e);toast('❌ Lỗi!');}
 }
 
+function switchAdminTab(el,id){
+  // Ẩn tất cả tab content
+  ['at-members','at-tasks-pending','at-wd-pending','at-manage-tasks','at-add-task','at-settings'].forEach(function(t){
+    var e=document.getElementById(t);if(e)e.style.display='none';
+  });
+  // Hiện tab được chọn
+  var tg=document.getElementById(id);if(tg)tg.style.display='block';
+  // Cập nhật active class
+  document.querySelectorAll('.adm-tab').forEach(function(t){t.classList.remove('active');});
+  if(el)el.classList.add('active');
+}
 function switchTab(el,id){['tt-hot','tt-all','tt-history'].forEach(function(t){var e=document.getElementById(t);if(e)e.style.display='none';});var tg=document.getElementById(id);if(tg)tg.style.display='block';el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');}
 
 function adminAddMoney(email){

@@ -3545,14 +3545,16 @@ function doTask(tid){
   sessionStorage.setItem('tg_token',token);
   sessionStorage.setItem('tg_pending_task',String(tid));
   sessionStorage.removeItem('tg_verified');
-  sessionStorage.removeItem('tg_went_out');
 
   _tg={task:task,startTime:Date.now(),linkOpen:false,timer:null,claimed:false,token:token};
 
-  // Tạo return URL kèm token
+  // Tạo return URL kèm token (verify sẽ redirect về đây sau khi xác nhận)
   var returnUrl=window.location.origin+window.location.pathname+'?done=1&token='+encodeURIComponent(token);
 
-  // URL trang verify trung gian
+  // Bước 1: Mở link nhiệm vụ trong tab mới
+  window.open(task.url,'_blank','noopener,noreferrer');
+
+  // Bước 2: Chuyển trang hiện tại sang verify để xác nhận
   var verifyBase=VERIFY_DOMAIN?VERIFY_DOMAIN+'/':window.location.origin+window.location.pathname.replace('index.html','')+'verify.html';
   var verifyUrl=verifyBase
     +'?url='+encodeURIComponent(task.url)
@@ -3563,8 +3565,10 @@ function doTask(tid){
     +'&icon='+encodeURIComponent(task.name[0]||'🌐')
     +'&return='+encodeURIComponent(returnUrl);
 
-  // Chuyển hướng sang trang verify
-  window.location.href=verifyUrl;
+  // Delay nhỏ để link kịp mở, rồi chuyển sang verify
+  setTimeout(function(){
+    window.location.href=verifyUrl;
+  },500);
 }
 
 function tgOpenLink(){

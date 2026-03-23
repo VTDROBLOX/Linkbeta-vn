@@ -3560,8 +3560,9 @@ function doTask(tid){
     +'&icon='+encodeURIComponent(task.name[0]||'🌐')
     +'&return='+encodeURIComponent(returnUrl);
 
-  // Lưu verify URL để dùng sau
+  // Lưu verify URL và thời gian bắt đầu
   sessionStorage.setItem('tg_verify_url',verifyUrl);
+  sessionStorage.setItem('tg_start_time',String(Date.now()));
 
   // BƯỚC 1: Chuyển hẳn sang link4m (tab chính)
   // → user phải ở lại link4m để link4m tính tiền quảng cáo
@@ -3574,10 +3575,25 @@ function doTask(tid){
 window.addEventListener('pageshow',function(e){
   var verifyUrl=sessionStorage.getItem('tg_verify_url');
   var token=sessionStorage.getItem('tg_token');
+  var startTime=parseInt(sessionStorage.getItem('tg_start_time')||'0');
   if(verifyUrl&&token&&!sessionStorage.getItem('tg_verified')){
-    // Xóa để không loop
+    // Kiểm tra đã ở lại link đủ thời gian chưa (tối thiểu waitSecs)
+    var elapsed=(Date.now()-startTime)/1000;
+    var pendingTask=sessionStorage.getItem('tg_pending_task');
+    var tasks=gd('lb_tasks',[]);
+    var task=null;
+    if(Array.isArray(tasks))tasks.forEach(function(t){if(String(t.id)===pendingTask)task=t;});
+    var required=task?task.waitSecs||30:30;
+
+    if(elapsed<required){
+      // Chưa đủ thời gian → KHÔNG chuyển verify
+      // Hiện thông báo và chờ
+      toast('⏳ Bạn cần xem link thêm '+(Math.ceil(required-elapsed))+' giây nữa!');
+      return;
+    }
+
+    // Đủ thời gian → chuyển sang verify
     sessionStorage.removeItem('tg_verify_url');
-    // Chuyển sang verify
     setTimeout(function(){
       window.location.href=verifyUrl;
     },300);

@@ -3548,28 +3548,41 @@ function doTask(tid){
 
   _tg={task:task,startTime:Date.now(),linkOpen:false,timer:null,claimed:false,token:token};
 
-  // Tạo return URL kèm token (verify sẽ redirect về đây sau khi xác nhận)
+  // Tạo verify URL kèm token
   var returnUrl=window.location.origin+window.location.pathname+'?done=1&token='+encodeURIComponent(token);
-
-  // Bước 1: Mở link nhiệm vụ trong tab mới
-  window.open(task.url,'_blank','noopener,noreferrer');
-
-  // Bước 2: Chuyển trang hiện tại sang verify để xác nhận
   var verifyBase=VERIFY_DOMAIN?VERIFY_DOMAIN+'/':window.location.origin+window.location.pathname.replace('index.html','')+'verify.html';
   var verifyUrl=verifyBase
     +'?url='+encodeURIComponent(task.url)
     +'&token='+encodeURIComponent(token)
     +'&name='+encodeURIComponent(task.name)
     +'&reward='+task.reward
-    +'&wait='+(task.waitSecs||15)
+    +'&wait='+(task.waitSecs||30)
     +'&icon='+encodeURIComponent(task.name[0]||'🌐')
     +'&return='+encodeURIComponent(returnUrl);
 
-  // Delay nhỏ để link kịp mở, rồi chuyển sang verify
-  setTimeout(function(){
-    window.location.href=verifyUrl;
-  },500);
+  // Lưu verify URL để dùng sau
+  sessionStorage.setItem('tg_verify_url',verifyUrl);
+
+  // BƯỚC 1: Chuyển hẳn sang link4m (tab chính)
+  // → user phải ở lại link4m để link4m tính tiền quảng cáo
+  // → sau khi vượt xong, link4m redirect hoặc user bấm Back
+  // → pageshow/pagehide fire → tự chuyển sang verify
+  window.location.href=task.url;
 }
+
+// Khi user quay lại trang chính (sau khi bấm Back từ link4m)
+window.addEventListener('pageshow',function(e){
+  var verifyUrl=sessionStorage.getItem('tg_verify_url');
+  var token=sessionStorage.getItem('tg_token');
+  if(verifyUrl&&token&&!sessionStorage.getItem('tg_verified')){
+    // Xóa để không loop
+    sessionStorage.removeItem('tg_verify_url');
+    // Chuyển sang verify
+    setTimeout(function(){
+      window.location.href=verifyUrl;
+    },300);
+  }
+});
 
 function tgOpenLink(){
   if(!_tg.task){return;}

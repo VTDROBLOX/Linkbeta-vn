@@ -3520,13 +3520,24 @@ function updateEmailVerifyUI(u){
 
 // =====================================================
 // CẤU HÌNH WEB TRUNG GIAN
-// Sau khi upload verify.html lên domain riêng, đổi dòng này:
-var VERIFY_DOMAIN = 'https://linkbeta-verify.vercel.app';
-// Nếu để trống → dùng verify.html cùng domain (Vercel)
+var VERIFY_DOMAIN  = 'https://linkbeta-verify.vercel.app';
+var WORKER_URL     = 'https://linkbeta-api.tvu727531.workers.dev';
 // =====================================================
 
 /* ===== TASK GATE LOGIC ===== */
 var _tg={task:null,startTime:0,linkOpen:false,timer:null,claimed:false,token:''};
+
+// Rút gọn link qua Cloudflare Worker
+function shortenUrl(url, service, callback){
+  var apiUrl = WORKER_URL + '/shorten?url=' + encodeURIComponent(url) + '&service=' + (service||'link4m');
+  fetch(apiUrl)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.success && d.url){callback(null, d.url);}
+      else{callback(d.error||'Lỗi rút gọn link', null);}
+    })
+    .catch(function(e){callback(e.message, null);});
+}
 
 function doTask(tid){
   var u=fr();
@@ -3540,19 +3551,23 @@ function doTask(tid){
   if(dailyCount>=DAILY_LIMIT){toast('Bạn đã làm đủ '+DAILY_LIMIT+' lần hôm nay!');return;}
   if(!task.url||!task.url.trim()){toast('Nhiệm vụ này chưa có link!');return;}
 
-  // Tạo token bảo mật
+  toast('⏳ Đang tạo link nhiệm vụ...');
+
+  // Rút gọn link qua Worker → mỗi user nhận link riêng
+  shortenUrl(task.url, task.service||'link4m', function(err, shortUrl){
+    _doTaskWithUrl(task, shortUrl||task.url);
+  });
+}
+
+function _doTaskWithUrl(task, taskUrl){
+  // Tạo token
   var token=Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2);
-  sessionStorage.setItem('tg_token',token);
-  sessionStorage.setItem('tg_pending_task',String(tid));
-  sessionStorage.removeItem('tg_verified');
 
-  _tg={task:task,startTime:Date.now(),linkOpen:false,timer:null,claimed:false,token:token};
-
-  // Tạo verify URL kèm token
+  // Tạo verify URL
   var returnUrl=window.location.origin+window.location.pathname+'?done=1&token='+encodeURIComponent(token);
   var verifyBase=VERIFY_DOMAIN?VERIFY_DOMAIN+'/':window.location.origin+window.location.pathname.replace('index.html','')+'verify.html';
   var verifyUrl=verifyBase
-    +'?url='+encodeURIComponent(task.url)
+    +'?url='+encodeURIComponent(taskUrl)
     +'&token='+encodeURIComponent(token)
     +'&name='+encodeURIComponent(task.name)
     +'&reward='+task.reward
@@ -3560,45 +3575,80 @@ function doTask(tid){
     +'&icon='+encodeURIComponent(task.name[0]||'🌐')
     +'&return='+encodeURIComponent(returnUrl);
 
-  // Lưu verify URL và thời gian bắt đầu
-  sessionStorage.setItem('tg_verify_url',verifyUrl);
-  sessionStorage.setItem('tg_start_time',String(Date.now()));
+  // Lưu trạng thái
+  try{
+    localStorage.setItem('lb_pending_verify',JSON.stringify({
+      verifyUrl:verifyUrl,token:token,
+      taskId:String(task.id),taskName:task.name,
+      reward:task.reward,startTime:Date.now(),waitSecs:task.waitSecs||30
+    }));
+  }catch(e){}
 
-  // BƯỚC 1: Chuyển hẳn sang link4m (tab chính)
-  // → user phải ở lại link4m để link4m tính tiền quảng cáo
-  // → sau khi vượt xong, link4m redirect hoặc user bấm Back
-  // → pageshow/pagehide fire → tự chuyển sang verify
-  window.location.href=task.url;
+  // Mở link trong tab mới + hiện modal chờ
+  window.open(taskUrl,'_blank','noopener,noreferrer');
+  showTaskWaiting(task,verifyUrl,token);
 }
 
-// Khi user quay lại trang chính (sau khi bấm Back từ link4m)
-window.addEventListener('pageshow',function(e){
-  var verifyUrl=sessionStorage.getItem('tg_verify_url');
-  var token=sessionStorage.getItem('tg_token');
-  var startTime=parseInt(sessionStorage.getItem('tg_start_time')||'0');
-  if(verifyUrl&&token&&!sessionStorage.getItem('tg_verified')){
-    // Kiểm tra đã ở lại link đủ thời gian chưa (tối thiểu waitSecs)
-    var elapsed=(Date.now()-startTime)/1000;
-    var pendingTask=sessionStorage.getItem('tg_pending_task');
-    var tasks=gd('lb_tasks',[]);
-    var task=null;
-    if(Array.isArray(tasks))tasks.forEach(function(t){if(String(t.id)===pendingTask)task=t;});
-    var required=task?task.waitSecs||30:30;
+function showTaskWaiting(task,verifyUrl,token){
+  // Xóa modal cũ nếu có
+  var old=document.getElementById('task-waiting-modal');
+  if(old)old.remove();
 
-    if(elapsed<required){
-      // Chưa đủ thời gian → KHÔNG chuyển verify
-      // Hiện thông báo và chờ
-      toast('⏳ Bạn cần xem link thêm '+(Math.ceil(required-elapsed))+' giây nữa!');
-      return;
+  var startTime=Date.now();
+  var required=task.waitSecs||30;
+
+  var modal=document.createElement('div');
+  modal.id='task-waiting-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML=
+    '<div style="background:#18181D;border:1px solid rgba(245,166,35,.2);border-radius:20px;padding:28px;max-width:360px;width:100%;text-align:center;">'
+    +'<div style="font-size:36px;margin-bottom:12px;">🔗</div>'
+    +'<div style="font-size:17px;font-weight:900;margin-bottom:6px;">Đang mở link nhiệm vụ</div>'
+    +'<div style="font-size:13px;color:#808088;margin-bottom:20px;">Link <b style="color:#F5A623;">'+task.name+'</b> đã mở ở tab mới.<br>Vui lòng vượt quảng cáo xong rồi bấm <b style="color:#2ECC71;">Tiếp tục</b>.</div>'
+    +'<div style="background:#0F0F12;border-radius:12px;padding:14px;margin-bottom:18px;">'
+    +'<div style="font-size:12px;color:#808088;margin-bottom:6px;">Thời gian chờ tối thiểu</div>'
+    +'<div id="twm-countdown" style="font-size:32px;font-weight:900;color:#F5A623;">'+required+'</div>'
+    +'<div style="font-size:11px;color:#808088;">giây</div>'
+    +'</div>'
+    +'<button id="twm-btn" disabled onclick="doTaskContinue()" style="width:100%;padding:15px;background:linear-gradient(135deg,#2ECC71,#27AE60);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;opacity:.4;">⏳ Đang chờ...</button>'
+    +'<div style="margin-top:12px;font-size:11px;color:#808088;">Tab link4m vẫn đang mở — vui lòng không đóng</div>'
+    +'</div>';
+  document.body.appendChild(modal);
+
+  // Đếm ngược
+  var cdEl=document.getElementById('twm-countdown');
+  var btn=document.getElementById('twm-btn');
+  var cdT=setInterval(function(){
+    var elapsed=Math.floor((Date.now()-startTime)/1000);
+    var remain=Math.max(0,required-elapsed);
+    if(cdEl)cdEl.textContent=remain;
+    if(remain<=0){
+      clearInterval(cdT);
+      if(cdEl)cdEl.style.color='#2ECC71';
+      if(cdEl)cdEl.textContent='✓';
+      if(btn){btn.disabled=false;btn.style.opacity='1';btn.innerHTML='✅ Tôi đã vượt xong - Tiếp tục!';}
     }
+  },500);
 
-    // Đủ thời gian → chuyển sang verify
-    sessionStorage.removeItem('tg_verify_url');
-    setTimeout(function(){
-      window.location.href=verifyUrl;
-    },300);
+  // Lưu verifyUrl để dùng khi bấm nút
+  window._pendingVerifyUrl=verifyUrl;
+}
+
+function doTaskContinue(){
+  var verifyUrl=window._pendingVerifyUrl;
+  if(!verifyUrl){
+    try{
+      var p=JSON.parse(localStorage.getItem('lb_pending_verify')||'null');
+      if(p)verifyUrl=p.verifyUrl;
+    }catch(e){}
   }
-});
+  var modal=document.getElementById('task-waiting-modal');
+  if(modal)modal.remove();
+  if(verifyUrl){
+    localStorage.removeItem('lb_pending_verify');
+    window.location.href=verifyUrl;
+  }
+}
 
 function tgOpenLink(){
   if(!_tg.task){return;}

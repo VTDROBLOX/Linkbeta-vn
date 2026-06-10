@@ -12039,37 +12039,106 @@ local function _GTranslate(text, target)
     return out, nil
 end
 
-Tabs.Misc:AddTextBox({
-    Name = "Text to translate",
-    Default = "",
-    TextDisappear = false,
-    Callback = function(v) _TransText = v end
-})
-Tabs.Misc:AddDropdown({
-    Name = "Translate to",
-    Options = _TransLangNames,
-    Default = "English",
-    Callback = function(v) _TransTo = _TransLangs[v] or "en" end
-})
 local _TransResult = Tabs.Misc:AddParagraph("Result", "...")
-Tabs.Misc:AddButton({
-    Name = "Translate",
-    Description = "Dich van ban bang Google Translate",
-    Callback = function()
-        if _TransText == "" then
-            Window:Notify({ Title = "Translate", Content = "Nhap text truoc", Image = "rbxassetid://96454140798208", Duration = 3 })
-            return
-        end
+
+local function _DoTranslate()
+    if _TransText == "" then return end
+    task.spawn(function()
         local result, err = _GTranslate(_TransText, _TransTo)
         if result then
             pcall(function() _TransResult:Set("Result", result) end)
             Window:Notify({ Title = "Translate", Content = result, Image = "rbxassetid://96454140798208", Duration = 6 })
             pcall(function() if setclipboard then setclipboard(result) end end)
         else
-            Window:Notify({ Title = "Translate", Content = err or "Loi", Image = "rbxassetid://96454140798208", Duration = 4 })
+            pcall(function() _TransResult:Set("Result", err or "Loi dich") end)
         end
+    end)
+end
+
+Tabs.Misc:AddTextBox({
+    Name = "Text to translate",
+    Default = "",
+    TextDisappear = false,
+    Callback = function(v)
+        _TransText = v
+        _DoTranslate()
     end
 })
+Tabs.Misc:AddDropdown({
+    Name = "Translate to",
+    Options = _TransLangNames,
+    Default = "English",
+    Callback = function(v)
+        -- v co the la string ten ngon ngu hoac bang {ten}
+        local key = v
+        if type(v) == "table" then key = v[1] or next(v) end
+        _TransTo = _TransLangs[key] or _TransLangs[tostring(key)] or "en"
+        _DoTranslate()
+    end
+})
+Tabs.Misc:AddButton({
+    Name = "Translate Now",
+    Description = "Dich lai ngay (Google Translate)",
+    Callback = function()
+        if _TransText == "" then
+            Window:Notify({ Title = "Translate", Content = "Nhap text truoc", Image = "rbxassetid://96454140798208", Duration = 3 })
+            return
+        end
+        _DoTranslate()
+    end
+})
+
+local _TayHubDict = {
+    ["Accept Allies"] = "Chấp nhận đồng minh",
+    ["Accept Quests"] = "Tự nhận nhiệm vụ",
+    ["Anti AFK"] = "Chống treo (AFK)",
+    ["Auto Awakening"] = "Tự thức tỉnh",
+    ["Auto Buy Fruit Shop"] = "Tự mua trái ở shop",
+    ["Auto Collect Fruit"] = "Tự nhặt trái",
+    ["Auto Complete Quest"] = "Tự hoàn thành nhiệm vụ",
+    ["Auto Drop Fruit"] = "Tự thả trái",
+    ["Auto Enable PvP"] = "Tự bật PvP",
+    ["Auto Farm All Boss"] = "Tự farm tất cả Boss",
+    ["Auto Farm All Island"] = "Tự farm tất cả đảo",
+    ["Auto Farm Berry"] = "Tự farm Berry (tiền)",
+    ["Auto Farm Bone"] = "Tự farm Xương",
+    ["Auto Buy Bait"] = "Tự mua mồi câu",
+    ["Auto Buy Chip [Beli]"] = "Tự mua Chip [Beli]",
+    ["Auto Buy Chip [Devil Fruit]"] = "Tự mua Chip [Trái ác quỷ]",
+    ["Auto Attack Sea Beast"] = "Tự đánh Thủy quái",
+    ["Auto Attack Leviathan"] = "Tự đánh Leviathan",
+    ["Auto Darkbeard"] = "Tự đánh Darkbeard",
+    ["Auto Dough King [Fully]"] = "Tự đánh Dough King [Đầy đủ]",
+    ["Auto Dojo Trainer"] = "Tự luyện Dojo",
+    ["Auto Defense"] = "Tự phòng thủ",
+    ["Auto Complete Trial Race"] = "Tự hoàn thành Trial Race",
+}
+
+-- Tu dong dich menu theo ngon ngu Roblox cua nguoi choi (offline, khong goi API -> khong lag/kick)
+task.spawn(function()
+    task.wait(2)
+    local ok, locale = pcall(function()
+        return game:GetService("LocalizationService").RobloxLocaleId
+    end)
+    if not ok then return end
+    -- Chi dich sang tieng Viet neu nguoi choi dung tieng Viet. Mac dinh giu tieng Anh.
+    if not (locale and string.sub(locale, 1, 2) == "vi") then return end
+    local CoreGui = (gethui and gethui()) or game:GetService("CoreGui")
+    -- Quet va doi text theo tu dien (lap lai vai lan de bat het UI load tre)
+    for pass = 1, 6 do
+        pcall(function()
+            for _, obj in ipairs(CoreGui:GetDescendants()) do
+                if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox") then
+                    local t = obj.Text
+                    if t and _TayHubDict[t] then
+                        obj.Text = _TayHubDict[t]
+                    end
+                end
+            end
+        end)
+        task.wait(1)
+    end
+end)
 
 Window:Notify({
   Title = "Tày Hub",

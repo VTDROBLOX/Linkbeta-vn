@@ -1353,7 +1353,7 @@ Tabs.Info:AddDiscordInvite({
 	Description = "A community for Tay hub Users - official scripts, updates, and suport in one place.",
 	Banner = "rbxassetid://96454140798208", 
 	Logo = "rbxassetid://96454140798208",
-	Invite = "https://discord.gg/HJbtKcHAw",
+	Invite = "https://discord.gg/75HaB35ymY",
 	Members = 36, 
 	Online = 67, 
 })

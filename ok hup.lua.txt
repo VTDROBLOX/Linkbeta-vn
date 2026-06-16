@@ -1360,11 +1360,106 @@ Tabs.Info:AddDiscordInvite({
 })
 Tabs.Info:AddSection("Status Server")
 
-Tabs.Hop:AddButton({
-    Name = "run menu HOP full moon",
-    Callback = function()
-        print("[Hop] Đang load script từ link...")
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Linkbeta-very/refs/heads/main/hop-tayhub.lua"))()
+Tabs.Hop:AddSection("Server Browser")
+
+-- =================== PHẦN HOP SPAM 0.1 GIÂY ===================
+local IsHopping = false
+
+local HopToggle = Tabs.Hop:AddToggle({
+    Name = "Auto Hop Full Moon (Spam 0.1s)",
+    Default = false,
+    Callback = function(Value)
+        IsHopping = Value
+
+        if IsHopping then
+            print("[Hop] Bắt đầu vòng lặp tìm Full Moon...")
+            task.spawn(function()
+                local visited = _G.VisitedFullMoonServers or {}
+                _G.VisitedFullMoonServers = visited
+
+                while IsHopping do
+                    local HttpService = game:GetService("HttpService")
+                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                    local TeleportService = game:GetService("TeleportService")
+                    local TeleportRemote = ReplicatedStorage:WaitForChild("__ServerBrowser")
+
+                    local request_fn = (syn and syn.request)
+                        or http_request
+                        or request
+                        or (fluxus and fluxus.request)
+                        or (http and http.request)
+
+                    if not request_fn then
+                        warn("[Hop] Executor không hỗ trợ request!")
+                        IsHopping = false
+                        if HopToggle and HopToggle.Set then HopToggle:Set(false) end
+                        break
+                    end
+
+                    local API = "https://api-server-clig.onrender.com/"
+                    local ok, res = pcall(function()
+                        return request_fn({
+                            Url = API,
+                            Method = "GET",
+                            Headers = {["User-Agent"] = "Roblox" }
+                        })
+                    end)
+
+                    if ok and res then
+                        local success, body = pcall(function()
+                            return HttpService:JSONDecode(res.Body)
+                        end)
+                        if success and body then
+                            local server_list = body.all_servers or body.moon_data or body.servers
+                            if server_list and type(server_list) == "table" then
+                                local full_moon_servers = {}
+                                for _, v in ipairs(server_list) do
+                                    local job = tostring(v.jobid or v.jobId or v.id or "")
+                                    local isFullMoon = v.type == "FullMoon" or (v.name and string.find(v.name, "FullMoon"))
+                                    if #job > 10 and job ~= game.JobId and not visited[job] and isFullMoon then
+                                        table.insert(full_moon_servers, job)
+                                    end
+                                end
+                                if #full_moon_servers > 0 then
+                                    local selected = full_moon_servers[math.random(1, #full_moon_servers)]
+                                    print("[Hop] Chọn server Full Moon:", selected)
+                                    visited[selected] = true
+
+                                    -- Hiển thị thông báo với jobid
+                                    Window:Notify({
+                                        Title = "Tay hub",
+                                        Content = "Đã vào server: " .. selected,
+                                        Image = "rbxassetid://96454140798208",
+                                        Duration = 5
+                                    })
+
+                                    -- Teleport
+                                    local teleport_ok = pcall(function()
+                                        TeleportRemote:InvokeServer("teleport", selected)
+                                    end)
+                                    if not teleport_ok then
+                                        pcall(function()
+                                            TeleportService:TeleportToPlaceInstance(game.PlaceId, selected, game.Players.LocalPlayer)
+                                        end)
+                                    end
+                                    print("[Hop] Đã teleport thành công!")
+                                else
+                                    print("[Hop] Chưa tìm thấy Full Moon server mới.")
+                                end
+                            end
+                        end
+                    end
+                    task.wait(0.1) -- Chờ 0.1 giây, spam cực nhanh
+                end
+
+                print("[Hop] Đã dừng tìm kiếm.")
+                if HopToggle and HopToggle.Set then
+                    HopToggle:Set(false)
+                end
+            end)
+        else
+            print("")
+        end
     end
 })
 

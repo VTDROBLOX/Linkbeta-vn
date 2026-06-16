@@ -1360,6 +1360,14 @@ Tabs.Info:AddDiscordInvite({
 })
 Tabs.Info:AddSection("Status Server")
 
+Tabs.Hop:AddButton({
+    Name = "run menu HOP full moon",
+    Callback = function()
+        print("[Hop] Đang load script từ link...")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Linkbeta-very/refs/heads/main/hop-tayhub.lua"))()
+    end
+})
+
 local TimeZone = Tabs.Info:AddParagraph("Time Zone", "")
 
 function UpdateOS()
@@ -11985,13 +11993,6 @@ local function StartMainLoops()
             FastAttackModule.ExecuteFastAttack()
         end
     end)
-
-    RunService.Heartbeat:Connect(function()
-        pcall(HitRegistrationModule.Execute)
-    end)
-end
-
-StartMainLoops()
 
     RunService.Heartbeat:Connect(function()
         pcall(HitRegistrationModule.Execute)

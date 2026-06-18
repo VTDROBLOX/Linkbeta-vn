@@ -1,14 +1,38 @@
--- ========== GET KEY - FIXED ULTRA GLASS UI ==========
+-- ========== GET KEY - AUTO DETECT FREE/KEY SYSTEM ==========
 local ValidKeys = {
-    "",
-    "36/67"
+    "" -- Nếu muốn cho FREE, hãy xóa hết chữ trong này đi để trống thành "" hoặc xóa hẳn dòng này.
 }
 
 local KeyFileName = "Tay_hub_key.txt"
 local GetKeyURL = "https://link4sub.com/9Oxy6iwxBJ"
+local MainScriptURL = "https://raw.githubusercontent.com/VTDROBLOX/Bytunghtml/refs/heads/main/lon.lua"
+
+-- Hàm kiểm tra xem danh sách key có thực sự trống (Free) hay không
+local function IsScriptFree()
+    local hasKey = false
+    for _, v in pairs(ValidKeys) do
+        if v ~= "" and v ~= nil then
+            hasKey = true
+            break
+        end
+    end
+    return not hasKey -- Trả về true nếu không có key nào hợp lệ (Chế độ FREE)
+end
+
+-- HÀM CHẠY SCRIPT CHÍNH
+local function RunMainScript()
+    loadstring(game:HttpGet(MainScriptURL))()
+end
+
+-- KIỂM TRA TỰ ĐỘNG CHUYỂN CHẾ ĐỘ
+if IsScriptFree() then
+    print("🆓 Không tìm thấy key nào trong danh sách. Kích hoạt chế độ FREE!")
+    RunMainScript()
+    return -- Dừng toàn bộ code phía dưới, không hiện UI nữa
+end
 
 local function IsKeyValid(k)
-    for _, v in pairs(ValidKeys) do if k == v then return true end end
+    for _, v in pairs(ValidKeys) do if k == v and v ~= "" then return true end end
     return false
 end
 
@@ -23,7 +47,7 @@ end
 -- Nếu đã lưu key hợp lệ từ trước, tự động chạy luôn script chính
 if LoadSaved() then
     print("✅ Key verified từ file lưu!")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Bytunghtml/refs/heads/main/lon.lua"))()
+    RunMainScript()
     return
 end
 
@@ -110,7 +134,7 @@ title.BackgroundTransparency = 1
 title.Text = "Get key once, valid forever."
 title.TextColor3 = Color3.fromRGB(45, 55, 72)
 title.Font = Enum.Font.GothamBold
-title.TextSize = 18 -- Hạ size xuống chút để không bị tràn chữ
+title.TextSize = 18 
 title.Parent = card
 
 -- Text phụ hướng dẫn
@@ -221,10 +245,9 @@ confirm.MouseButton1Click:Connect(function()
         msg.TextColor3 = Color3.fromRGB(34, 197, 94)
         if writefile then writefile(KeyFileName, input.Text) end
         task.wait(1)
-        gui:Destroy() -- Xóa giao diện nhập key
+        gui:Destroy() 
         
-        -- NƠI TẢI SCRIPT CHÍNH CỦA BẠN ĐÃ ĐƯỢC CHÈN VÀO ĐÂY:
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/VTDROBLOX/Linkbeta-vn/refs/heads/main/ok%20hup.lua.txt"))()
+        RunMainScript() -- Chạy script chính
     else
         msg.Text = "❌ Incorrect key, please try again.."
         msg.TextColor3 = Color3.fromRGB(239, 68, 68)
@@ -276,5 +299,5 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-print("✨ UI loaded successfully with main script integration!")
+print("✨ UI loaded with smart Auto-Free system!")
 

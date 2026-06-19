@@ -5,7 +5,7 @@ local ValidKeys = {
 
 local KeyFileName = "Tay_hub_key.txt"
 local GetKeyURL = "https://link4sub.com/9Oxy6iwxBJ"
-local MainScriptURL = "https://raw.githubusercontent.com/VTDROBLOX/Bytunghtml/refs/heads/main/lon.lua"
+local MainScriptURL = "https://raw.githubusercontent.com/VTDROBLOX/Bytunghtml/d7d169e766df8d904a20f257f803bed843ae88b2/lon.lua"
 
 -- Hàm kiểm tra xem danh sách key có thực sự trống (Free) hay không
 local function IsScriptFree()

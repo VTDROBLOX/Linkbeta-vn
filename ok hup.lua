@@ -1,6 +1,6 @@
 -- ========== GET KEY - AUTO DETECT FREE/KEY SYSTEM ==========
 local ValidKeys = {
-    "36/67" -- Nếu muốn cho FREE, hãy xóa hết chữ trong này đi để trống thành "" hoặc xóa hẳn dòng này.
+    "" -- Nếu muốn cho FREE, hãy xóa hết chữ trong này đi để trống thành "" hoặc xóa hẳn dòng này.
 }
 
 local KeyFileName = "Tay_hub_key.txt"
